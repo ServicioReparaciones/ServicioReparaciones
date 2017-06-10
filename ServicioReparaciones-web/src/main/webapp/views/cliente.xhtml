@@ -101,7 +101,7 @@
                         <h:outputText value="#{cli.nombres} " />
                         <h:outputText value=" #{cli.apellidos}" />
                     </p:column>
-                    <p:column headerText="Cedula" style="text-align: center">
+                    <p:column filterBy="#{cli.cedula}" headerText="Cedula" style="text-align: center" filterMatchMode="contains">
                         <h:outputText value="#{cli.cedula}" />
                     </p:column>
                     <p:column filterBy="#{cli.movil}" headerText="Movil" style="text-align: center" filterMatchMode="contains">
