@@ -1,0 +1,198 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fdtpro">
+            <p:panel>
+                <p:dataTable  id="dtpro" var="pro" value="#{productoBean.productos}" 
+                              filteredValue="#{productoBean.filterProductos}"
+                              rowKey="#{pro.codigo}" rows="5"
+                              paginator="true" tableStyle="width: auto"
+                              paginatorPosition="bottom" reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="PRODUCTOS"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center;font-size: 65%">
+                        <h:outputText value="#{pro.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column filterBy="#{pro.barcode}" headerText="Barcode" style="text-align: center;font-size: 65%" filterMatchMode="contains">
+                        <h:outputText value="#{pro.barcode}" />
+                    </p:column>
+                    <p:column headerText="Cliente" style="text-align: center;font-size: 65%">
+                        <h:outputText value="#{pro.cliente.nombres}" />
+                        <h:outputText value="#{pro.cliente.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Producto" style="text-align: center;font-size: 65%">
+                        <h:outputText value="#{pro.artefacto}" />
+                    </p:column>
+                    <p:column headerText="Marca" style="text-align: center;font-size: 65%">
+                        <h:outputText value="#{pro.marca}" />
+                    </p:column>
+                    <p:column headerText="Modelo" style="text-align: center;font-size: 65%">
+                        <h:outputText value="#{pro.modelo}" />
+                    </p:column>
+                    <p:column filterBy="#{pro.serie}" headerText="Serie" style="text-align: center;font-size: 65%" filterMatchMode="contains">
+                        <h:outputText value="#{pro.serie}" />
+                    </p:column>
+                    <p:column filterBy="#{pro.pnc}" headerText="PNC" style="text-align: center;font-size: 65%" filterMatchMode="contains">
+                        <h:outputText value="#{pro.pnc}" />
+                    </p:column>
+                    <p:column filterBy="#{pro.placa}" headerText="Placa" style="text-align: center;font-size: 65%" filterMatchMode="contains">
+                        <h:outputText value="#{pro.placa}" />
+                    </p:column>
+                    <p:column headerText="Garantía" style="text-align: center;font-size: 65%">
+                        <p:commandButton icon="fa -fa-fw fa-check" disabled="true" rendered="#{pro.warranty}"/>
+                        <p:commandButton icon="fa -fa-fw fa-close" disabled="true" rendered="#{not pro.warranty}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center;font-size: 65%">
+                        <h:outputText value="#{pro.username.datosPersonales.nombres}" />
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outPro"
+                                         oncomplete="PF('dlgModifyPro').show()">
+                            <f:setPropertyActionListener value="#{pro}" target="#{productoBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outPro"
+                                         oncomplete="PF('dlgDeletePro').show()">
+                            <f:setPropertyActionListener value="#{pro}" target="#{productoBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Producto" widgetVar="dlgModifyPro" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outPro">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel value="BARCODE:"/>
+                        <h:outputLabel value="#{productoBean.selected.barcode}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{productoBean.selected.artefacto}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                           itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}re"/>
+                        </p:selectOneMenu>
+                        <p:message for="eartefacto" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emarca" value="Marca:"/>
+                        <p:selectOneMenu id="emarca" required="true" value="#{productoBean.selected.marca}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{productoBean.marcas}" var="mar"
+                                           itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
+                        </p:selectOneMenu>
+                        <p:message for="emarca" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emodelo" value="Modelo:"/>
+                        <p:inputText id="emodelo" value="#{productoBean.selected.modelo}"/>
+                        <p:message for="emodelo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eserie" value="Serie:"/>
+                        <p:inputText id="eserie" value="#{productoBean.selected.serie}"/>
+                        <p:message for="eserie" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="epnc" value="PNC:"/>
+                        <p:inputText id="epnc" value="#{productoBean.selected.pnc}"/>
+                        <p:message for="epnc" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eplaca" value="Placa:"/>
+                        <p:inputText id="eplaca" value="#{productoBean.selected.placa}"/>
+                        <p:message for="eplaca" display="tooltip" severity="error"/>    
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputText value="Garantía:" />
+                        <p:selectBooleanCheckbox value="#{productoBean.selected.warranty}"/>
+                    </h:panelGrid>
+                    <p:panel rendered="#{productoBean.selected.warranty}">
+                        <h:panelGrid columns="6" cellpadding="5">
+                            <p:outputLabel for="ealmacen" value="Almacén:"/>
+                            <p:selectOneMenu id="ealmacen" value="#{productoBean.selected.garantia.almacen}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{productoBean.almacenes}" var="alm"
+                                               itemLabel="#{alm.almacen}" itemValue="#{alm.almacen}"/>
+                            </p:selectOneMenu>
+                            <p:message for="ealmacen" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="etelefonoAlmacen" value="Telefono Almacén"/>
+                            <p:inputNumber id="etelefonoAlmacen" maxlength="13" 
+                                           value="#{productoBean.selected.garantia.telefonoAlmacen}"/>
+                            <p:message for="etelefonoAlmacen" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="enumeroFactura" value="Numéro Factura:"/>
+                            <p:inputNumber id="enumeroFactura" maxlength="12" 
+                                           value="#{productoBean.selected.garantia.numeroFactura}"/>
+                            <p:message for="enumeroFactura" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="efechaFactura" value="Fecha Factura:"/>
+                            <p:calendar  id="efechaFactura" pattern="dd/MM/yyyy" showOn="button" 
+                                         value="#{productoBean.selected.garantia.fechaFactura}"/>
+                            <p:message for="efechaFactura" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fdtpro:dtpro" 
+                                     actionListener="#{productoBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Producto" widgetVar="dlgDeletePro" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outPro">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Artefacto:"/>
+                        <p:outputLabel value="#{productoBean.selected.artefacto}"/>
+
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{productoBean.selected.marca}"/>
+
+                        <p:outputLabel value="Modelo:"/>
+                        <p:outputLabel value="#{productoBean.selected.modelo}"/>
+
+                        <p:outputLabel value="Serie:"/>
+                        <p:outputLabel value="#{productoBean.selected.serie}"/>
+
+                        <p:outputLabel value="PNC:"/>
+                        <p:outputLabel value="#{productoBean.selected.pnc}"/>
+
+                        <p:outputLabel value="Placa:"/>
+                        <p:outputLabel value="#{productoBean.selected.placa}"/>    
+                    </h:panelGrid>
+                    <p:panel rendered="#{productoBean.selected.warranty}">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Almacén:"/>
+                            <p:outputLabel value="#{productoBean.selected.garantia.almacen}"/>
+
+                            <p:outputLabel value="Telefono Almacén"/>
+                            <p:outputLabel value="#{productoBean.selected.garantia.telefonoAlmacen}"/>
+
+                            <p:outputLabel value="Numéro Factura:"/>
+                            <p:outputLabel value="#{productoBean.selected.garantia.numeroFactura}"/>
+
+                            <p:outputLabel value="Fecha Factura:"/>
+                            <h:outputText value="#{productoBean.selected.garantia.fechaFactura}">
+                                <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fdtpro:dtpro" 
+                                     actionListener="#{productoBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

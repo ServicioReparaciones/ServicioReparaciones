@@ -1,0 +1,529 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="ford">
+            <p:wizard flowListener="#{ordenBean.onFlowProcess}" showStepStatus="true"
+                      nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
+                <p:tab id="cliente" title="CLIENTE">
+                    <p:panel header="1. Seleccione un cliente">
+                        <p:dataTable  id="dtcli" var="cli" value="#{ordenBean.clienteBean.clientes}" 
+                                      filteredValue="#{ordenBean.clienteBean.filterClientes}"
+                                      selectionMode="single" selection="#{ordenBean.clienteBean.selected}"
+                                      rowKey="#{cli.codigo}" rows="5" paginator="true"
+                                      paginatorPosition="bottom" reflow="true">
+
+                            <p:ajax event="rowSelect" listener="#{ordenBean.clienteBean.onRowSelect}" 
+                                    update=":ford:outCli, :ford:codigo"/>
+
+                            <f:facet name="header">
+                                <h:outputText value="CLIENTES"/>
+                            </f:facet>
+                            <p:column headerText="Fecha" style="text-align: center">
+                                <h:outputText value="#{cli.lastChange}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Cliente" style="text-align: center">
+                                <h:outputText value="#{cli.nombres} " />
+                                <h:outputText value=" #{cli.apellidos}" />
+                            </p:column>
+                            <p:column filterBy="#{cli.cedula}" headerText="Cedula" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{cli.cedula}" />
+                            </p:column>
+                            <p:column filterBy="#{cli.movil}" headerText="Movil" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{cli.movil}" />
+                            </p:column>
+                            <p:column filterBy="#{cli.telefono}" headerText="Telefono" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{cli.telefono}" />
+                            </p:column>
+                            <p:column headerText="Provincia" style="text-align: center">
+                                <h:outputText value="#{cli.provincia}" />
+                            </p:column>
+                            <p:column headerText="Cantón" style="text-align: center">
+                                <h:outputText value="#{cli.canton}" />
+                            </p:column>
+                            <p:column headerText="Parroquia" style="text-align: center">
+                                <h:outputText value="#{cli.parroquia}" />
+                            </p:column>
+                            <p:column headerText="Usuario" style="text-align: center">
+                                <h:outputText value="#{cli.username.datosPersonales.nombres}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:separator/>
+                        <p:outputPanel id="outCli">
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.nombres}"/>
+
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.apellidos}"/>
+
+                                <p:outputLabel value="Cédula:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.cedula}"/>
+
+                                <p:outputLabel value="Móvil:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.movil}"/>
+
+                                <p:outputLabel value="Teléfono:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.telefono}"/>
+
+                                <p:outputLabel value="Provincia:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.provincia}"/>
+
+                                <p:outputLabel value="Catón:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.canton}"/>
+
+                                <p:outputLabel value="Parroquia:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.parroquia}"/>
+
+                                <p:outputLabel value="Dirección:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.direccion}"/>
+
+                                <p:outputLabel value="Referencia:"/>
+                                <p:outputLabel value="#{ordenBean.clienteBean.selected.referencia}"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <p:separator/>
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="codigo" value="Código del Cliente:"/>
+                            <p:inputText id="codigo" required="true" value="#{ordenBean.clienteBean.nuevo.codigo}"/>
+                            <p:message for="codigo" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+
+                <p:tab id="producto" title="PRODUCTO">
+                    <p:panel header="2. Seleccione un producto">
+                        <p:panel>
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <h:outputText value="El cliente"/>
+                                <h:outputText value="#{ordenBean.clienteBean.nuevo.nombres}"/>
+                                <h:outputText value="#{ordenBean.clienteBean.nuevo.apellidos}"/>
+                                <h:outputText value="tiene los siguientes productos registrados."/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <h:outputText value="&lt;br/&gt;" escape="false"/>
+                        <p:dataTable  id="dtpro" var="pro" value="#{ordenBean.productoBean.productos}" 
+                                      filteredValue="#{ordenBean.productoBean.filterProductos}"
+                                      selectionMode="single" selection="#{ordenBean.productoBean.selected}"
+                                      rowKey="#{pro.codigo}" rows="5" paginator="true"
+                                      paginatorPosition="bottom" reflow="true">
+
+                            <p:ajax event="rowSelect" listener="#{ordenBean.productoBean.onRowSelect}" 
+                                    update=":ford:outPro, :ford:barcode"/>
+
+                            <f:facet name="header">
+                                <h:outputText value="PRODUCTOS DEL CLEINTE"/>
+                            </f:facet>
+                            <p:column headerText="Fecha" style="text-align: center">
+                                <h:outputText value="#{pro.lastChange}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{pro.barcode}" headerText="Barcode" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{pro.barcode}" />
+                            </p:column>
+                            <p:column headerText="Producto" style="text-align: center">
+                                <h:outputText value="#{pro.artefacto} " />
+                            </p:column>
+                            <p:column headerText="Marca" style="text-align: center">
+                                <h:outputText value="#{pro.marca}" />
+                            </p:column>
+                            <p:column headerText="Modelo" style="text-align: center">
+                                <h:outputText value="#{pro.modelo}" />
+                            </p:column>
+                            <p:column filterBy="#{pro.serie}" headerText="Serie" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{pro.serie}" />
+                            </p:column>
+                            <p:column filterBy="#{pro.pnc}" headerText="PNC" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{pro.pnc}" />
+                            </p:column>
+                            <p:column filterBy="#{pro.placa}" headerText="Placa" style="text-align: center" filterMatchMode="contains">
+                                <h:outputText value="#{pro.placa}" />
+                            </p:column>
+                            <p:column headerText="Garantía" style="text-align: center">
+                                <p:commandButton icon="fa -fa-fw fa-check" disabled="true" rendered="#{pro.warranty}"/>
+                                <p:commandButton icon="fa -fa-fw fa-close" disabled="true" rendered="#{not pro.warranty}"/>
+                            </p:column>
+                            <p:column headerText="Usuario" style="text-align: center">
+                                <h:outputText value="#{pro.username.datosPersonales.nombres}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton value="Nuevo Producto sin Garantá" update=":faddPro:outPro"
+                                                 actionListener="#{ordenBean.productoBean.initProducto(evt)}"
+                                                 oncomplete="PF('dlgAddPro').show()"/>
+                                <p:commandButton value="Nuevo Producto con Garantá" update=":faddProWarranty:outProW"
+                                                 actionListener="#{ordenBean.productoBean.initProducto(evt)}"
+                                                 oncomplete="PF('dlgAddProWarranty').show()"/>
+                            </f:facet>
+                        </p:dataTable>
+                        <p:separator/>
+                        <p:outputPanel id="outPro">
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel value="Artefacto:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.selected.artefacto}"/>
+
+                                <p:outputLabel value="Marca:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.selected.marca}"/>
+
+                                <p:outputLabel value="Modelo:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.selected.modelo}"/>
+
+                                <p:outputLabel value="Serie:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.selected.serie}"/>
+
+                                <p:outputLabel value="PNC:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.selected.pnc}"/>
+
+                                <p:outputLabel value="Placa:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.selected.placa}"/>    
+                            </h:panelGrid>
+                            <p:panel rendered="#{ordenBean.productoBean.selected.warranty}">
+                                <h:panelGrid columns="4" cellpadding="5">
+                                    <p:outputLabel value="Almacén:"/>
+                                    <p:outputLabel value="#{ordenBean.productoBean.selected.garantia.almacen}"/>
+
+                                    <p:outputLabel value="Telefono Almacén"/>
+                                    <p:outputLabel value="#{ordenBean.productoBean.selected.garantia.telefonoAlmacen}"/>
+
+                                    <p:outputLabel value="Numéro Factura:"/>
+                                    <p:outputLabel value="#{ordenBean.productoBean.selected.garantia.numeroFactura}"/>
+
+                                    <p:outputLabel value="Fecha Factura:"/>
+                                    <h:outputText value="#{ordenBean.productoBean.selected.garantia.fechaFactura}">
+                                        <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                    </h:outputText>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:outputPanel>
+                        <p:separator/>
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="barcode" value="Barcode del Producto:"/>
+                            <p:inputText id="barcode" required="true" value="#{ordenBean.productoBean.nuevo.codigo}"/>
+                            <p:message for="barcode" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+
+                <p:tab id="visita" title="VISTA">
+                    <p:panel header="3. Registre la fecha de visita al cliente">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="fechaVisita" value="Fecha/Hora Vista"/>
+                            <p:calendar id="fechaVisita" required="true" pattern="MM/dd/yyyy HH:mm"
+                                        value="#{ordenBean.vistaBean.nuevo.fechaVisitaCliente}"/>
+                            <p:message for="fechaVisita" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="servicio" value="Servicio:"/>
+                            <p:selectOneMenu id="servicio" required="true" value="#{ordenBean.vistaBean.nuevo.servicio.codigo}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{servicioBean.servicios}" var="servis"
+                                               itemLabel="#{servis.descripcion} #{servis.artefacto} #{servis.marca} #{servis.precio}" 
+                                               itemValue="#{servis.codigo}"/>
+                            </p:selectOneMenu>
+                            <p:message for="servicio" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="posibleFalla" value="Posible Falla:"/>
+                            <p:inputText id="posibleFalla" value="#{ordenBean.vistaBean.nuevo.posibleFalla}"/>
+                            <p:message for="posibleFalla" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="observacionCliente" value="Observación cliente:"/>
+                            <p:inputText id="observacionCliente" value="#{ordenBean.vistaBean.nuevo.observacionCliente}"/>
+                            <p:message for="observacionCliente" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                        <p:separator rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                        <h:panelGrid cellpadding="5" rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                            <p:outputLabel value="Códigos Garantía"
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                        </h:panelGrid>
+                        <p:separator rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                        <h:panelGrid columns="6" cellpadding="5"
+                                     rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                            <p:outputLabel for="numOrden" value="Numéro de Orden Garantía:"
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                            <p:inputText id="numOrden" required="true"
+                                         rendered="#{ordenBean.productoBean.nuevo.warranty}"
+                                         value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroOrden}"/>
+                            <p:message for="numOrden" display="tooltip" severity="error"
+                                       rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+
+                            <p:outputLabel for="numTicket" value="Numéro de Ticket:"
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                            <p:inputText id="numTicket" required="true"
+                                         rendered="#{ordenBean.productoBean.nuevo.warranty}"
+                                         value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroTicket}"/>
+                            <p:message for="numTicket" display="tooltip" severity="error"
+                                       rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+
+                <p:tab id="orden" title="ORDEN">
+                    <p:panel header="4. Revisión Datos Orden">
+                        <h:panelGrid columns="2" cellpadding="5" 
+                                     rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                            <p:outputLabel value="Numéro Orden Garantía:" 
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                            <p:outputLabel id="fnumOrden" 
+                                           value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroOrden}"
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+
+                            <p:outputLabel value="Numéro Ticket:"
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                            <p:outputLabel id="fnumTicket" 
+                                           value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroTicket}"
+                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                        </h:panelGrid>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:commandButton icon="fa fa-fw fa-user" value="Cliente"/>
+                        <h:panelGrid columns="6" cellpadding="5">
+                            <p:outputLabel value="Nombres:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.nombres}"/>
+
+                            <p:outputLabel value="Apellidos:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.apellidos}"/>
+
+                            <p:outputLabel value="Cédula:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.cedula}"/>
+
+                            <p:outputLabel value="Móvil:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.movil}"/>
+
+                            <p:outputLabel value="Teléfono:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.telefono}"/>
+
+                            <p:outputLabel value="Provincia:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.provincia}"/>
+
+                            <p:outputLabel value="Catón:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.canton}"/>
+
+                            <p:outputLabel value="Parroquia:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.parroquia}"/>
+
+                            <p:outputLabel value="Dirección:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.direccion}"/>
+
+                            <p:outputLabel value="Referencia:"/>
+                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.referencia}"/>
+                        </h:panelGrid>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:commandButton icon="fa fa-fw fa-cube" value="Producto"/>
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel value="Artefacto:"/>
+                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.artefacto}"/>
+
+                            <p:outputLabel value="Marca:"/>
+                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.marca}"/>
+
+                            <p:outputLabel value="Modelo:"/>
+                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.modelo}"/>
+
+                            <p:outputLabel value="Serie:"/>
+                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.serie}"/>
+
+                            <p:outputLabel value="PNC:"/>
+                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.pnc}"/>
+
+                            <p:outputLabel value="Placa:"/>
+                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.placa}"/>    
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Servicio:"/>
+                            <p:outputLabel value="#{ordenBean.vistaBean.nuevo.servicio}"/>
+                        </h:panelGrid>
+                        <p:panel rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="Almacén:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.nuevo.garantia.almacen}"/>
+
+                                <p:outputLabel value="Telefono Almacén"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.nuevo.garantia.telefonoAlmacen}"/>
+
+                                <p:outputLabel value="Numéro Factura:"/>
+                                <p:outputLabel value="#{ordenBean.productoBean.nuevo.garantia.numeroFactura}"/>
+
+                                <p:outputLabel value="Fecha Factura:"/>
+                                <h:outputText value="#{ordenBean.productoBean.nuevo.garantia.fechaFactura}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                        </p:panel>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:commandButton icon="fa fa-fw fa-edit" value="Visita"/>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Fecha Vista"/>
+                            <h:outputText value="#{ordenBean.vistaBean.nuevo.fechaVisitaCliente}">
+                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+
+                            <p:outputLabel value="Posible Falla:"/>
+                            <p:outputLabel value="#{ordenBean.vistaBean.nuevo.posibleFalla}"/>
+
+                            <p:outputLabel value="Observación cliente:"/>
+                            <p:outputLabel value="#{ordenBean.vistaBean.nuevo.observacionCliente}"/>
+                        </h:panelGrid>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <h:panelGrid style="margin: 0 auto;">
+                            <p:commandButton value="Generar Nueva Orden" 
+                                             update=":fwin:outOrd" 
+                                             styleClass="green-button" 
+                                             style="margin-bottom:10px;"
+                                             actionListener="#{ordenBean.add(evt)}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
+            </p:wizard>
+        </h:form>
+        <h:form id="faddPro">
+            <p:dialog header="Nuevo Producto" widgetVar="dlgAddPro" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outPro">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel value="BARCODE:"/>
+                        <h:outputLabel value="#{productoBean.nuevo.barcode}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{productoBean.nuevo.artefacto}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                           itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}re"/>
+                        </p:selectOneMenu>
+                        <p:message for="eartefacto" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emarca" value="Marca:"/>
+                        <p:selectOneMenu id="emarca" required="true" value="#{productoBean.nuevo.marca}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{productoBean.marcas}" var="mar"
+                                           itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
+                        </p:selectOneMenu>
+                        <p:message for="emarca" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emodelo" value="Modelo:"/>
+                        <p:inputText id="emodelo" value="#{productoBean.nuevo.modelo}"/>
+                        <p:message for="emodelo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eserie" value="Serie:"/>
+                        <p:inputText id="eserie" value="#{productoBean.nuevo.serie}"/>
+                        <p:message for="eserie" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="epnc" value="PNC:"/>
+                        <p:inputText id="epnc" value="#{productoBean.nuevo.pnc}"/>
+                        <p:message for="epnc" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eplaca" value="Placa:"/>
+                        <p:inputText id="eplaca" value="#{productoBean.nuevo.placa}"/>
+                        <p:message for="eplaca" display="tooltip" severity="error"/>    
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":faddPro, :ford:dtpro" 
+                                     actionListener="#{productoBean.addProductoWarranty(evt, false)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>     
+        <h:form id="faddProWarranty">
+            <p:dialog header="Nuevo Producto" widgetVar="dlgAddProWarranty" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outProW">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel value="BARCODE:"/>
+                        <h:outputLabel value="#{ordenBean.productoBean.nuevo.barcode}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{ordenBean.productoBean.nuevo.artefacto}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{ordenBean.productoBean.artefactos}" var="art"
+                                           itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}re"/>
+                        </p:selectOneMenu>
+                        <p:message for="eartefacto" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emarca" value="Marca:"/>
+                        <p:selectOneMenu id="emarca" required="true" value="#{ordenBean.productoBean.nuevo.marca}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{ordenBean.productoBean.marcas}" var="mar"
+                                           itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
+                        </p:selectOneMenu>
+                        <p:message for="emarca" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emodelo" value="Modelo:"/>
+                        <p:inputText id="emodelo" value="#{ordenBean.productoBean.nuevo.modelo}"/>
+                        <p:message for="emodelo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eserie" value="Serie:"/>
+                        <p:inputText id="eserie" value="#{ordenBean.productoBean.nuevo.serie}"/>
+                        <p:message for="eserie" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="epnc" value="PNC:"/>
+                        <p:inputText id="epnc" value="#{ordenBean.productoBean.nuevo.pnc}"/>
+                        <p:message for="epnc" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eplaca" value="Placa:"/>
+                        <p:inputText id="eplaca" value="#{ordenBean.productoBean.nuevo.placa}"/>
+                        <p:message for="eplaca" display="tooltip" severity="error"/>    
+                    </h:panelGrid>
+                    <p:panel>
+                        <h:panelGrid columns="6" cellpadding="5">
+                            <p:outputLabel for="ealmacen" value="Almacén:"/>
+                            <p:selectOneMenu id="ealmacen" required="true" 
+                                             value="#{ordenBean.productoBean.nuevo.garantia.almacen}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{ordenBean.productoBean.almacenes}" var="alm"
+                                               itemLabel="#{alm.almacen}" itemValue="#{alm.almacen}"/>
+                            </p:selectOneMenu>
+                            <p:message for="ealmacen" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="etelefonoAlmacen" value="Telefono Almacén"/>
+                            <p:inputText id="etelefonoAlmacen" maxlength="13" 
+                                         value="#{ordenBean.productoBean.nuevo.garantia.telefonoAlmacen}"/>
+                            <p:message for="etelefonoAlmacen" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="enumeroFactura" value="Numéro Factura:"/>
+                            <p:inputText id="enumeroFactura" maxlength="12" 
+                                         value="#{ordenBean.productoBean.nuevo.garantia.numeroFactura}"/>
+                            <p:message for="enumeroFactura" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="efechaFactura" value="Fecha Factura:"/>
+                            <p:calendar  id="efechaFactura" pattern="dd/MM/yyyy" showOn="button" 
+                                         value="#{ordenBean.productoBean.nuevo.garantia.fechaFactura}"/>
+                            <p:message for="efechaFactura" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":faddProWarranty, :ford:dtpro" 
+                                     actionListener="#{ordenBean.productoBean.addProductoWarranty(evt, true)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>      
+        <h:form id="fwin"> 
+            <p:dialog header="Orden Generada" widgetVar="dlgOrdenGenerada" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade" closable="false">
+                <p:outputPanel id="outOrd">
+                    <h:panelGrid cellpadding="5">
+                        <p:outputLabel value="Se ha generado con exito la orden."/>
+                        <p:outputLabel value="Para imprimir de click en el icono."/>
+                        <h:panelGrid style="margin: 0 auto;">
+                            <p:link target="_blank" href="#{ordenBean.ordenGenerate.abierta.url}">
+                                <p:graphicImage name="images/pdf.png" library="icarus-layout"/>
+                            </p:link>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Salir" update=":fwin, :ford"
+                                     action="/faces/views/principal"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

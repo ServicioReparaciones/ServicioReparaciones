@@ -1,0 +1,252 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registar Nuevo Técnico">
+                <h:panelGrid cellpadding="5">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nombres" value="Nombres:"/>
+                    <p:inputText id="nombres" required="true" value="#{tecnicoBean.nuevo.datosPersonales.nombres}"/>
+                    <p:message for="nombres" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="apellidos" value="Apellidos:"/>
+                    <p:inputText id="apellidos" required="true" value="#{tecnicoBean.nuevo.datosPersonales.apellidos}"/>
+                    <p:message for="apellidos" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="cargo" value="Cargo:"/>
+                    <p:inputText id="cargo" required="true" value="#{tecnicoBean.nuevo.cargo}"/>
+                    <p:message for="cargo" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="cedula" value="Cédula:"/>
+                    <p:inputText id="cedula" value="#{tecnicoBean.nuevo.datosPersonales.cedula}">
+                        <f:validateLongRange minimum="10"/>
+                    </p:inputText>
+                    <p:message for="cedula" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="fechaNacimiento" value="Fecha Nacimiento:" />
+                    <p:calendar id="fechaNacimiento"  pattern="dd/MM/yyy"
+                                value="#{tecnicoBean.nuevo.datosPersonales.fechaNacimiento}" 
+                                locale="de" navigator="true" required="true"/>
+                    <p:message for="fechaNacimiento" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="genero" value="Genero:"/>
+                    <p:selectOneRadio id="genero" required="true"
+                                      value="#{tecnicoBean.nuevo.datosPersonales.sexo}">
+                        <f:selectItem itemLabel="Masculino" itemValue="Hombre" />
+                        <f:selectItem itemLabel="Femenino" itemValue="Mujer" />
+                    </p:selectOneRadio>
+                    <p:message for="genero" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="email" value="e-mail:"/>
+                    <p:inputText id="email" value="#{tecnicoBean.nuevo.datosPersonales.email}">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                    <p:message for="email" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="movil" value="Móvil:"/>
+                    <p:inputMask id="movil" required="true" value="#{tecnicoBean.nuevo.datosPersonales.movil}" mask="999-999-9999"/>
+                    <p:message for="movil" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="provincia" value="Provincia:"/>
+                    <p:selectOneMenu id="provincia" required="true"
+                                     value="#{tecnicoBean.nuevo.datosPersonales.provincia}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{tecnicoBean.provincias}" var="prov"
+                                       itemLabel="#{prov.provincia}" itemValue="#{prov.provincia}"/>
+                    </p:selectOneMenu>
+                    <p:message for="provincia" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="direccion" value="Dirección:"/>
+                    <p:inputTextarea id="direccion" required="true" rows="3" 
+                                     value="#{tecnicoBean.nuevo.datosPersonales.direccion}"/>
+                    <p:message for="direccion" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":fadd, :fdttec:dttec, :fadd:messages"
+                                     actionListener="#{tecnicoBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdttec">
+            <p:panel>
+                <p:dataTable  id="dttec" var="tec" value="#{tecnicoBean.tecnicos}"
+                              filteredValue="#{tecnicoBean.filterTecnicos}"
+                              rowKey="#{tec.codigo}" rows="5"
+                              paginator="true" paginatorPosition="bottom"
+                              reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="TECNICOS"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{tec.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Técnico" style="text-align: center">
+                        <h:outputText value="#{tec.datosPersonales.nombres} " />
+                        <h:outputText value=" #{tec.datosPersonales.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Cargo" style="text-align: center">
+                        <h:outputText value="#{tec.cargo}" />
+                    </p:column>
+                    <p:column headerText="Cedula" style="text-align: center">
+                        <h:outputText value="#{tec.datosPersonales.cedula}" />
+                    </p:column>
+                    <p:column headerText="Fecha Nacimiento" style="text-align: center">
+                        <h:outputText value="#{tec.datosPersonales.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Genero" style="text-align: center">
+                        <h:outputText value="#{tec.datosPersonales.sexo}" />
+                    </p:column>
+                    <p:column filterBy="#{tec.datosPersonales.movil}" headerText="Movil" style="text-align: center" filterMatchMode="contains">
+                        <h:outputText value="#{tec.datosPersonales.movil}" />
+                    </p:column>
+                    <p:column headerText="Provincia" style="text-align: center">
+                        <h:outputText value="#{tec.datosPersonales.provincia}" />
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{tec.username.datosPersonales.nombres}" />
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outTec"
+                                         oncomplete="PF('dlgModifyTec').show()">
+                            <f:setPropertyActionListener value="#{tec}" target="#{tecnicoBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outTec"
+                                         oncomplete="PF('dlgDeleteTec').show()">
+                            <f:setPropertyActionListener value="#{tec}" target="#{tecnicoBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false" />
+        <h:form id="fedit">
+            <p:dialog header="Modificar Técnico" widgetVar="dlgModifyTec" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outTec">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="enombres" value="Nombres:"/>
+                        <p:inputText id="enombres" required="true" value="#{tecnicoBean.selected.datosPersonales.nombres}"/>
+                        <p:message for="enombres" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eapellidos" value="Apellidos:"/>
+                        <p:inputText id="eapellidos" required="true" value="#{tecnicoBean.selected.datosPersonales.apellidos}"/>
+                        <p:message for="eapellidos" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecargo" value="Cargo:"/>
+                        <p:inputText id="ecargo" required="true" value="#{tecnicoBean.selected.cargo}"/>
+                        <p:message for="ecargo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecedula" value="Cédula:"/>
+                        <p:inputText id="ecedula" value="#{tecnicoBean.selected.datosPersonales.cedula}">
+                            <f:validateLongRange minimum="10"/>
+                        </p:inputText>
+                        <p:message for="ecedula" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="efechaNacimiento" value="Fecha Nacimiento:" />
+                        <p:calendar id="efechaNacimiento"  pattern="dd/MM/yyy"
+                                    value="#{tecnicoBean.selected.datosPersonales.fechaNacimiento}" 
+                                    locale="de" navigator="true" required="true"/>
+                        <p:message for="efechaNacimiento" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="egenero" value="Genero:"/>
+                        <p:selectOneRadio id="egenero" required="true"
+                                          value="#{tecnicoBean.selected.datosPersonales.sexo}">
+                            <f:selectItem itemLabel="Masculino" itemValue="Hombre" />
+                            <f:selectItem itemLabel="Femenino" itemValue="Mujer" />
+                        </p:selectOneRadio>
+                        <p:message for="egenero" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eemail" value="e-mail:"/>
+                        <p:inputText id="eemail" value="#{tecnicoBean.selected.datosPersonales.email}">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText>
+                        <p:message for="eemail" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emovil" value="Móvil:"/>
+                        <p:inputMask id="emovil" required="true" value="#{tecnicoBean.selected.datosPersonales.movil}" mask="999-999-9999"/>
+                        <p:message for="emovil" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eprovincia" value="Provincia:"/>
+                        <p:selectOneMenu id="eprovincia" required="true"
+                                         value="#{tecnicoBean.selected.datosPersonales.provincia}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{tecnicoBean.provincias}" var="eprov"
+                                           itemLabel="#{eprov.provincia}" itemValue="#{eprov.provincia}"/>
+                        </p:selectOneMenu>
+                        <p:message for="eprovincia" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="edireccion" value="Dirección:"/>
+                        <p:inputTextarea id="edireccion" required="true" rows="3" 
+                                         value="#{tecnicoBean.selected.datosPersonales.direccion}"/>
+                        <p:message for="edireccion" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdttec:dttec" 
+                                     actionListener="#{tecnicoBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Técnico" widgetVar="dlgDeleteTec" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outTec">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.nombres}"/>
+
+                        <p:outputLabel value="Apellidos:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.apellidos}"/>
+
+                        <p:outputLabel value="Cargo:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.cargo}"/>
+
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.cedula}"/>
+
+                        <p:outputLabel value="Fecha Nacimiento:" />
+                        <h:outputText value="#{tecnicoBean.selected.datosPersonales.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Genero:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.sexo}"/>
+
+                        <p:outputLabel value="e-mail:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.email}"/>
+
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.movil}"/>
+
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.provincia}"/>
+
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{tecnicoBean.selected.datosPersonales.direccion}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdttec:dttec" 
+                                     actionListener="#{tecnicoBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

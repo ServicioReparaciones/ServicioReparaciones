@@ -1,0 +1,111 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form>
+            <p:schedule id="schedule" value="#{calendarioBean.modelCalendar}" timeZone="GMT-5" locale="es">
+                <p:ajax event="eventSelect" listener="#{calendarioBean.onEventSelect}" 
+                        update=":fvisita:outVist" oncomplete="PF('dlgVisita').show();" />
+            </p:schedule>
+            <script type="text/javascript">
+                PrimeFaces.locales['es'] = {
+                    closeText: 'Cerrar',
+                    prevText: 'Anterior',
+                    nextText: 'Siguiente',
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                    dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+                    weekHeader: 'Semana',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: '',
+                    timeOnlyTitle: 'Sólo hora',
+                    timeText: 'Tiempo',
+                    hourText: 'Hora',
+                    minuteText: 'Minuto',
+                    secondText: 'Segundo',
+                    currentText: 'Fecha actual',
+                    ampm: false,
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día',
+                    allDayText: 'Todo el día'
+                };
+            </script>
+            <style type="text/css">
+                .value {
+                    width: 1000px;
+                }
+
+                .color{
+                    background: #AFADAD !important;
+                    border-color: #AFADAD !important;
+                }
+            </style>
+        </h:form>
+        <h:form id="fvisita">
+            <p:dialog header="Visita" widgetVar="dlgVisita" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outVist">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Registrada por:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.username.datosPersonales.nombres}"/>
+                        <p:outputLabel value="#{calendarioBean.selected.username.datosPersonales.apellidos}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Fecha de Visita:"/>
+                        <h:outputText value="#{calendarioBean.selected.fechaVisitaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Cliente:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.nombres}"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.apellidos}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Teléfono:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.telefono}"/>
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.movil}"/>
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.cedula}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.direccion}"/>
+                        <p:outputLabel value="Referencia:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.cliente.referencia}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Posible Fálla:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.posibleFalla}"/>
+                        <p:outputLabel value="Observación Cliente:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.observacionCliente}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Artefacto:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.producto.artefacto}"/>
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.producto.marca}"/>
+                        <p:outputLabel value="Modelo:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.producto.modelo}"/>
+                        <p:outputLabel value="Serie:"/>
+                        <p:outputLabel value="#{calendarioBean.selected.producto.serie}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

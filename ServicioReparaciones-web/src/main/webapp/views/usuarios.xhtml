@@ -1,0 +1,156 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fdtusu">
+            <p:panel>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:panelGrid>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
+                <p:dataTable  id="dtusu" var="usu" value="#{usuarioBean.usuarios}"
+                              filteredValue="#{usuarioBean.filterUsuarios}"
+                              rowKey="#{usu.codigo}" rows="5" paginator="true" 
+                              paginatorPosition="bottom" reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="USUARIOS"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{usu.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Username" style="text-align: center">
+                        <h:outputText value="#{usu.username}" />
+                    </p:column>
+                    <p:column headerText="Propietario" style="text-align: center">
+                        <h:outputText value="#{usu.datosPersonales.nombres} " />
+                        <h:outputText value=" #{usu.datosPersonales.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Movil" style="text-align: center">
+                        <h:outputText value="#{usu.datosPersonales.movil}" />
+                    </p:column>
+                    <p:column headerText="E-mail" style="text-align: center">
+                        <h:outputText value="#{usu.datosPersonales.email}" />
+                    </p:column>
+                    <p:column headerText="Tipo Admin" style="text-align: center">
+                        <p:commandButton icon="fa -fa-fw fa-check" disabled="true" rendered="#{usu.admin}"/>
+                        <p:commandButton icon="fa -fa-fw fa-close" disabled="true" rendered="#{not usu.admin}"/>
+                    </p:column>
+                    <p:column headerText="Habilitado" style="text-align: center">
+                        <p:commandButton icon="fa -fa-fw fa-check" disabled="true" rendered="#{usu.estado}"/>
+                        <p:commandButton icon="fa -fa-fw fa-close" disabled="true" rendered="#{not usu.estado}"/>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outUsu"
+                                         oncomplete="PF('dlgModifyUsu').show()">
+                            <f:setPropertyActionListener value="#{usu}" target="#{usuarioBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outUsu"
+                                         oncomplete="PF('dlgDeleteUsu').show()">
+                            <f:setPropertyActionListener value="#{usu}" target="#{usuarioBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Activar Cuenta de Usuario" widgetVar="dlgModifyUsu" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outUsu">
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.nombres}"/>
+
+                        <p:outputLabel value="Apellidos:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.apellidos}"/>
+
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.cedula}"/>
+
+                        <p:outputLabel value="Fecha Nacimiento:" />
+                        <h:outputText value="#{usuarioBean.selected.datosPersonales.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Genero:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.sexo}"/>
+
+                        <p:outputLabel value="e-mail:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.email}"/>
+
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.movil}"/>
+
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.provincia}"/>
+
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.direccion}"/>
+                    </h:panelGrid>
+                    <p:panel>
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel value="OTORGAR permisos de Administrador?"/>
+                            <p:selectBooleanCheckbox value="#{usuarioBean.selected.admin}"/>
+
+                            <p:outputLabel value="Activar Cuenta de usuario:"/>
+                            <p:selectBooleanCheckbox value="#{usuarioBean.selected.estado}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fdtusu:messages, :fdtusu:dtusu" 
+                                     actionListener="#{usuarioBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Cuenta de Usuario" widgetVar="dlgDeleteUsu" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outUsu">
+                    <p:outputLabel value="Está seguro que desea eliminar la siguiente cuenta de usuario?"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.nombres}"/>
+
+                        <p:outputLabel value="Apellidos:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.apellidos}"/>
+
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.cedula}"/>
+
+                        <p:outputLabel value="Fecha Nacimiento:" />
+                        <h:outputText value="#{usuarioBean.selected.datosPersonales.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Genero:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.sexo}"/>
+
+                        <p:outputLabel value="e-mail:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.email}"/>
+
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.movil}"/>
+
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.provincia}"/>
+
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.datosPersonales.direccion}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fdtusu:messages, :fdtusu:dtusu" 
+                                     actionListener="#{usuarioBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

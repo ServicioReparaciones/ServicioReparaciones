@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>ServiReparaciones - Registrarse</title>
+    </h:head>
+    <h:body styleClass="containerLogin">
+        <div class="logo-container">
+            <h:graphicImage name="images/logo.svg" id="PageLogo" library="icarus-layout"/>
+        </div>
+        <div class="ui-g">
+            <p:panel header="Registrarse" styleClass="panel-login">
+                <div align="left">
+                    <h:form id="register">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="user" value="Username:"/>
+                            <p:inputText id="user" required="true" 
+                                         value="#{registerBean.nuevo.username}"/>
+                            <p:message for="user" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="password" value="Contraseña:"/>
+                            <p:password id="password" promptLabel="Por favor, introduzca una contraseña" 
+                                        weakLabel="Debil" required="true"
+                                        value="#{registerBean.nuevo.password}"
+                                        goodLabel="Buena" strongLabel="Fuerte" feedback="true"/>
+                            <p:message for="password" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="cpassword" value="Confirmiar Contraseña:"/>
+                            <p:password id="cpassword" required="true"
+                                        value="#{registerBean.comfirmPassword}"/>
+                            <p:message for="cpassword" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="nombres" value="Nombres:"/>
+                            <p:inputText id="nombres" required="true"
+                                         value="#{registerBean.nuevo.datosPersonales.nombres}"/>
+                            <p:message for="nombres" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="apellidos" value="Apellidos:"/>
+                            <p:inputText id="apellidos" required="true"
+                                         value="#{registerBean.nuevo.datosPersonales.apellidos}"/>
+                            <p:message for="apellidos" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="cedula" value="Cédula:"/>
+                            <p:inputText id="cedula" required="true"
+                                         value="#{registerBean.nuevo.datosPersonales.cedula}">
+                                <f:validateLongRange minimum="10"/>
+                            </p:inputText>
+                            <p:message for="cedula" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="fechaNacimiento" value="Fecha Nacimiento:" />
+                            <p:calendar id="fechaNacimiento" required="true" pattern="dd/MM/yyyy"
+                                        locale="de" navigator="true"
+                                        value="#{registerBean.nuevo.datosPersonales.fechaNacimiento}"/>
+                            <p:message for="fechaNacimiento" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="genero" value="Genero:"/>
+                            <p:selectOneRadio id="genero" required="true"
+                                              value="#{registerBean.nuevo.datosPersonales.sexo}">
+                                <f:selectItem itemLabel="Masculino" itemValue="Hombre" />
+                                <f:selectItem itemLabel="Femenino" itemValue="Mujer" />
+                            </p:selectOneRadio>
+                            <p:message for="genero" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="movil" value="Movil:"/>
+                            <p:inputText id="movil" required="true"
+                                         value="#{registerBean.nuevo.datosPersonales.movil}">
+                                <f:validateLongRange minimum="10"/>
+                            </p:inputText>
+                            <p:message for="movil" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="email" value="e-mail:"/>
+                            <p:inputText id="email" required="true"
+                                         value="#{registerBean.nuevo.datosPersonales.email}">
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                            <p:message for="email" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                        <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    </h:form>
+                </div>
+                <p:commandButton id="loginButton" value="Registrarse" update=":register, :register:messages"
+                                 actionListener="#{registerBean.add(evt)}"/>
+            </p:panel>
+            <p:dialog header="Se registrado existosamente" widgetVar="dlgRegister" 
+                      modal="true" resizable="false">
+                <p:outputLabel value="Porfavor comuniquese con su empleador para que habilite su cuenta"/>
+                <f:facet name="footer">
+                    <p:button value="Aceptar" outcome="/faces/index"/>
+                </f:facet>
+            </p:dialog>
+            <div class="ui-g-12 footer-login">
+                <span>ServiReparaciones</span><br/>
+                <span>Servicio Técnico de Fábrica</span>
+            </div>
+        </div>
+
+        <style type="text/css">
+            html {height: 100%;}
+            .ui-button-text, .ui-button-text-only .ui-button-text{padding:8px !important; transition:none !important;}
+            .ui-panel .ui-panel-title {font-size: 17px;}
+        </style>
+
+        <h:outputStylesheet name="css/layout-blue.css" library="icarus-layout" />
+
+    </h:body>
+</html>

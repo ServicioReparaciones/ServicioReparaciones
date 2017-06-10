@@ -1,0 +1,348 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fford">
+            <p:panel>
+                <h:panelGrid columns="8" cellpadding="5">
+                    <p:outputLabel for="findOrd" value="Buscar por:"/>
+                    <p:selectOneMenu id="findOrd" required="true" 
+                                     value="#{recordOrdenBean.pattern}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="Cédula" itemValue="CLI01"/>
+                        <f:selectItem itemLabel="Teléfono" itemValue="CLI02"/>
+                        <f:selectItem itemLabel="Movil" itemValue="CLI03"/>
+                        <f:selectItem itemLabel="Serie" itemValue="PRO02"/>
+                        <f:selectItem itemLabel="PNC" itemValue="PRO03"/>
+                        <f:selectItem itemLabel="Placa" itemValue="PRO04"/>
+                        <f:selectItem itemLabel="Código ORD" itemValue="ORD01"/>
+                        <f:selectItem itemLabel="Número ORD" itemValue="ORD02"/>
+                        <f:selectItem itemLabel="Número Ticket" itemValue="ORD03"/>
+                    </p:selectOneMenu>
+                    <p:message for="findOrd" display="tooltip" severity="error"/>
+
+                    <p:inputText id="pathOrd" required="true" value="#{recordOrdenBean.value}"/>
+                    <p:message for="pathOrd" display="tooltip" severity="error"/>
+
+                    <p:commandButton value="Buscar" icon="fa fa-fw fa-search"
+                                     update=":fford, :fdtord:dtord"
+                                     actionListener="#{recordOrdenBean.findOrden(evt)}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false"/>
+        <h:form id="fdtord">
+            <p:panel>
+                <p:dataTable id="dtord" var="ord" value="#{recordOrdenBean.recordOrdenes}"
+                             selectionMode="single" selection="#{recordOrdenBean.selected}"
+                             rowKey="#{ord.codigo}" rows="5" paginator="true"
+                             paginatorPosition="bottom" reflow="true">
+
+                    <p:ajax event="rowSelect" listener="#{recordOrdenBean.onRowSelect}"
+                            update=":fdata:outOrd"/>
+
+                    <f:facet name="header">
+                        <h:outputText value="ORDENES"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Código ORD" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Número ORD" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.numeroOrden}"/>
+                    </p:column>
+                    <p:column headerText="Número Ticket" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.numeroTicket}"/>
+                    </p:column>
+                    <p:column headerText="Cliente" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.cliente.nombres}"/>
+                        <h:outputText value="#{ord.cliente.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="Teléfono" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.cliente.telefono}"/>
+                    </p:column>
+                    <p:column headerText="Movil" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.cliente.movil}"/>
+                    </p:column>
+                    <p:column headerText="Producto" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.artefacto}"/>
+                    </p:column>
+                    <p:column headerText="Marca" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.marca}"/>
+                    </p:column>
+                    <p:column headerText="Serie" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.serie}"/>
+                    </p:column>
+                    <p:column headerText="PNC" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.pnc}"/>
+                    </p:column>
+                    <p:column headerText="Placa" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.placa}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.username.datosPersonales.nombres}"/>
+                    </p:column>
+                    <p:column headerText="Estado" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.ciclo.abierta.alias} " rendered="#{ord.ciclo.abierta.active}"/>
+                        <h:outputText value="#{ord.ciclo.abierta.username.datosPersonales.nombres}" rendered="#{ord.ciclo.abierta.active}"/>
+                        <h:outputText value="#{ord.ciclo.cerrada.alias} " rendered="#{ord.ciclo.cerrada.active}"/>
+                        <h:outputText value="#{ord.ciclo.cerrada.username.datosPersonales.nombres}" rendered="#{ord.ciclo.cerrada.active}"/>
+                        <h:outputText value="#{ord.ciclo.pendiente.alias} " rendered="#{ord.ciclo.pendiente.active}"/>
+                        <h:outputText value="#{ord.ciclo.pendiente.username.datosPersonales.nombres}" rendered="#{ord.ciclo.pendiente.active}"/>
+                    </p:column>
+                    <p:column>
+                        <p:link target="_blank" href="#{ord.url}">
+                            <p:graphicImage name="images/pdf.png" library="icarus-layout"/>
+                        </p:link>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false"/>
+        <h:form id="fdata">
+            <p:outputPanel id="outOrd">
+                <p:panel header="Datos Orden" rendered="#{recordOrdenBean.active}">
+                    <p:separator/>
+                    <h:outputText style="font-size: 40px" value="N. ORD: #{recordOrdenBean.find.codigo}"/>
+                    <h:panelGrid cellpadding="5">
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.abierta.alias} " rendered="#{recordOrdenBean.find.ciclo.abierta.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.abierta.username.datosPersonales.nombres}" rendered="#{recordOrdenBean.find.ciclo.abierta.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.cerrada.alias} " rendered="#{recordOrdenBean.find.ciclo.cerrada.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.cerrada.username.datosPersonales.nombres}" rendered="#{recordOrdenBean.find.ciclo.cerrada.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.pendiente.alias} " rendered="#{recordOrdenBean.find.ciclo.pendiente.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.pendiente.username.datosPersonales.nombres}" rendered="#{recordOrdenBean.find.ciclo.pendiente.active}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="2" cellpadding="5" 
+                                 rendered="#{recordOrdenBean.find.producto.warranty}">
+                        <p:outputLabel value="Numéro Orden Garantía:" 
+                                       rendered="#{recordOrdenBean.find.producto.warranty}"/>
+                        <p:outputLabel id="fnumOrden" 
+                                       value="#{recordOrdenBean.find.numeroOrden}"
+                                       rendered="#{recordOrdenBean.find.producto.warranty}"/>
+
+                        <p:outputLabel value="Numéro Ticket:"
+                                       rendered="#{recordOrdenBean.find.producto.warranty}"/>
+                        <p:outputLabel id="fnumTicket" 
+                                       value="#{recordOrdenBean.find.numeroTicket}"
+                                       rendered="#{recordOrdenBean.find.producto.warranty}"/>
+                    </h:panelGrid>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-user" value="Cliente"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.nombres}"/>
+
+                        <p:outputLabel value="Apellidos:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.apellidos}"/>
+
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.cedula}"/>
+
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.movil}"/>
+
+                        <p:outputLabel value="Teléfono:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.telefono}"/>
+
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.provincia}"/>
+
+                        <p:outputLabel value="Catón:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.canton}"/>
+
+                        <p:outputLabel value="Parroquia:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.parroquia}"/>
+
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.direccion}"/>
+
+                        <p:outputLabel value="Referencia:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.cliente.referencia}"/>
+                    </h:panelGrid>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-edit" value="Visita"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Fecha Vista:"/>
+                        <h:outputText value="#{recordOrdenBean.find.visita.fechaVisitaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Fecha llegada al cliente:"/>
+                        <h:outputText value="#{recordOrdenBean.find.visita.fechaLlegadaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Fecha salida del cliente:"/>
+                        <h:outputText value="#{recordOrdenBean.find.visita.fechaSalidaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Fecha entrega del producto:"/>
+                        <h:outputText value="#{recordOrdenBean.find.visita.fechaEntregaProducto}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Lugar de Atencón::"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.visita.lugarAtencion}"/>
+
+                        <p:outputLabel value="Posible Falla:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.visita.posibleFalla}"/>
+
+                        <p:outputLabel value="Observación cliente:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.visita.observacionCliente}"/>
+
+                        <p:outputLabel value="Km. Recorrido:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.kilometrosRuta.kmRecorridos}"/>
+
+                        <p:outputLabel value="Observacion Km. Recorrido:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.kilometrosRuta.observacionRuta}"/>
+                    </h:panelGrid>
+                    <p:panel>
+                        <h:panelGrid columns="2" cellpadding="5" style="float: right">
+                            <p:outputLabel value="Valor subTotal Km. Recorrido: $"/>
+                            <p:outputLabel value="#{recordOrdenBean.find.kilometrosRuta.subTotal}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-cube" value="Producto"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Artefacto:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.producto.artefacto}"/>
+
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.producto.marca}"/>
+
+                        <p:outputLabel value="Modelo:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.producto.modelo}"/>
+
+                        <p:outputLabel value="Serie:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.producto.serie}"/>
+
+                        <p:outputLabel value="PNC:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.producto.pnc}"/>
+
+                        <p:outputLabel value="Placa:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.producto.placa}"/>    
+                    </h:panelGrid>
+                    <p:panel rendered="#{recordOrdenBean.find.producto.warranty}">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Almacén:"/>
+                            <p:outputLabel value="#{recordOrdenBean.find.producto.garantia.almacen}"/>
+
+                            <p:outputLabel value="Telefono Almacén"/>
+                            <p:outputLabel value="#{recordOrdenBean.find.producto.garantia.telefonoAlmacen}"/>
+
+                            <p:outputLabel value="Numéro Factura:"/>
+                            <p:outputLabel value="#{recordOrdenBean.find.producto.garantia.numeroFactura}"/>
+
+                            <p:outputLabel value="Fecha Factura:"/>
+                            <h:outputText value="#{recordOrdenBean.find.producto.garantia.fechaFactura}">
+                                <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-wrench" value="Servicios"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <p:dataTable var="srvOrd" rowIndexVar="isvrOrd"
+                                 value="#{recordOrdenBean.find.detalleServicios}">
+                        <f:facet name="header">
+                            <h:outputText value="SERVICIOS"/>
+                        </f:facet>
+                        <p:column style="width:16px;text-align: center">
+                            <h:outputText value="#{isvrOrd +1}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                            <h:outputText value="#{srvOrd.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Servicio" style="text-align: center;width: auto">
+                            <h:outputText value="#{srvOrd.servicio.descripcion} #{srvOrd.servicio.artefacto} #{srvOrd.servicio.marca}" />
+                        </p:column>
+                        <p:column headerText="Precio Unit." style="text-align: center;width: auto">
+                            <h:outputText value="#{srvOrd.servicio.precio}" />
+                        </p:column>
+                        <p:column headerText="SubTotal" style="text-align: center;width: auto">
+                            <h:outputText value="#{srvOrd.subTotal}" />
+                        </p:column>
+                    </p:dataTable>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:panel>
+                        <h:panelGrid columns="2" cellpadding="5" style="float: right">
+                            <p:outputLabel value="Valor subTotal Servicios Prestados: $"/>
+                            <p:outputLabel value="#{recordOrdenBean.find.subTotalServicios}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-steam-square" value="Repuestos"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <p:dataTable var="repOrd" rowIndexVar="irepOrd"
+                                 value="#{recordOrdenBean.find.detalleRepuestos}">
+                        <f:facet name="header">
+                            <h:outputText value="REPUESTOS"/>
+                        </f:facet>
+                        <p:column style="width:16px;text-align: center">
+                            <h:outputText value="#{irepOrd +1}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Código" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.repuesto.code}" />
+                        </p:column>
+                        <p:column headerText="Numero Parte" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.repuesto.code}" />
+                        </p:column>
+                        <p:column headerText="Modelo" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.repuesto.modelo}" />
+                        </p:column>
+                        <p:column headerText="Repuesto" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.repuesto.nombre} #{repOrd.repuesto.descripcion}" />
+                        </p:column>
+                        <p:column headerText="Marca" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.repuesto.marca}" />
+                        </p:column>
+                        <p:column headerText="Precio Unit." style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.repuesto.precio}" />
+                        </p:column>
+                        <p:column headerText="SubTotal" style="text-align: center;width: auto">
+                            <h:outputText value="#{repOrd.subTotal}" />
+                        </p:column>
+                    </p:dataTable>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:panel>
+                        <h:panelGrid columns="2" cellpadding="5" style="float: right">
+                            <p:outputLabel value="Valor subTotal Repuestos Utilizados: $"/>
+                            <p:outputLabel value="#{recordOrdenBean.find.subTotalRepuestos}"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-tasks" value="Trabajo"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:panelGrid cellpadding="5">
+                        <p:outputLabel value="Desperfecto del producto reparado:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.trabajoFinalEjecutado.desperfecto}"/>
+
+                        <p:outputLabel value="Descripción de Trabajo Final Ejecutado por el Tećnico:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.trabajoFinalEjecutado.trabajoRealizado}"/>
+
+                        <p:outputLabel value="Observaciónes :"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.trabajoFinalEjecutado.observaciones}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

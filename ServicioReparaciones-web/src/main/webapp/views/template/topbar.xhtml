@@ -1,0 +1,45 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+
+    <div id="top-bar-wrapper">
+        <div id="top-bar">
+            <div class="search-bar">
+
+            </div>
+
+            <div class="top-bar-profile">
+                <div class="profile-name">
+                    <span><h:outputText value="#{credencialBean.userSession.datosPersonales.nombres} "/></span>
+                    <br/>
+                    <h:outputText value="#{credencialBean.userSession.username}"/>
+                </div>
+                <a href="#" id="profile-image">
+                    <h:graphicImage id="imgPerfil" name="images/profile.png" 
+                                    library="icarus-layout" style="border: 0 none;"/>
+                </a>
+                <ul class="top-submenu animated flipInX">
+                    <li>
+                        <h:link outcome="/faces/views/perfil">
+                            <i class="fa fa-fw fa-user"></i>
+                            <span>Perfil</span>
+                        </h:link>
+                    </li>
+                    <li>
+                        <p:commandLink actionListener="#{credencialBean.logout(event)}"
+                                       oncomplete="handleLoginRequest(xhr, status, args)">
+                            <i class="top-submenu-icon fa fa-fw fa-close"></i>
+                            <span>Salir</span>
+                        </p:commandLink>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+</ui:composition>

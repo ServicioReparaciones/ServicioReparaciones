@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>ServiReparaciones</title>
+    </h:head>
+
+    <h:body styleClass="containerLogin">
+        <div class="logo-container">
+            <h:graphicImage name="images/logo.svg" id="PageLogo" library="icarus-layout"/>
+        </div>
+        <div class="ui-g">
+            <p:panel header="Iniciar Sesión" styleClass="panel-login">
+                <h:form id="flogin">
+                    <div class="ui-g-12" style="padding-top:35px;">
+                        <p:inputText required="true" value="#{loginBean.usuario.username}" 
+                                     placeholder="Usuario" style="width:60%;"/><br/>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:password required="true" value="#{loginBean.usuario.password}" 
+                                    placeholder="Contraseña" style="width:60%"/>
+                    </div>
+                </h:form>
+                <div class="ui-g-2"></div>
+                <div class="ui-g-8 login-input-container">
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                        <p:graphicImage name="images/register.svg" width="15%" height="15%" 
+                                        library="icarus-layout"/>
+                        <p:link value="Registrarse" outcome="/faces/register"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                        <p:graphicImage name="images/forgot.svg" width="15%" height="15%" 
+                                        library="icarus-layout"/>
+                        <p:link value="Olvidó su contraseña?" outcome="/faces/recovery"/>
+                    </div>
+                </div>
+                <div class="ui-g-2"></div>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:panelGrid>
+                <p:commandButton id="loginButton" value="Iniciar"
+                                 update=":flogin, messages"
+                                 actionListener="#{loginBean.login(evt)}"
+                                 oncomplete="handleLoginRequest(xhr, status, args)"/>
+            </p:panel>
+            <div class="ui-g-12 footer-login">
+                <span>ServiReparaciones</span><br/>
+                <span>Servicio Técnico de Fábrica</span>
+            </div>
+        </div>
+
+        <style type="text/css">
+            html {height: 100%;}
+            .ui-button-text, .ui-button-text-only .ui-button-text{padding:8px !important; transition:none !important;}
+            .ui-panel .ui-panel-title {font-size: 17px;}
+        </style>
+
+        <h:outputStylesheet name="css/layout-blue.css" library="icarus-layout" />
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.validationFailed || !args.loggedIn) {
+                    jQuery('#flogin').effect("shake", {times: 5}, 100);
+                } else {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+    </h:body>
+
+</html>

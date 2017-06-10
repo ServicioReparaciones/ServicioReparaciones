@@ -1,0 +1,675 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fford">
+            <p:panel>
+                <h:panelGrid columns="8" cellpadding="5">
+                    <p:outputLabel for="findOrd" value="Buscar por:"/>
+                    <p:selectOneMenu id="findOrd" required="true" 
+                                     value="#{findOrden.pattern}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="Cédula" itemValue="CLI01"/>
+                        <f:selectItem itemLabel="Teléfono" itemValue="CLI02"/>
+                        <f:selectItem itemLabel="Movil" itemValue="CLI03"/>
+                        <f:selectItem itemLabel="Serie" itemValue="PRO02"/>
+                        <f:selectItem itemLabel="PNC" itemValue="PRO03"/>
+                        <f:selectItem itemLabel="Placa" itemValue="PRO04"/>
+                        <f:selectItem itemLabel="Código ORD" itemValue="ORD01"/>
+                        <f:selectItem itemLabel="Número ORD" itemValue="ORD02"/>
+                        <f:selectItem itemLabel="Número Ticket" itemValue="ORD03"/>
+                    </p:selectOneMenu>
+                    <p:message for="findOrd" display="tooltip" severity="error"/>
+
+                    <p:inputText id="pathOrd" required="true" value="#{findOrden.value}"/>
+                    <p:message for="pathOrd" display="tooltip" severity="error"/>
+
+                    <p:commandButton value="Buscar" icon="fa fa-fw fa-search"
+                                     update=":fford, :fdtord:dtord"
+                                     actionListener="#{findOrden.findOrden(evt)}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false"/>
+        <h:form id="fdtord">
+            <p:panel>
+                <p:dataTable id="dtord" var="ord" value="#{findOrden.findOrdenes}"
+                             selectionMode="single" selection="#{findOrden.selected}"
+                             rowKey="#{ord.codigo}" rows="5" paginator="true"
+                             paginatorPosition="bottom" reflow="true">
+
+                    <p:ajax event="rowSelect" listener="#{findOrden.onRowSelect}"
+                            update=":ford:outWizard"/>
+
+                    <f:facet name="header">
+                        <h:outputText value="ORDENES"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Código ORD" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Número ORD" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.numeroOrden}"/>
+                    </p:column>
+                    <p:column headerText="Número Ticket" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.numeroTicket}"/>
+                    </p:column>
+                    <p:column headerText="Cliente" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.cliente.nombres}"/>
+                        <h:outputText value="#{ord.cliente.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="Teléfono" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.cliente.telefono}"/>
+                    </p:column>
+                    <p:column headerText="Movil" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.cliente.movil}"/>
+                    </p:column>
+                    <p:column headerText="Producto" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.artefacto}"/>
+                    </p:column>
+                    <p:column headerText="Marca" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.marca}"/>
+                    </p:column>
+                    <p:column headerText="Serie" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.serie}"/>
+                    </p:column>
+                    <p:column headerText="PNC" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.pnc}"/>
+                    </p:column>
+                    <p:column headerText="Placa" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.producto.placa}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.username.datosPersonales.nombres}"/>
+                    </p:column>
+                    <p:column headerText="Estado" style="text-align: center;font-size: 75%">
+                        <h:outputText value="#{ord.ciclo.abierta.alias} " rendered="#{ord.ciclo.abierta.active}"/>
+                        <h:outputText value="#{ord.ciclo.abierta.username.datosPersonales.nombres}" rendered="#{ord.ciclo.abierta.active}"/>
+                        <h:outputText value="#{ord.ciclo.cerrada.alias} " rendered="#{ord.ciclo.cerrada.active}"/>
+                        <h:outputText value="#{ord.ciclo.cerrada.username.datosPersonales.nombres}" rendered="#{ord.ciclo.cerrada.active}"/>
+                        <h:outputText value="#{ord.ciclo.pendiente.alias} " rendered="#{ord.ciclo.pendiente.active}"/>
+                        <h:outputText value="#{ord.ciclo.pendiente.username.datosPersonales.nombres}" rendered="#{ord.ciclo.pendiente.active}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false"/>
+        <h:form id="ford">
+            <p:outputPanel id="outWizard">
+                <p:wizard rendered="#{findOrden.active}"
+                          flowListener="#{findOrden.onFlowProcess}" showStepStatus="true"
+                          nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
+                    <p:tab id="visita" title="VISITA">
+                        <p:panel header="1. Complete los datos de la visita realizada">
+                            <h:panelGrid cellpadding="5">
+                                <p:outputLabel value="BARCOE: #{findOrden.find.barcode}"/>
+                            </h:panelGrid>
+                            <p:separator rendered="#{findOrden.find.producto.warranty}"/>
+                            <h:panelGrid cellpadding="5" rendered="#{findOrden.find.producto.warranty}">
+                                <p:outputLabel value="Códigos Garantía"
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                            </h:panelGrid>
+                            <p:separator rendered="#{findOrden.find.producto.warranty}"/>
+                            <h:panelGrid columns="6" cellpadding="5"
+                                         rendered="#{findOrden.find.producto.warranty}">
+                                <p:outputLabel for="numOrden" value="Numéro de Orden Garantía:"
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                                <p:inputText id="numOrden" required="true"
+                                             rendered="#{findOrden.find.producto.warranty}"
+                                             value="#{findOrden.find.numeroOrden}"/>
+                                <p:message for="numOrden" display="tooltip" severity="error"
+                                           rendered="#{findOrden.find.producto.warranty}"/>
+
+                                <p:outputLabel for="numTicket" value="Numéro de Ticket:"
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                                <p:inputText id="numTicket" required="true"
+                                             rendered="#{findOrden.find.producto.warranty}"
+                                             value="#{findOrden.find.numeroTicket}"/>
+                                <p:message for="numTicket" display="tooltip" severity="error"
+                                           rendered="#{findOrden.find.producto.warranty}"/>
+                            </h:panelGrid>
+                            <p:separator/>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="Fecha/Hora Vista"/>
+                                <h:outputText value="#{findOrden.find.visita.fechaVisitaCliente}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+
+                                <p:outputLabel value="Posible Falla:"/>
+                                <p:outputLabel value="#{findOrden.find.visita.posibleFalla}"/>
+
+                                <p:outputLabel value="Observación cliente:"/>
+                                <p:outputLabel value="#{findOrden.find.visita.observacionCliente}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:outputLabel for="fechaLlegada" value="Fecha/Hora Llegada Cliente:"/>
+                                <p:calendar id="fechaLlegada" required="true" pattern="MM/dd/yyyy HH:mm"
+                                            value="#{findOrden.find.visita.fechaLlegadaCliente}"/>
+                                <p:message for="fechaLlegada" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="fechaSalida" value="Fecha/Hora Salida Cliente:"/>
+                                <p:calendar id="fechaSalida" required="true" pattern="MM/dd/yyyy HH:mm"
+                                            value="#{findOrden.find.visita.fechaSalidaCliente}"/>
+                                <p:message for="fechaSalida" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="lugarAtencion" value="Lugar de Atención:" />
+                                <p:selectOneRadio id="lugarAtencion" required="true"
+                                                  value="#{findOrden.find.visita.lugarAtencion}">
+                                    <f:selectItem itemLabel="Domicilio" itemValue="Domicilio"/>
+                                    <f:selectItem itemLabel="Centro Servicio" itemValue="Centro Servicio"/>
+                                </p:selectOneRadio>
+                                <p:message for="lugarAtencion" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="fechaEntregaProducto" value="Fecha/Hora Entrega Producto:"/>
+                                <p:calendar id="fechaEntregaProducto" required="true" pattern="MM/dd/yyyy HH:mm"
+                                            value="#{findOrden.find.visita.fechaEntregaProducto}"/>
+                                <p:message for="fechaEntregaProducto" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="tecnico" value="Técnico:"/>
+                                <p:selectOneMenu id="tecnico" required="true"
+                                                 value="#{findOrden.find.tecnico.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{tecnicoBean.tecnicos}" var="tec" itemValue="#{tec.codigo}"
+                                                   itemLabel="#{tec.datosPersonales.nombres} #{tec.datosPersonales.apellidos}"/>
+                                </p:selectOneMenu>
+                                <p:message for="tecnico" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="kmRecorrido" value="Km. Recorrido::"/>
+                                <p:inputNumber id="kmRecorrido" value="#{findOrden.find.kilometrosRuta.kmRecorridos}"/>
+                                <p:message for="kmRecorrido" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="valorKmRecorrido" value="Precio por Km. Recorrido:"/>
+                                <p:inputNumber id="valorKmRecorrido" value="#{findOrden.find.kilometrosRuta.valorPorKmRecorrido}"/>
+                                <p:message for="valorKmRecorrido" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="obsKmRecorrido" value="Observación Km. Recorrido:"/>
+                                <p:inputText id="obsKmRecorrido" value="#{findOrden.find.kilometrosRuta.observacionRuta}"/>
+                                <p:message for="obsKmRecorrido" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="producto" title="PRODUCTO">
+                        <p:panel header="2. Complete los datos del producto">
+                            <h:panelGrid columns="5" cellpadding="5" rendered="#{findOrden.find.producto.warranty}">
+                                <p:outputLabel value="Códigos Garantía" rendered="#{findOrden.find.producto.warranty}"/>
+
+                                <p:outputLabel value="Numéro de Orden Garantía:" 
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                                <p:outputLabel rendered="#{findOrden.find.producto.warranty}"
+                                               value="#{findOrden.find.numeroOrden}"/>
+
+                                <p:outputLabel value="Numéro de Ticket:" 
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                                <p:outputLabel rendered="#{findOrden.find.producto.warranty}"
+                                               value="#{findOrden.find.numeroTicket}"/>                           
+                            </h:panelGrid>
+                            <p:separator rendered="#{findOrden.find.producto.warranty}"/>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:outputLabel for="artefacto" value="Artefacto:"/>
+                                <p:selectOneMenu id="artefacto" required="true" value="#{findOrden.find.producto.artefacto}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                                   itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}re"/>
+                                </p:selectOneMenu>
+                                <p:message for="artefacto" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="marca" value="Marca:"/>
+                                <p:selectOneMenu id="marca" required="true" value="#{findOrden.find.producto.marca}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{productoBean.marcas}" var="mar"
+                                                   itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
+                                </p:selectOneMenu>
+                                <p:message for="marca" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="modelo" value="Modelo:"/>
+                                <p:inputText id="modelo" required="true" value="#{findOrden.find.producto.modelo}"/>
+                                <p:message for="modelo" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="serie" value="Serie:"/>
+                                <p:inputText id="serie" required="true" value="#{findOrden.find.producto.serie}"/>
+                                <p:message for="serie" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="pnc" value="PNC:"/>
+                                <p:inputText id="pnc" value="#{findOrden.find.producto.pnc}"/>
+                                <p:message for="pnc" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="placa" value="Placa:"/>
+                                <p:inputText id="placa" value="#{findOrden.find.producto.placa}"/>
+                                <p:message for="placa" display="tooltip" severity="error"/>    
+                            </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:panel rendered="#{findOrden.find.producto.warranty}">
+                                <h:panelGrid columns="3" cellpadding="5">
+                                    <p:outputLabel for="almacen" value="Almacén:"/>
+                                    <p:selectOneMenu id="almacen" required="true"
+                                                     value="#{findOrden.find.producto.garantia.almacen}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{productoBean.almacenes}" var="ealm"
+                                                       itemLabel="#{ealm.almacen}" itemValue="#{ealm.almacen}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="almacen" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="telefonoAlmacen" value="Telefono Almacén:"/>
+                                    <p:inputText id="telefonoAlmacen" maxlength="13" 
+                                                   value="#{findOrden.find.producto.garantia.telefonoAlmacen}"/>
+                                    <p:message for="telefonoAlmacen" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="numeroFactura" value="Numéro Factura:"/>
+                                    <p:inputText id="numeroFactura" maxlength="12" required="true" 
+                                                   value="#{findOrden.find.producto.garantia.numeroFactura}"/>
+                                    <p:message for="numeroFactura" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="fechaFactura" value="Fecha Factura:"/>
+                                    <p:calendar  id="fechaFactura" required="true" pattern="dd/MM/yyyy" showOn="button"
+                                                 value="#{findOrden.find.producto.garantia.fechaFactura}"/>
+                                    <p:message for="fechaFactura" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="servicio" title="SERVICIOS">
+                        <p:panel header="3. Agregue los servicios realizados">
+                            <p:panel>
+                                <p:outputPanel id="outItemSrv">
+                                    <h:panelGrid columns="4" cellpadding="5">
+                                        <p:outputLabel value="Cantidad:"/>
+                                        <p:inputText value="#{findOrden.itemsServicio.nuevo.cantidad}"/>
+                                        <p:selectOneMenu value="#{findOrden.itemsServicio.nuevo.servicio.codigo}">
+                                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{servicioBean.servicios}" var="servs"
+                                                           itemLabel="#{servs}" itemValue="#{servs.codigo}"/>
+                                        </p:selectOneMenu>
+                                        <p:commandButton value="Agregar" update=":ford:outItemSrv, :ford:dtsrv"
+                                                         actionListener="#{findOrden.itemsServicio.add(evt)}"/>
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:dataTable id="dtsrv" var="srv" rowIndexVar="isvr"
+                                         value="#{findOrden.itemsServicio.items}">
+                                <f:facet name="header">
+                                    <h:outputText value="DETALLE SERVICIOS"/>
+                                </f:facet>
+                                <p:column style="width:16px;text-align: center">
+                                    <h:outputText value="#{isvr +1}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srv.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Servicio" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srv.servicio.descripcion} #{srv.servicio.artefacto} #{srv.servicio.marca}" />
+                                </p:column>
+                                <p:column headerText="Precio Unit." style="text-align: center;width: auto">
+                                    <h:outputText value="#{srv.servicio.precio}" />
+                                </p:column>
+                                <p:column headerText="SubTotal" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srv.subTotal}" />
+                                </p:column>
+                                <p:column style="width:32px;text-align: center">
+                                    <p:commandButton icon="fa fa-fw fa-remove" update=":ford:dtsrv"
+                                                     actionListener="#{findOrden.itemsServicio.remove(evt)}">
+                                        <f:setPropertyActionListener value="#{srv}" target="#{findOrden.itemsServicio.selected}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="repuesto" title="REPUESTOS">
+                        <p:panel header="4. Agregue los repuestos ulitizados">
+                            <p:panel>
+                                <p:outputPanel id="outItemRep">
+                                    <h:panelGrid columns="4" cellpadding="5">
+                                        <p:outputLabel value="Cantidad:"/>
+                                        <p:inputText value="#{findOrden.itemsRepuesto.nuevo.cantidad}"/>
+                                        <p:selectOneMenu value="#{findOrden.itemsRepuesto.nuevo.repuesto.codigo}">
+                                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{repuestoBean.repuestos}" var="reptos"
+                                                           itemLabel="#{reptos}" itemValue="#{reptos.codigo}"/>
+                                        </p:selectOneMenu>
+                                        <p:commandButton value="Agregar" update=":ford:outItemRep, :ford:dtrep"
+                                                         actionListener="#{findOrden.itemsRepuesto.add(evt)}"/>
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:dataTable id="dtrep" var="rep" rowIndexVar="irep"
+                                         value="#{findOrden.itemsRepuesto.items}">
+                                <f:facet name="header">
+                                    <h:outputText value="DETALLE REPUESTOS"/>
+                                </f:facet>
+                                <p:column style="width:16px;text-align: center">
+                                    <h:outputText value="#{irep +1}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Código" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.repuesto.code}" />
+                                </p:column>
+                                <p:column headerText="Numero Parte" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.repuesto.code}" />
+                                </p:column>
+                                <p:column headerText="Modelo" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.repuesto.modelo}" />
+                                </p:column>
+                                <p:column headerText="Repuesto" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.repuesto.nombre} #{rep.repuesto.descripcion}" />
+                                </p:column>
+                                <p:column headerText="Marca" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.repuesto.marca}" />
+                                </p:column>
+                                <p:column headerText="Precio Unit." style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.repuesto.precio}" />
+                                </p:column>
+                                <p:column headerText="SubTotal" style="text-align: center;width: auto">
+                                    <h:outputText value="#{rep.subTotal}" />
+                                </p:column>
+                                <p:column style="width:32px;text-align: center">
+                                    <p:commandButton icon="fa fa-fw fa-remove" update=":ford:dtrep"
+                                                     actionListener="#{findOrden.itemsRepuesto.remove(evt)}">
+                                        <f:setPropertyActionListener value="#{rep}" target="#{findOrden.itemsRepuesto.selected}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="trabajo" title="TRABAJO">
+                        <p:panel header="5. Complete los datos del trabajo final ejecutado">
+                            <h:panelGrid cellpadding="5">
+                                <p:outputLabel for="desperfecto" value="Desperfecto del producto reparado:"/>
+                                <p:inputTextarea id="desperfecto" required="true" rows="5" cols="60" 
+                                                 value="#{findOrden.find.trabajoFinalEjecutado.desperfecto}"/>
+                                <p:message for="desperfecto" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="trabajoFinalEjecutado" value="Descripción de Trabajo Final Ejecutado por el Tećnico:"/>
+                                <p:inputTextarea id="trabajoFinalEjecutado" required="true" rows="5" cols="60" 
+                                                 value="#{findOrden.find.trabajoFinalEjecutado.trabajoRealizado}"/>
+                                <p:message for="trabajoFinalEjecutado" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="onservaciones" value="Observaciónes :"/>
+                                <p:inputTextarea id="onservaciones" rows="5" cols="60"
+                                                 value="#{findOrden.find.trabajoFinalEjecutado.observaciones}"/>
+                                <p:message for="onservaciones" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="orden" title="ORDEN">
+                        <p:panel header="6. Revisión Datos Orden">
+                            <h:panelGrid columns="2" cellpadding="5" 
+                                         rendered="#{findOrden.find.producto.warranty}">
+                                <p:outputLabel value="Numéro Orden Garantía:" 
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                                <p:outputLabel id="fnumOrden" 
+                                               value="#{findOrden.find.numeroOrden}"
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+
+                                <p:outputLabel value="Numéro Ticket:"
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                                <p:outputLabel id="fnumTicket" 
+                                               value="#{findOrden.find.numeroTicket}"
+                                               rendered="#{findOrden.find.producto.warranty}"/>
+                            </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-user" value="Cliente"/>
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.nombres}"/>
+
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.apellidos}"/>
+
+                                <p:outputLabel value="Cédula:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.cedula}"/>
+
+                                <p:outputLabel value="Móvil:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.movil}"/>
+
+                                <p:outputLabel value="Teléfono:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.telefono}"/>
+
+                                <p:outputLabel value="Provincia:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.provincia}"/>
+
+                                <p:outputLabel value="Catón:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.canton}"/>
+
+                                <p:outputLabel value="Parroquia:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.parroquia}"/>
+
+                                <p:outputLabel value="Dirección:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.direccion}"/>
+
+                                <p:outputLabel value="Referencia:"/>
+                                <p:outputLabel value="#{findOrden.find.cliente.referencia}"/>
+                            </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-edit" value="Visita"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Fecha Vista:"/>
+                                <h:outputText value="#{findOrden.find.visita.fechaVisitaCliente}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+
+                                <p:outputLabel value="Fecha llegada al cliente:"/>
+                                <h:outputText value="#{findOrden.find.visita.fechaLlegadaCliente}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+
+                                <p:outputLabel value="Fecha salida del cliente:"/>
+                                <h:outputText value="#{findOrden.find.visita.fechaSalidaCliente}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+
+                                <p:outputLabel value="Fecha entrega del producto:"/>
+                                <h:outputText value="#{findOrden.find.visita.fechaEntregaProducto}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+
+                                <p:outputLabel value="Lugar de Atencón::"/>
+                                <p:outputLabel value="#{findOrden.find.visita.lugarAtencion}"/>
+
+                                <p:outputLabel value="Posible Falla:"/>
+                                <p:outputLabel value="#{findOrden.find.visita.posibleFalla}"/>
+
+                                <p:outputLabel value="Observación cliente:"/>
+                                <p:outputLabel value="#{findOrden.find.visita.observacionCliente}"/>
+
+                                <p:outputLabel value="Km. Recorrido:"/>
+                                <p:outputLabel value="#{findOrden.find.kilometrosRuta.kmRecorridos}"/>
+
+                                <p:outputLabel value="Observacion Km. Recorrido:"/>
+                                <p:outputLabel value="#{findOrden.find.kilometrosRuta.observacionRuta}"/>
+                            </h:panelGrid>
+                            <p:panel>
+                                <h:panelGrid columns="2" cellpadding="5" style="float: right">
+                                    <p:outputLabel value="Valor subTotal Km. Recorrido: $"/>
+                                    <p:outputLabel value="#{findOrden.find.kilometrosRuta.subTotal}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-cube" value="Producto"/>
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Artefacto:"/>
+                                <p:outputLabel value="#{findOrden.find.producto.artefacto}"/>
+
+                                <p:outputLabel value="Marca:"/>
+                                <p:outputLabel value="#{findOrden.find.producto.marca}"/>
+
+                                <p:outputLabel value="Modelo:"/>
+                                <p:outputLabel value="#{findOrden.find.producto.modelo}"/>
+
+                                <p:outputLabel value="Serie:"/>
+                                <p:outputLabel value="#{findOrden.find.producto.serie}"/>
+
+                                <p:outputLabel value="PNC:"/>
+                                <p:outputLabel value="#{findOrden.find.producto.pnc}"/>
+
+                                <p:outputLabel value="Placa:"/>
+                                <p:outputLabel value="#{findOrden.find.producto.placa}"/>    
+                            </h:panelGrid>
+                            <p:panel rendered="#{findOrden.find.producto.warranty}">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:outputLabel value="Almacén:"/>
+                                    <p:outputLabel value="#{findOrden.find.producto.garantia.almacen}"/>
+
+                                    <p:outputLabel value="Telefono Almacén"/>
+                                    <p:outputLabel value="#{findOrden.find.producto.garantia.telefonoAlmacen}"/>
+
+                                    <p:outputLabel value="Numéro Factura:"/>
+                                    <p:outputLabel value="#{findOrden.find.producto.garantia.numeroFactura}"/>
+
+                                    <p:outputLabel value="Fecha Factura:"/>
+                                    <h:outputText value="#{findOrden.find.producto.garantia.fechaFactura}">
+                                        <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                    </h:outputText>
+                                </h:panelGrid>
+                            </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-wrench" value="Servicios"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:dataTable var="srvOrd" rowIndexVar="isvrOrd"
+                                         value="#{findOrden.itemsServicio.items}">
+                                <f:facet name="header">
+                                    <h:outputText value="SERVICIOS"/>
+                                </f:facet>
+                                <p:column style="width:16px;text-align: center">
+                                    <h:outputText value="#{isvrOrd +1}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Servicio" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.servicio.descripcion} #{srvOrd.servicio.artefacto} #{srvOrd.servicio.marca}" />
+                                </p:column>
+                                <p:column headerText="Precio Unit." style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.servicio.precio}" />
+                                </p:column>
+                                <p:column headerText="SubTotal" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.subTotal}" />
+                                </p:column>
+                            </p:dataTable>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:panel>
+                                <h:panelGrid columns="2" cellpadding="5" style="float: right">
+                                    <p:outputLabel value="Valor subTotal Servicios Prestados: $"/>
+                                    <p:outputLabel value="#{findOrden.itemsServicio.calcularSubTotal()}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-steam-square" value="Repuestos"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:dataTable var="repOrd" rowIndexVar="irepOrd"
+                                         value="#{findOrden.itemsRepuesto.items}">
+                                <f:facet name="header">
+                                    <h:outputText value="REPUESTOS"/>
+                                </f:facet>
+                                <p:column style="width:16px;text-align: center">
+                                    <h:outputText value="#{irepOrd +1}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Código" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.repuesto.code}" />
+                                </p:column>
+                                <p:column headerText="Numero Parte" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.repuesto.code}" />
+                                </p:column>
+                                <p:column headerText="Modelo" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.repuesto.modelo}" />
+                                </p:column>
+                                <p:column headerText="Repuesto" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.repuesto.nombre} #{repOrd.repuesto.descripcion}" />
+                                </p:column>
+                                <p:column headerText="Marca" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.repuesto.marca}" />
+                                </p:column>
+                                <p:column headerText="Precio Unit." style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.repuesto.precio}" />
+                                </p:column>
+                                <p:column headerText="SubTotal" style="text-align: center;width: auto">
+                                    <h:outputText value="#{repOrd.subTotal}" />
+                                </p:column>
+                            </p:dataTable>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:panel>
+                                <h:panelGrid columns="2" cellpadding="5" style="float: right">
+                                    <p:outputLabel value="Valor subTotal Repuestos Utilizados: $"/>
+                                    <p:outputLabel value="#{findOrden.itemsRepuesto.calcularSubTotal()}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-tasks" value="Trabajo"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:panelGrid cellpadding="5">
+                                <p:outputLabel value="Desperfecto del producto reparado:"/>
+                                <p:outputLabel value="#{findOrden.find.trabajoFinalEjecutado.desperfecto}"/>
+
+                                <p:outputLabel value="Descripción de Trabajo Final Ejecutado por el Tećnico:"/>
+                                <p:outputLabel value="#{findOrden.find.trabajoFinalEjecutado.trabajoRealizado}"/>
+
+                                <p:outputLabel value="Observaciónes :"/>
+                                <p:outputLabel value="#{findOrden.find.trabajoFinalEjecutado.observaciones}"/>
+                            </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <h:panelGrid style="margin: 0 auto;">
+                                <p:commandButton value="Cerrar Orden Servicio"
+                                                 update=":fwin:outOrdC" 
+                                                 styleClass="green-button" 
+                                                 style="margin-bottom:10px;"
+                                                 actionListener="#{findOrden.modifyCloseOrden(evt)}"/>
+                            </h:panelGrid>
+                            <h:panelGrid style="margin: 0 auto;">
+                                <p:commandButton value="Poner pendiente Orden"
+                                                 update=":fwin:outOrdP" 
+                                                 styleClass="black-button" 
+                                                 style="margin-bottom:10px;"
+                                                 oncomplete="PF('dlgOrdenPendy').show()"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </p:outputPanel>
+        </h:form>
+        <h:form id="fwin"> 
+            <p:dialog header="Orden Cerrada" widgetVar="dlgOrdenCerrada" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade" closable="false">
+                <p:outputPanel id="outOrdC">
+                    <h:panelGrid cellpadding="5">
+                        <p:outputLabel value="Se ha actualizado con exito la orden."/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Salir" update=":fwin, :ford"
+                                     action="/faces/views/principal"/>
+                </f:facet>
+            </p:dialog>
+            <p:dialog header="Orden Pendiente" widgetVar="dlgOrdenPendy" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade" closable="false">
+                <p:outputPanel id="outOrdP">
+                    <h:panelGrid cellpadding="5">
+                        <p:outputLabel value="Causa por la cual esta pendiente la orden:"/>
+                        <p:inputText value="#{findOrden.find.ciclo.pendiente.comentario}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Salir" update=":fwin, :ford"
+                                     actionListener="#{findOrden.modifyPendyOrden(evt)}"
+                                     action="/faces/views/principal"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
