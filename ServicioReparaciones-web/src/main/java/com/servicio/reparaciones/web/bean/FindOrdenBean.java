@@ -286,6 +286,9 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
                     this.itemsServicio.getItems().add(e);
                 }
             }
+            if(this.find.getTecnico().getCodigo() != null){
+                this.find.setTecnico(this.tecnicoService.findByCodigo(this.find.getTecnico()));
+            }
         }
         return event.getNewStep();
     }
