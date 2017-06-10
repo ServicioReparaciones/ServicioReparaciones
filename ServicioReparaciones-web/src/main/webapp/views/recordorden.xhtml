@@ -114,10 +114,13 @@
                     <h:panelGrid cellpadding="5">
                         <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.abierta.alias} " rendered="#{recordOrdenBean.find.ciclo.abierta.active}"/>
                         <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.abierta.username.datosPersonales.nombres}" rendered="#{recordOrdenBean.find.ciclo.abierta.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.abierta.comentario}" rendered="#{recordOrdenBean.find.ciclo.abierta.active}"/>
                         <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.cerrada.alias} " rendered="#{recordOrdenBean.find.ciclo.cerrada.active}"/>
                         <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.cerrada.username.datosPersonales.nombres}" rendered="#{recordOrdenBean.find.ciclo.cerrada.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.cerrada.comentario}" rendered="#{recordOrdenBean.find.ciclo.cerrada.active}"/>
                         <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.pendiente.alias} " rendered="#{recordOrdenBean.find.ciclo.pendiente.active}"/>
                         <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.pendiente.username.datosPersonales.nombres}" rendered="#{recordOrdenBean.find.ciclo.pendiente.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{recordOrdenBean.find.ciclo.pendiente.comentario}" rendered="#{recordOrdenBean.find.ciclo.pendiente.active}"/>    
                     </h:panelGrid>
                     <p:separator/>
                     <h:panelGrid columns="2" cellpadding="5" 
@@ -326,6 +329,18 @@
                             <p:outputLabel value="#{recordOrdenBean.find.subTotalRepuestos}"/>
                         </h:panelGrid>
                     </p:panel>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-male" value="Técnico"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="#{recordOrdenBean.find.tecnico.datosPersonales.nombres}"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.tecnico.datosPersonales.apellidos}"/>
+                        <p:outputLabel value="Cargo:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.tecnico.cargo}"/>
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.tecnico.datosPersonales.movil}"/>
+                    </h:panelGrid>
                     <h:outputText value="&lt;br/&gt;" escape="false" />
                     <p:commandButton icon="fa fa-fw fa-tasks" value="Trabajo"/>
                     <h:outputText value="&lt;br/&gt;" escape="false"/>

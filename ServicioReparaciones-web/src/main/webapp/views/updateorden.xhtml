@@ -258,12 +258,12 @@
 
                                     <p:outputLabel for="telefonoAlmacen" value="Telefono Almacén:"/>
                                     <p:inputText id="telefonoAlmacen" maxlength="13" 
-                                                   value="#{findOrden.find.producto.garantia.telefonoAlmacen}"/>
+                                                 value="#{findOrden.find.producto.garantia.telefonoAlmacen}"/>
                                     <p:message for="telefonoAlmacen" display="tooltip" severity="error"/>
 
                                     <p:outputLabel for="numeroFactura" value="Numéro Factura:"/>
                                     <p:inputText id="numeroFactura" maxlength="12" required="true" 
-                                                   value="#{findOrden.find.producto.garantia.numeroFactura}"/>
+                                                 value="#{findOrden.find.producto.garantia.numeroFactura}"/>
                                     <p:message for="numeroFactura" display="tooltip" severity="error"/>
 
                                     <p:outputLabel for="fechaFactura" value="Fecha Factura:"/>
@@ -609,6 +609,18 @@
                                 </h:panelGrid>
                             </p:panel>
                             <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-male" value="Técnico"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="#{findOrden.find.tecnico.datosPersonales.nombres}"/>
+                                <p:outputLabel value="#{findOrden.find.tecnico.datosPersonales.apellidos}"/>
+                                <p:outputLabel value="Cargo:"/>
+                                <p:outputLabel value="#{findOrden.find.tecnico.cargo}"/>
+                                <p:outputLabel value="Móvil:"/>
+                                <p:outputLabel value="#{findOrden.find.tecnico.datosPersonales.movil}"/>
+                            </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
                             <p:commandButton icon="fa fa-fw fa-tasks" value="Trabajo"/>
                             <h:outputText value="&lt;br/&gt;" escape="false"/>
                             <h:outputText value="&lt;br/&gt;" escape="false"/>
@@ -658,8 +670,8 @@
             <p:dialog header="Orden Pendiente" widgetVar="dlgOrdenPendy" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade" closable="false">
                 <p:outputPanel id="outOrdP">
-                    <h:panelGrid cellpadding="5">
-                        <p:outputLabel value="Causa por la cual esta pendiente la orden:"/>
+                    <h:panelGrid columns="5" cellpadding="5">
+                        <p:outputLabel value="Describa la causa por la cual esta pendiente la orden:"/>
                         <p:inputText value="#{findOrden.find.ciclo.pendiente.comentario}"/>
                     </h:panelGrid>
                 </p:outputPanel>
