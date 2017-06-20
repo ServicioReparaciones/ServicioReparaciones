@@ -108,8 +108,9 @@
                           nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
                     <p:tab id="visita" title="VISITA">
                         <p:panel header="1. Complete los datos de la visita realizada">
-                            <h:panelGrid cellpadding="5">
-                                <p:outputLabel value="BARCOE: #{findOrden.find.barcode}"/>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="Cédula del Cliente :"/>
+                                <p:inputText value="#{findOrden.find.cliente.cedula}"/>
                             </h:panelGrid>
                             <p:separator rendered="#{findOrden.find.producto.warranty}"/>
                             <h:panelGrid cellpadding="5" rendered="#{findOrden.find.producto.warranty}">

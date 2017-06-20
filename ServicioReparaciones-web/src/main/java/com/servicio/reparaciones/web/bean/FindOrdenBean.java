@@ -10,6 +10,7 @@ import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.modelo.nosql.Tecnico;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.modelo.nosql.Visita;
+import com.servicio.reparaciones.servicio.ClienteServicio;
 import com.servicio.reparaciones.servicio.OrdenServicio;
 import com.servicio.reparaciones.servicio.ProductoServicio;
 import com.servicio.reparaciones.servicio.TecnicoServicio;
@@ -52,6 +53,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     private Usuario usuario;
 
     @Inject
+    private ClienteServicio clienteService;
+    @Inject
     private VisitaServicio visitaService;
     @Inject
     private OrdenServicio ordenService;
@@ -87,6 +90,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     public void modifyCloseOrden(ActionEvent evt) {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
+            this.find.getCliente().setUsername(this.usuario);
+            this.clienteService.update(this.find.getCliente());
             this.selected.setUsername(this.usuario);
             this.find.getVisita().setUsername(this.usuario);
             this.visitaService.update(this.find.getVisita());
