@@ -20,9 +20,7 @@
                     <p:message for="apellidos" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="cedula" value="Cédula:"/>
-                    <p:inputText id="cedula" value="#{clienteBean.nuevo.cedula}">
-                        <f:validateLongRange minimum="10"/>
-                    </p:inputText>
+                    <p:inputText id="cedula" value="#{clienteBean.nuevo.cedula}"/>
                     <p:message for="cedula" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="movil" value="Móvil:"/>
@@ -68,7 +66,7 @@
                     <p:message for="direccion" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="referencia" value="Referencia:"/>
-                    <p:inputTextarea id="referencia" required="true" rows="3"
+                    <p:inputTextarea id="referencia" rows="3"
                                      value="#{clienteBean.nuevo.referencia}"/>
                     <p:message for="referencia" display="tooltip" severity="error"/>
                 </h:panelGrid>

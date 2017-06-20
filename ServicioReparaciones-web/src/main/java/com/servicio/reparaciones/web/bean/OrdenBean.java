@@ -23,9 +23,9 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
@@ -36,7 +36,7 @@ import org.primefaces.event.FlowEvent;
  * @author luis
  */
 @Named(value = "ordenBean")
-@Dependent
+@ViewScoped
 public class OrdenBean implements ImethodsBean, Serializable {
 
     private static final long serialVersionUID = 3453220622521364881L;
