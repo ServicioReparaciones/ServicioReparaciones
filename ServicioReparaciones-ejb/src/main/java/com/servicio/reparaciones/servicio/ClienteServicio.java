@@ -103,11 +103,13 @@ public class ClienteServicio implements Icliente, Serializable {
 
     public Cliente findByTelefono(Cliente cliente) {
         Cliente find = new Cliente();
-        Query<Cliente> result = this.ds.find(Cliente.class).
-                field("telefono").equal(cliente.getTelefono()).
-                field("flag").equal(1);
-        if (result.asList() != null && !result.asList().isEmpty()) {
-            find = result.asList().get(0);
+        if (!cliente.getTelefono().equals("999999999")) {
+            Query<Cliente> result = this.ds.find(Cliente.class).
+                    field("telefono").equal(cliente.getTelefono()).
+                    field("flag").equal(1);
+            if (result.asList() != null && !result.asList().isEmpty()) {
+                find = result.asList().get(0);
+            }
         }
         return find;
     }
