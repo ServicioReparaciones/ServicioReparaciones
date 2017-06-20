@@ -42,6 +42,7 @@ public class Cliente extends BaseEntity {
         this.username = new Usuario();
         this.cedula = "0000000000";
         this.telefono = "999999999";
+        this.referencia = "NINGUNA";
     }
 
     public Integer getCodigo() {
