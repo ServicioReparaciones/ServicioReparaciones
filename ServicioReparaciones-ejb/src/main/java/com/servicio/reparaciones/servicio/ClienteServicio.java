@@ -90,11 +90,13 @@ public class ClienteServicio implements Icliente, Serializable {
 
     public Cliente findByCedula(Cliente cliente) {
         Cliente find = new Cliente();
-        Query<Cliente> result = this.ds.find(Cliente.class).
-                field("cedula").equal(cliente.getCedula()).
-                field("flag").equal(1);
-        if (result.asList() != null && !result.asList().isEmpty()) {
-            find = result.asList().get(0);
+        if (!cliente.getCedula().equals("0000000000")) {
+            Query<Cliente> result = this.ds.find(Cliente.class).
+                    field("cedula").equal(cliente.getCedula()).
+                    field("flag").equal(1);
+            if (result.asList() != null && !result.asList().isEmpty()) {
+                find = result.asList().get(0);
+            }
         }
         return find;
     }
@@ -152,8 +154,8 @@ public class ClienteServicio implements Icliente, Serializable {
         }
         return list;
     }
-    
-     public List<Cliente> ObtenerListaClientes() {
+
+    public List<Cliente> ObtenerListaClientes() {
         List<Cliente> list = new ArrayList<>();
         Query<Cliente> result = this.ds.find(Cliente.class);
         if (result.asList() != null && !result.asList().isEmpty()) {
