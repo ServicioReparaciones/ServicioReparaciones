@@ -12,6 +12,7 @@ import com.servicio.reparaciones.modelo.nosql.ItemServicio;
 import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.modelo.nosql.Producto;
 import com.servicio.reparaciones.servicio.Interfaz.Iorden;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class OrdenServicio implements Iorden, Serializable {
 
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
+    private Calendario calendario = new Calendario();
 
     @Inject
     private ClienteServicio clienteService;
@@ -91,6 +93,7 @@ public class OrdenServicio implements Iorden, Serializable {
                 set("trabajoFinalEjecutado", orden.getTrabajoFinalEjecutado()).
                 set("url", orden.getUrl()).
                 set("username", orden.getUsername()).
+                set("lastChange",this.calendario.getCalendario().getTime()).
                 set("flag", orden.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

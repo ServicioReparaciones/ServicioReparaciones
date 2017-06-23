@@ -8,6 +8,7 @@ package com.servicio.reparaciones.servicio;
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Cliente;
 import com.servicio.reparaciones.servicio.Interfaz.Icliente;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ClienteServicio implements Icliente, Serializable {
 
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
+    private Calendario calendario = new Calendario();
 
     @Override
     public Integer generatedCodigo() {
@@ -71,6 +73,7 @@ public class ClienteServicio implements Icliente, Serializable {
                 set("direccion", cliente.getDireccion()).
                 set("referencia", cliente.getReferencia()).
                 set("username", cliente.getUsername()).
+                set("lastChange",this.calendario.getCalendario().getTime()).
                 set("flag", cliente.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

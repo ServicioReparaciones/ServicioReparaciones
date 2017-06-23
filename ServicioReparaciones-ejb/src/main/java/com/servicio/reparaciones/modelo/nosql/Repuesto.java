@@ -27,6 +27,7 @@ public class Repuesto extends BaseEntity {
     private String modelo;
     private String code;
     private String marca;
+    private String artefacto;
     private String nombre;
     private String descripcion;
     private String numeroParte;
@@ -84,6 +85,14 @@ public class Repuesto extends BaseEntity {
 
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    public String getArtefacto() {
+        return artefacto;
+    }
+
+    public void setArtefacto(String artefacto) {
+        this.artefacto = artefacto;
     }
 
     public void setNombre(String nombre) {
@@ -161,6 +170,6 @@ public class Repuesto extends BaseEntity {
 
     @Override
     public String toString() {
-        return  "" + nombre +", " + descripcion +", " + marca + ", " + modelo + ", " + code + ", " + numeroParte;
-    }    
+        return nombre + ", modelo: " + modelo + ", codigo: " + code + ", numero parte: " + numeroParte + ", $" + precio;
+    }
 }

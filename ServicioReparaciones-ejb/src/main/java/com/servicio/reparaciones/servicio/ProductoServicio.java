@@ -75,6 +75,7 @@ public class ProductoServicio implements Iproducto, Serializable {
                 set("garantia", producto.getGarantia()).
                 set("codesWarranty", producto.getCodesWarranty()).
                 set("username", producto.getUsername()).
+                set("lastChange",producto.getLastChange()).
                 set("flag", producto.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

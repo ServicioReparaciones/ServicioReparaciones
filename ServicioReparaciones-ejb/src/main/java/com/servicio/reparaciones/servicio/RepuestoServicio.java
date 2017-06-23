@@ -8,6 +8,7 @@ package com.servicio.reparaciones.servicio;
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Repuesto;
 import com.servicio.reparaciones.servicio.Interfaz.Irepuesto;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class RepuestoServicio implements Irepuesto, Serializable {
 
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
+    private Calendario calendario = new Calendario();
 
     @Override
     public Integer generatedCodigo() {
@@ -71,6 +73,7 @@ public class RepuestoServicio implements Irepuesto, Serializable {
                 set("numeroParte", repuesto.getNumeroParte()).
                 set("precio", repuesto.getPrecio()).
                 set("username", repuesto.getUsername()).
+                set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", repuesto.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -122,7 +125,7 @@ public class RepuestoServicio implements Irepuesto, Serializable {
     }
 
     public Repuesto findByNumeroParte(Repuesto repuesto) {
-    Repuesto find = new Repuesto();
+        Repuesto find = new Repuesto();
         Query<Repuesto> result = this.ds.find(Repuesto.class).
                 field("numeroParte").equal(repuesto.getNumeroParte()).
                 field("flag").equal(1);
@@ -163,7 +166,21 @@ public class RepuestoServicio implements Irepuesto, Serializable {
         }
         return list;
     }
-    
+
+    public List<Repuesto> ObtenerListaRepuestosMarcaArtefacto(String Marca, String Artefacto) {
+        List<Repuesto> list = new ArrayList<>();
+        Query<Repuesto> result = this.ds.find(Repuesto.class).
+                field("artefacto").equal(Artefacto).
+                field("marca").equal(Marca);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
     public List<Repuesto> ObtenerListaRepuestos() {
         List<Repuesto> list = new ArrayList<>();
         Query<Repuesto> result = this.ds.find(Repuesto.class);

@@ -127,7 +127,7 @@ public class Servicio extends BaseEntity {
 
     @Override
     public String toString() {
-        return descripcion + " " + artefacto + " " + marca + " $" + precio;
+        return descripcion +" $" + precio;
     }
 
 }

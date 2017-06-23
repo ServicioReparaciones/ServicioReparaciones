@@ -5,12 +5,13 @@
  */
 package com.servicio.reparaciones.modelo.nosql;
 
+import java.util.Date;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
- * @author luis
+ * @author luis prueba cambio de datos embedded
  */
 @Embedded
 public class Estado {
@@ -18,6 +19,7 @@ public class Estado {
     private Boolean active;
     private String alias;
     private String comentario;
+    private Date creationDate;
     
     @Reference
     private Usuario username;
@@ -26,6 +28,7 @@ public class Estado {
         this.active = Boolean.FALSE;
         this.alias = "";
         this.username = new Usuario();
+        this.creationDate = new Date();
     }
 
     public Estado(Boolean active, String alias, String comentario, Usuario username) {
@@ -33,6 +36,7 @@ public class Estado {
         this.alias = alias;
         this.comentario = comentario;
         this.username = username;
+        this.creationDate = new Date();
     }
     
     public Boolean getActive() {
@@ -65,5 +69,13 @@ public class Estado {
 
     public void setUsername(Usuario username) {
         this.username = username;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }

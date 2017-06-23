@@ -8,6 +8,7 @@ package com.servicio.reparaciones.servicio;
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.Interfaz.Ivisita;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,7 @@ public class VisitaServicio implements Ivisita, Serializable {
 
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
+    private Calendario calendario = new Calendario();
 
     @Override
     public Integer generatedCodigo() {
@@ -77,6 +79,7 @@ public class VisitaServicio implements Ivisita, Serializable {
                 set("observacionCliente", Visita.getObservacionCliente()).
                 set("posibleFalla", Visita.getPosibleFalla()).
                 set("username", Visita.getUsername()).
+                set("lastChange",this.calendario.getCalendario().getTime()).
                 set("flag", Visita.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

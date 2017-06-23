@@ -8,6 +8,7 @@ package com.servicio.reparaciones.servicio;
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Servicio;
 import com.servicio.reparaciones.servicio.Interfaz.Iservicio;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ServicioServicio implements Iservicio, Serializable {
 
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
+    private Calendario calendario = new Calendario();
 
     @Override
     public Integer generatedCodigo() {
@@ -63,6 +65,7 @@ public class ServicioServicio implements Iservicio, Serializable {
                 set("marca", servicio.getMarca()).
                 set("precio", servicio.getPrecio()).
                 set("username", servicio.getUsername()).
+                set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", servicio.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -79,7 +82,7 @@ public class ServicioServicio implements Iservicio, Serializable {
         }
         return find;
     }
-    
+
     public Servicio findByDescripcion(Servicio servicio) {
         Servicio find = new Servicio();
         Query<Servicio> result = this.ds.find(Servicio.class).
@@ -119,6 +122,25 @@ public class ServicioServicio implements Iservicio, Serializable {
         }
         if (list == null) {
             list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    public List<Servicio> ObtenerListaServiciosMarcaArtefacto(String Marca, String Artefacto) {
+        List<Servicio> list = new ArrayList<>();
+        Query<Servicio> result = this.ds.find(Servicio.class).
+                field("artefacto").equal(Artefacto).
+                field("marca").equal(Marca);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        } else {
+            Servicio blank = findByDescripcion(new Servicio("blank"));
+            if (blank.getCodigo() != null) {
+                list.add(blank);
+            }
         }
         return list;
     }
