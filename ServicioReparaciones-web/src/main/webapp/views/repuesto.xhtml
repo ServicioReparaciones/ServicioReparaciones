@@ -20,6 +20,14 @@
                     <p:inputText id="nombre" required="true" value="#{repuestoBean.nuevo.nombre}"/>
                     <p:message for="nombre" display="tooltip" severity="error"/>
 
+                    <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                    <p:selectOneMenu id="eartefacto" required="true" value="#{repuestoBean.nuevo.artefacto}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                       itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}"/>
+                    </p:selectOneMenu>
+                    <p:message for="eartefacto" display="tooltip" severity="error"/>
+
                     <p:outputLabel for="marca" value="Marca:"/>
                     <p:selectOneMenu id="marca" required="true" value="#{repuestoBean.nuevo.marca}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
@@ -77,6 +85,9 @@
                     <p:column headerText="Repuesto" style="text-align: center">
                         <h:outputText value="#{rep.nombre} " />
                     </p:column>
+                    <p:column headerText="Artefacto" style="text-align: center">
+                        <h:outputText value="#{rep.artefacto} " />
+                    </p:column>
                     <p:column headerText="Marca" style="text-align: center">
                         <h:outputText value="#{rep.marca} " />
                     </p:column>
@@ -121,6 +132,14 @@
                         <p:outputLabel for="enombre" value="Nombres:"/>
                         <p:inputText id="enombre" required="true" value="#{repuestoBean.selected.nombre}"/>
                         <p:message for="enombre" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{repuestoBean.selected.artefacto}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                           itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}"/>
+                        </p:selectOneMenu>
+                        <p:message for="eartefacto" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="emarca" value="Marca:"/>
                         <p:selectOneMenu id="emarca" required="true" value="#{repuestoBean.selected.marca}">

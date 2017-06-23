@@ -6,6 +6,7 @@
 package com.servicio.reparaciones.web.bean;
 
 import com.servicio.reparaciones.modelo.nosql.Orden;
+import com.servicio.reparaciones.modelo.nosql.Servicio;
 import com.servicio.reparaciones.modelo.nosql.Tecnico;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.modelo.nosql.Visita;
@@ -14,12 +15,14 @@ import com.servicio.reparaciones.servicio.ServicioServicio;
 import com.servicio.reparaciones.servicio.TecnicoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.servicio.VisitaServicio;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
 import com.servicio.reparaciones.web.bean.util.GeneratedHtml;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
 import com.servicio.reparaciones.xml.servidor.OrdenServidorXml;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -40,12 +43,13 @@ import org.primefaces.event.FlowEvent;
 public class OrdenBean implements ImethodsBean, Serializable {
 
     private static final long serialVersionUID = 3453220622521364881L;
+    private Calendario calendario = new Calendario();
 
     private Orden nuevo;
     private Orden selected;
     private List<Orden> ordenes;
     private List<Orden> filterOrdenes;
-
+    private List<Servicio> servicios;
     private Usuario usuario;
 
     @Inject
@@ -76,6 +80,7 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.selected = null;
         this.ordenes = this.ordenService.ObtenerListaOrdens(1);
         this.filterOrdenes = null;
+        this.servicios = new ArrayList<>();
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -105,6 +110,7 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.nuevo.setNumeroOrden(this.productoBean.getNuevo().getCodesWarranty().getNumeroOrden());
         this.nuevo.setNumeroTicket(this.productoBean.getNuevo().getCodesWarranty().getNumeroTicket());
         this.nuevo.getCiclo().getAbierta().setActive(Boolean.TRUE);
+        this.nuevo.getCiclo().getAbierta().setCreationDate(this.calendario.getCalendario().getTime());
         this.cicloInit();
         String barcode = this.nuevo.getBarcode();
         String url = "/var/www/html/pdf/" + barcode + "/";
@@ -175,6 +181,7 @@ public class OrdenBean implements ImethodsBean, Serializable {
         }
         if (this.productoBean.getNuevo() != null) {
             this.nuevo.setProducto(this.productoBean.getNuevo());
+            this.servicios = this.servicioService.ObtenerListaServiciosMarcaArtefacto(this.nuevo.getProducto().getMarca(), this.nuevo.getProducto().getArtefacto());
             this.vistaBean.getNuevo().setCliente(this.clienteBean.getNuevo());
             this.vistaBean.getNuevo().setProducto(this.productoBean.getNuevo());
         }
@@ -247,5 +254,13 @@ public class OrdenBean implements ImethodsBean, Serializable {
 
     public void setOrdenGenerate(OrdenGeneratedBean ordenGenerate) {
         this.ordenGenerate = ordenGenerate;
+    }
+
+    public List<Servicio> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<Servicio> servicios) {
+        this.servicios = servicios;
     }
 }

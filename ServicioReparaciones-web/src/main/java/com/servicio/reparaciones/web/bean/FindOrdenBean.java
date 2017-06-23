@@ -7,15 +7,20 @@ package com.servicio.reparaciones.web.bean;
 
 import com.servicio.reparaciones.modelo.nosql.ItemServicio;
 import com.servicio.reparaciones.modelo.nosql.Orden;
+import com.servicio.reparaciones.modelo.nosql.Repuesto;
+import com.servicio.reparaciones.modelo.nosql.Servicio;
 import com.servicio.reparaciones.modelo.nosql.Tecnico;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.ClienteServicio;
 import com.servicio.reparaciones.servicio.OrdenServicio;
 import com.servicio.reparaciones.servicio.ProductoServicio;
+import com.servicio.reparaciones.servicio.RepuestoServicio;
+import com.servicio.reparaciones.servicio.ServicioServicio;
 import com.servicio.reparaciones.servicio.TecnicoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.servicio.VisitaServicio;
+import com.servicio.reparaciones.servicio.util.Calendario;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsFindBeans;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
@@ -42,6 +47,7 @@ import org.primefaces.event.SelectEvent;
 public class FindOrdenBean implements ImethodsFindBeans, Serializable {
 
     private static final long serialVersionUID = 4230889177898245141L;
+    private Calendario calendario = new Calendario();
 
     private String pattern;
     private String value;
@@ -49,7 +55,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     private Orden selected;
     private List<Orden> findOrdenes;
     private Boolean active;
-
+    private List<Servicio> servicios;
+    private List<Repuesto> repuestos;
     private Usuario usuario;
 
     @Inject
@@ -67,6 +74,10 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     @Inject
     private ItemRepuestoBean itemsRepuesto;
     @Inject
+    private ServicioServicio servicioService;
+    @Inject
+    private RepuestoServicio repuestoService;
+    @Inject
     private UsuarioServicio usarioService;
 
     @PostConstruct
@@ -78,6 +89,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
         this.findOrdenes = this.ordenService.ObtenerListaOrdens(1);
         Collections.reverse(this.findOrdenes);
         this.active = Boolean.FALSE;
+        this.servicios = new ArrayList<>();
+        this.repuestos = new ArrayList<>();
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -107,8 +120,9 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.getCiclo().getAbierta().setActive(Boolean.FALSE);
             this.find.getCiclo().getPendiente().setActive(Boolean.FALSE);
             this.find.getCiclo().getCerrada().setActive(Boolean.TRUE);
-            this.find.getCiclo().setFlag(0);
+            this.find.getCiclo().getCerrada().setCreationDate(this.calendario.getCalendario().getTime());
             this.find.getCiclo().getCerrada().setUsername(this.usuario);
+            this.find.getCiclo().setFlag(0);
             Boolean exito = this.ordenService.update(this.selected);
             if (exito) {
                 this.find.getVisita().setFlag(0);
@@ -142,6 +156,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.setSubTotalKilometraje(this.find.getKilometrosRuta().getSubTotal());
             this.find.getCiclo().getAbierta().setActive(Boolean.FALSE);
             this.find.getCiclo().getPendiente().setActive(Boolean.TRUE);
+            this.find.getCiclo().getPendiente().setCreationDate(this.calendario.getCalendario().getTime());
             this.find.getCiclo().getPendiente().setUsername(this.usuario);
             Boolean exito = this.ordenService.update(this.selected);
             if (exito) {
@@ -281,6 +296,10 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
 
     public String onFlowProcess(FlowEvent event) {
         if (this.find.getCodigo() != null) {
+            if (this.find.getProducto().getCodigo() != null) {
+                this.servicios = this.servicioService.ObtenerListaServiciosMarcaArtefacto(this.find.getProducto().getMarca(), this.find.getProducto().getArtefacto());
+                this.repuestos = this.repuestoService.ObtenerListaRepuestosMarcaArtefacto(this.find.getProducto().getMarca(), this.find.getProducto().getArtefacto());
+            }
             if (this.find.getVisita().getServicio().getCodigo() != null
                     && this.find.getCiclo().getAbierta().getActive()) {
                 if (this.itemsServicio.getItems().isEmpty()) {
@@ -291,7 +310,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
                     this.itemsServicio.getItems().add(e);
                 }
             }
-            if(this.find.getTecnico().getCodigo() != null){
+            if (this.find.getTecnico().getCodigo() != null) {
                 this.find.setTecnico(this.tecnicoService.findByCodigo(this.find.getTecnico()));
             }
         }
@@ -395,6 +414,22 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
 
     public void setItemsRepuesto(ItemRepuestoBean itemsRepuesto) {
         this.itemsRepuesto = itemsRepuesto;
+    }
+
+    public List<Servicio> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<Servicio> servicios) {
+        this.servicios = servicios;
+    }
+
+    public List<Repuesto> getRepuestos() {
+        return repuestos;
+    }
+
+    public void setRepuestos(List<Repuesto> repuestos) {
+        this.repuestos = repuestos;
     }
 
 }

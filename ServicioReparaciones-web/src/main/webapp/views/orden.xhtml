@@ -220,8 +220,8 @@
                             <p:outputLabel for="servicio" value="Servicio:"/>
                             <p:selectOneMenu id="servicio" required="true" value="#{ordenBean.vistaBean.nuevo.servicio.codigo}">
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                <f:selectItems value="#{servicioBean.servicios}" var="servis"
-                                               itemLabel="#{servis.descripcion} #{servis.artefacto} #{servis.marca} #{servis.precio}" 
+                                <f:selectItems value="#{ordenBean.servicios}" var="servis"
+                                               itemLabel="#{servis.descripcion}  #{servis.precio}" 
                                                itemValue="#{servis.codigo}"/>
                             </p:selectOneMenu>
                             <p:message for="servicio" display="tooltip" severity="error"/>
