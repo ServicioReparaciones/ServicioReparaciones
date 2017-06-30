@@ -170,6 +170,6 @@ public class Repuesto extends BaseEntity {
 
     @Override
     public String toString() {
-        return nombre + ", modelo: " + modelo + ", codigo: " + code + ", numero parte: " + numeroParte + ", $" + precio;
+        return nombre +" - "+codigo+" - " + numeroParte + " - $" + precio;
     }
 }
