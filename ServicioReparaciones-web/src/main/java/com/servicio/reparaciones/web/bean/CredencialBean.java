@@ -29,6 +29,7 @@ public class CredencialBean implements Serializable {
 
     private Usuario userSession = new Usuario();
     private String confirmationPassword;
+    private String password;
 
     @Inject
     private UsuarioServicio usuarioService;
@@ -39,6 +40,7 @@ public class CredencialBean implements Serializable {
 
     public void startSession(Usuario usuario) {
         this.userSession = usuario;
+        this.password = this.userSession.getPassword();
         this.loadDataSession(this.userSession);
     }
 
@@ -52,6 +54,7 @@ public class CredencialBean implements Serializable {
     }
     
     public void modifyInfo(ActionEvent evt) {
+        this.userSession.setPassword(this.password);
         Boolean exito = this.usuarioService.update(this.userSession);
         if (exito) {
             FacesUtil.addMessageInfo("Se actualizo exitosamente.");

@@ -1,0 +1,43 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Crear Nueva Bodega">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nombre" value="Nombres:"/>
+                    <p:inputText id="nombre" required="true" value="#{clienteBean.nuevo.nombres}"/>
+                    <p:message for="nombre" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="provincia" value="Provincia:"/>
+                    <p:selectOneMenu id="provincia" required="true"
+                                     value="#{clienteBean.nuevo.provincia}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{clienteBean.provincias}" var="prov"
+                                       itemLabel="#{prov.provincia}" itemValue="#{prov.provincia}"/>
+                        <p:ajax update="canton, parroquia" listener="#{clienteBean.loadCantones}"/>
+                    </p:selectOneMenu>
+                    <p:message for="provincia" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="canton" value="Catón:"/>
+                    <p:selectOneMenu id="canton" required="true"
+                                     value="#{clienteBean.nuevo.canton}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{clienteBean.cantones}" var="can"
+                                       itemLabel="#{can.canton}" itemValue="#{can.canton}"/>
+                        <p:ajax update="parroquia" listener="#{clienteBean.loadParroquias}"/>
+                    </p:selectOneMenu>
+                    <p:message for="canton" display="tooltip" severity="error"/>
+                    
+                </h:panelGrid>
+                <f:facet name="footer">
+                    
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

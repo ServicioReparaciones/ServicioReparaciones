@@ -29,6 +29,13 @@
             <p:submenu id="tec_tecnicos" label="Tecnicos" icon="fa fa-users">
                 <p:menuitem id="tec_nuevo" value="Nuevo Técnico" icon="fa fa-male" outcome="/faces/views/tecnico"/>
             </p:submenu>
+            <p:submenu id="bod_bodegas" label="Bodegas" icon="fa fa-archive">
+                <p:menuitem id="bod_bodega" value="Nueva Bodega" icon="fa fa-folder" outcome="/faces/views/bodega"/>
+                <p:menuitem id="bod_articulo" value="Nuevo Articulo" icon="fa fa-dropbox" outcome="/faces/views/articulo"/>
+                <p:menuitem id="bod_entrada" value="Nueva Entrada" icon="fa fa-long-arrow-left" outcome="/faces/views/entrada"/>
+                <p:menuitem id="bod_salida" value="Nueva Salida" icon="fa fa-long-arrow-right" outcome="/faces/views/salida"/>
+                <p:menuitem id="bod_inventarios" value="Inventarios" icon="fa fa-th-list" outcome="/faces/views/inventarios"/>
+            </p:submenu>
             <p:submenu id="usr_usuarios" label="Usuarios" icon="fa fa-user-secret">
                 <p:menuitem id="usr_nuevo" value="Administración de Usuarios" icon="fa fa-street-view" outcome="/faces/views/usuarios"/>
             </p:submenu>

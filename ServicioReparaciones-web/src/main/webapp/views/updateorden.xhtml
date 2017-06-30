@@ -284,7 +284,7 @@
                                         <p:inputText value="#{findOrden.itemsServicio.nuevo.cantidad}"/>
                                         <p:selectOneMenu value="#{findOrden.itemsServicio.nuevo.servicio.codigo}">
                                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                            <f:selectItems value="#{servicioBean.servicios}" var="servs"
+                                            <f:selectItems value="#{findOrden.servicios}" var="servs"
                                                            itemLabel="#{servs}" itemValue="#{servs.codigo}"/>
                                         </p:selectOneMenu>
                                         <p:commandButton value="Agregar" update=":ford:outItemSrv, :ford:dtsrv"
@@ -331,7 +331,7 @@
                                         <p:inputText value="#{findOrden.itemsRepuesto.nuevo.cantidad}"/>
                                         <p:selectOneMenu value="#{findOrden.itemsRepuesto.nuevo.repuesto.codigo}">
                                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                            <f:selectItems value="#{repuestoBean.repuestos}" var="reptos"
+                                            <f:selectItems value="#{findOrden.repuestos}" var="reptos"
                                                            itemLabel="#{reptos}" itemValue="#{reptos.codigo}"/>
                                         </p:selectOneMenu>
                                         <p:commandButton value="Agregar" update=":ford:outItemRep, :ford:dtrep"
