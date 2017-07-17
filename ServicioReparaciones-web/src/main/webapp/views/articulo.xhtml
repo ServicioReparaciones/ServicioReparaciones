@@ -1,8 +1,186 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/template.xhtml">
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        content
+        <h:form id="fadd">
+            <p:panel header="Registar Nuevo Articulo = Repuesto en Bodega">
+                <h:panelGrid cellpadding="5">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <p:separator/>
+                <h:panelGrid cellpadding="5">
+                    <p:outputLabel value="BARCODE: #{articuloBean.nuevo.barcode}"/>
+                </h:panelGrid>
+                <p:separator/>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" required="true" value="#{articuloBean.nuevo.nombre}"/>
+                    <p:message for="nombre" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                    <p:selectOneMenu id="eartefacto" required="true" value="#{articuloBean.nuevo.artefacto}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                       itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}"/>
+                    </p:selectOneMenu>
+                    <p:message for="eartefacto" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="marca" value="Marca:"/>
+                    <p:selectOneMenu id="marca" required="true" value="#{articuloBean.nuevo.marca}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{articuloBean.marcas}" var="mar"
+                                       itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
+                    </p:selectOneMenu>
+                    <p:message for="marca" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="modelo" value="Modelo:"/>
+                    <p:inputText id="modelo" required="true" value="#{articuloBean.nuevo.modelo}"/>
+                    <p:message for="modelo" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="codigo" value="Código:"/>
+                    <p:inputText id="codigo" required="true" value="#{articuloBean.nuevo.code}"/>
+                    <p:message for="codigo" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="numeroParte" value="Numéro Parte:"/>
+                    <p:inputText id="numeroParte" required="true" value="#{articuloBean.nuevo.numeroParte}"/>
+                    <p:message for="numeroParte" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":fadd, :fdtart:dtart, :fadd:messages"
+                                     actionListener="#{articuloBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false" />
+        <h:form id="fdtart">
+            <p:panel>
+                <p:dataTable  id="dtart" var="art" value="#{articuloBean.articulos}"
+                              filteredValue="#{articuloBean.filtered}"
+                              rowKey="#{art.codigo}" rows="5" tableStyle="width: auto"
+                              paginator="true" paginatorPosition="bottom"
+                              reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="REPUESTOS"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{art.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Articulo = Repuesto en Bodega" style="text-align: center">
+                        <h:outputText value="#{art.nombre} " />
+                    </p:column>
+                    <p:column headerText="Artefacto" style="text-align: center">
+                        <h:outputText value="#{art.artefacto} " />
+                    </p:column>
+                    <p:column headerText="Marca" style="text-align: center">
+                        <h:outputText value="#{art.marca} " />
+                    </p:column>
+                    <p:column filterBy="#{art.modelo}" headerText="Modelo" style="text-align: center" filterMatchMode="contains">
+                        <h:outputText value="#{art.modelo} " />
+                    </p:column>
+                    <p:column filterBy="#{art.code}" headerText="Código" style="text-align: center" filterMatchMode="contains">
+                        <h:outputText value="#{art.code} " />
+                    </p:column>
+                    <p:column filterBy="#{art.numeroParte}" headerText="Numéro Parte" style="text-align: center" filterMatchMode="contains">
+                        <h:outputText value="#{art.numeroParte} " />
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{art.username.datosPersonales.nombres}" />
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outRep"
+                                         oncomplete="PF('dlgModifyRep').show()">
+                            <f:setPropertyActionListener value="#{art}" target="#{articuloBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outRep"
+                                         oncomplete="PF('dlgDeleteRep').show()">
+                            <f:setPropertyActionListener value="#{art}" target="#{articuloBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Articulo = Repuesto en Bodega" widgetVar="dlgModifyRep" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outRep">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="enombre" value="Nombres:"/>
+                        <p:inputText id="enombre" required="true" value="#{articuloBean.selected.nombre}"/>
+                        <p:message for="enombre" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eartefacto" value="Artefacto:"/>
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{articuloBean.selected.artefacto}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{productoBean.artefactos}" var="art"
+                                           itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}"/>
+                        </p:selectOneMenu>
+                        <p:message for="eartefacto" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emarca" value="Marca:"/>
+                        <p:selectOneMenu id="emarca" required="true" value="#{articuloBean.selected.marca}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{articuloBean.marcas}" var="emar"
+                                           itemLabel="#{emar.marca}" itemValue="#{emar.marca}"/>
+                        </p:selectOneMenu>
+                        <p:message for="emarca" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="emodelo" value="Modelo:"/>
+                        <p:inputText id="emodelo" required="true" value="#{articuloBean.selected.modelo}"/>
+                        <p:message for="emodelo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecodigo" value="Código:"/>
+                        <p:inputText id="ecodigo" required="true" value="#{articuloBean.selected.code}"/>
+                        <p:message for="ecodigo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="enumeroParte" value="Numéro Parte:"/>
+                        <p:inputText id="enumeroParte" required="true" value="#{articuloBean.selected.numeroParte}"/>
+                        <p:message for="enumeroParte" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtart:dtart" 
+                                     actionListener="#{articuloBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Articulo = Repuesto en Bodega" widgetVar="dlgDeleteRep" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outRep">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <p:outputLabel value="#{articuloBean.selected.nombre}"/>
+
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{articuloBean.selected.marca}"/>
+
+                        <p:outputLabel value="Modelo:"/>
+                        <p:outputLabel value="#{articuloBean.selected.modelo}"/>
+
+                        <p:outputLabel value="Código:"/>
+                        <p:outputLabel value="#{articuloBean.selected.code}"/>
+
+                        <p:outputLabel value="Numéro Parte:"/>
+                        <p:outputLabel value="#{articuloBean.selected.numeroParte}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtart:dtart" 
+                                     actionListener="#{articuloBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>

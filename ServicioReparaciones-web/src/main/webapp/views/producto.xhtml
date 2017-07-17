@@ -20,9 +20,6 @@
                             <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
-                    <p:column filterBy="#{pro.barcode}" headerText="Barcode" style="text-align: center;font-size: 65%" filterMatchMode="contains">
-                        <h:outputText value="#{pro.barcode}" />
-                    </p:column>
                     <p:column headerText="Cliente" style="text-align: center;font-size: 65%">
                         <h:outputText value="#{pro.cliente.nombres}" />
                         <h:outputText value="#{pro.cliente.apellidos}" />
@@ -38,9 +35,6 @@
                     </p:column>
                     <p:column filterBy="#{pro.serie}" headerText="Serie" style="text-align: center;font-size: 65%" filterMatchMode="contains">
                         <h:outputText value="#{pro.serie}" />
-                    </p:column>
-                    <p:column filterBy="#{pro.pnc}" headerText="PNC" style="text-align: center;font-size: 65%" filterMatchMode="contains">
-                        <h:outputText value="#{pro.pnc}" />
                     </p:column>
                     <p:column filterBy="#{pro.placa}" headerText="Placa" style="text-align: center;font-size: 65%" filterMatchMode="contains">
                         <h:outputText value="#{pro.placa}" />

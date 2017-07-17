@@ -13,7 +13,7 @@
                         <p:dataTable  id="dtcli" var="cli" value="#{ordenBean.clienteBean.clientes}" 
                                       filteredValue="#{ordenBean.clienteBean.filterClientes}"
                                       selectionMode="single" selection="#{ordenBean.clienteBean.selected}"
-                                      rowKey="#{cli.codigo}" rows="5" paginator="true"
+                                      rowKey="#{cli.codigo}" rows="5" paginator="true" tableStyle="width: auto"
                                       paginatorPosition="bottom" reflow="true">
 
                             <p:ajax event="rowSelect" listener="#{ordenBean.clienteBean.onRowSelect}" 

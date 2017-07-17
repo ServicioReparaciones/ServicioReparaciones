@@ -8,35 +8,169 @@
         <h:form id="fadd">
             <p:panel header="Crear Nueva Bodega">
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="nombre" value="Nombres:"/>
-                    <p:inputText id="nombre" required="true" value="#{clienteBean.nuevo.nombres}"/>
+                    <p:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" required="true" value="#{bodegaBean.nuevo.nombre}"/>
                     <p:message for="nombre" display="tooltip" severity="error"/>
-                    
+
                     <p:outputLabel for="provincia" value="Provincia:"/>
                     <p:selectOneMenu id="provincia" required="true"
-                                     value="#{clienteBean.nuevo.provincia}">
+                                     value="#{bodegaBean.nuevo.provincia}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{clienteBean.provincias}" var="prov"
+                        <f:selectItems value="#{bodegaBean.provincias}" var="prov"
                                        itemLabel="#{prov.provincia}" itemValue="#{prov.provincia}"/>
-                        <p:ajax update="canton, parroquia" listener="#{clienteBean.loadCantones}"/>
+                        <p:ajax update="canton" listener="#{bodegaBean.loadCantones}"/>
                     </p:selectOneMenu>
                     <p:message for="provincia" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="canton" value="Catón:"/>
                     <p:selectOneMenu id="canton" required="true"
-                                     value="#{clienteBean.nuevo.canton}">
+                                     value="#{bodegaBean.nuevo.canton}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{clienteBean.cantones}" var="can"
+                        <f:selectItems value="#{bodegaBean.cantones}" var="can"
                                        itemLabel="#{can.canton}" itemValue="#{can.canton}"/>
-                        <p:ajax update="parroquia" listener="#{clienteBean.loadParroquias}"/>
                     </p:selectOneMenu>
                     <p:message for="canton" display="tooltip" severity="error"/>
-                    
+
+                    <p:outputLabel for="responsable" value="Responsable:"/>
+                    <p:selectOneMenu id="responsable" required="true"
+                                     value="#{bodegaBean.nuevo.responsable.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{usuarioBean.usuarios}" var="respons"
+                                       itemLabel="#{respons.datosPersonales.nombres} #{respons.datosPersonales.apellidos}" 
+                                       itemValue="#{respons.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="responsable" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                 </h:panelGrid>
                 <f:facet name="footer">
-                    
+                    <p:commandButton value="Guardar" update=":fadd, :fdtbod:dtbod, :fadd:messages"
+                                     actionListener="#{bodegaBean.add(evt)}"/>
                 </f:facet>
             </p:panel>
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false" />
+        <h:form id="fdtbod">
+            <p:panel>
+                <p:dataTable  id="dtbod" var="bod" value="#{bodegaBean.bodegas}"
+                              rowKey="#{bod.codigo}" rows="5"
+                              paginator="true"
+                              paginatorPosition="bottom" reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="BODEGAS"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{bod.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Nombre" style="text-align: center">
+                        <h:outputText value="#{bod.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Responsable" style="text-align: center">
+                        <h:outputText value="#{bod.responsable.datosPersonales.nombres} - "/>
+                        <h:outputText value="#{bod.responsable.datosPersonales.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="Provincia" style="text-align: center">
+                        <h:outputText value="#{bod.provincia}"/>
+                    </p:column>
+                    <p:column headerText="Canton" style="text-align: center">
+                        <h:outputText value="#{bod.canton}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{bod.username.datosPersonales.nombres} - "/>
+                        <h:outputText value="#{bod.username.datosPersonales.apellidos}"/>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outBod"
+                                         oncomplete="PF('dlgModifyBod').show()">
+                            <f:setPropertyActionListener value="#{bod}" target="#{bodegaBean.selected}"/>
+                            <f:setPropertyActionListener value="#{bod.responsable}" target="#{bodegaBean.selectedResponsable}"/>
+                            <p:ajax event="click" listener="#{bodegaBean.loadModifyCantones(bod.provincia)}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outBod"
+                                         oncomplete="PF('dlgDeleteBod').show()">
+                            <f:setPropertyActionListener value="#{bod}" target="#{bodenteBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Bodega" widgetVar="dlgModifyBod" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outBod">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="enombre" value="Nombres:"/>
+                        <p:inputText id="enombre" required="true" value="#{bodegaBean.selected.nombre}"/>
+                        <p:message for="enombre" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eprovincia" value="Provincia:"/>
+                        <p:selectOneMenu id="eprovincia" required="true"
+                                         value="#{bodegaBean.selected.provincia}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{bodegaBean.provincias}" var="eprov"
+                                           itemLabel="#{eprov.provincia}" itemValue="#{eprov.provincia}"/>
+                            <p:ajax update="ecanton" listener="#{bodegaBean.selectedloadCantones()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="eprovincia" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecanton" value="Catón:"/>
+                        <p:selectOneMenu id="ecanton" required="true"
+                                         value="#{bodegaBean.selected.canton}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{bodegaBean.cantones}" var="ecan"
+                                           itemLabel="#{ecan.canton}" itemValue="#{ecan.canton}"/>
+                        </p:selectOneMenu>
+                        <p:message for="ecanton" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eresponsable" value="Responsable:"/>
+                        <p:selectOneMenu id="eresponsable" required="true"
+                                         value="#{bodegaBean.selectedResponsable.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{usuarioBean.usuarios}" var="erespons"
+                                           itemLabel="#{erespons.datosPersonales.nombres} #{erespons.datosPersonales.apellidos}" 
+                                           itemValue="#{erespons.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="eresponsable" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtbod:dtbod" 
+                                     actionListener="#{bodegaBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Bodega" widgetVar="dlgDeleteBod" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outBod">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombre:"/>
+                        <p:outputLabel value="#{bodegaBean.selected.nombre}"/>
+
+                        <p:outputLabel value="Responsable:"/>
+                        <p:outputLabel value="#{bodegaBean.selected.responsable}"/>
+
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{bodegaBean.selected.provincia}"/>
+
+                        <p:outputLabel value="Cantón:"/>
+                        <p:outputLabel value="#{bodegaBean.selected.canton}"/>
+
+                        <p:outputLabel value="Usuario:"/>
+                        <p:outputLabel value="#{bodegaBean.selected.username}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtbod:dtbod" 
+                                     actionListener="#{bodegaBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
     </ui:define>
 

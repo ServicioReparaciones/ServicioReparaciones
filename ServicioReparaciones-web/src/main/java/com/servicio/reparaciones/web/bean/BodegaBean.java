@@ -14,8 +14,8 @@ import com.servicio.reparaciones.servicio.CantonServicio;
 import com.servicio.reparaciones.servicio.ProvinciaServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
+import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
-import com.sun.imageio.plugins.common.BogusColorSpace;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,9 @@ public class BodegaBean implements ImethodsBean, Serializable {
     private List<Provincia> provincias;
     private List<Canton> cantones;
 
+    private Usuario selectedResponsable;
     private Usuario usuario;
-    
+
     @Inject
     private BodegaService bodegaService;
     @Inject
@@ -51,10 +52,11 @@ public class BodegaBean implements ImethodsBean, Serializable {
     private CantonServicio cantonService;
     @Inject
     private UsuarioServicio usarioService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new Bodega();
+        this.selectedResponsable = new Usuario();
         this.selected = null;
         this.bodegas = this.bodegaService.ObtenerListaBodegas(1);
         this.provincias = this.provinciaService.ObtenerListaProvincias();
@@ -65,17 +67,74 @@ public class BodegaBean implements ImethodsBean, Serializable {
 
     @Override
     public void add(ActionEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.usuario = this.usarioService.findByCodigo(this.usuario);
+        Usuario responsable = this.usarioService.findByCodigo(this.nuevo.getResponsable());
+        this.nuevo.setResponsable(responsable);
+        this.nuevo.setUsername(this.usuario);
+        Boolean exito = this.bodegaService.insert(this.nuevo);
+        if (exito) {
+            FacesUtil.addMessageInfo("Se ha guardado con exito.");
+            this.init();
+        } else {
+            FacesUtil.addMessageError(null, "No se ha guardado.");
+            this.init();
+        }
     }
 
     @Override
     public void modify(ActionEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.selected != null) {
+            this.usuario = this.usarioService.findByCodigo(this.usuario);
+            Usuario responsable = this.usarioService.findByCodigo(this.selectedResponsable);
+            this.selected.setResponsable(responsable);
+            this.selected.setUsername(this.usuario);
+            Boolean exito = this.bodegaService.update(this.selected);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha modifcado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
+                this.init();
+            }
+        } else {
+            FacesUtil.addMessageInfo("Seleccione un registro.");
+        }
     }
 
     @Override
     public void remove(ActionEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.selected != null) {
+            this.usuario = this.usarioService.findByCodigo(this.usuario);
+            this.selected.setUsername(this.usuario);
+            Boolean exito = this.bodegaService.deleteFlag(this.selected);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha eliminado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
+                this.init();
+            }
+        } else {
+            FacesUtil.addMessageInfo("Seleccione un registro.");
+        }
+    }
+
+    public void loadCantones() {
+        if (this.nuevo.getProvincia() != null && !this.nuevo.getProvincia().equals("")) {
+            this.cantones = this.provinciaService.ObtenerProvincia(this.nuevo.getProvincia()).getCantonList();
+        }
+    }
+    
+     public void selectedloadCantones() {
+        if (this.selected.getProvincia() != null && !this.selected.getProvincia().equals("")) {
+            this.cantones = this.provinciaService.ObtenerProvincia(this.selected.getProvincia()).getCantonList();
+        }
+    }
+
+    public void loadModifyCantones(String provincia) {
+        if (provincia != null && !provincia.equals("")) {
+            this.cantones = this.provinciaService.ObtenerProvincia(provincia).getCantonList();
+        }
     }
 
     public Bodega getNuevo() {
@@ -116,6 +175,14 @@ public class BodegaBean implements ImethodsBean, Serializable {
 
     public void setCantones(List<Canton> cantones) {
         this.cantones = cantones;
+    }
+
+    public Usuario getSelectedResponsable() {
+        return selectedResponsable;
+    }
+
+    public void setSelectedResponsable(Usuario selectedResponsable) {
+        this.selectedResponsable = selectedResponsable;
     }
 
 }
