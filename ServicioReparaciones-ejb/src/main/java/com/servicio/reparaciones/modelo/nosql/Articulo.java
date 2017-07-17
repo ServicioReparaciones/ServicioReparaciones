@@ -22,27 +22,38 @@ import org.mongodb.morphia.annotations.Reference;
     @Index(fields = @Field("codigo"))})
 public class Articulo extends BaseEntity {
 
-    private String codigo;
+    private Integer codigo;
+    private String barcode;
     private String nombre;
-    private String unidad;
+    private String modelo;
+    private String code;
+    private String marca;
+    private String artefacto;
+    private String numeroParte;
+    private String unidadMedicion;//UNIDAD DE MEDIDA
     private Integer flag;
 
-    @Reference
-    private Bodega bodega;
     @Reference
     private Usuario username;
 
     public Articulo() {
-        this.bodega = new Bodega();
         this.username = new Usuario();
     }
 
-    public String getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getNombre() {
@@ -53,12 +64,52 @@ public class Articulo extends BaseEntity {
         this.nombre = nombre;
     }
 
-    public String getUnidad() {
-        return unidad;
+    public String getModelo() {
+        return modelo;
     }
 
-    public void setUnidad(String unidad) {
-        this.unidad = unidad;
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getArtefacto() {
+        return artefacto;
+    }
+
+    public void setArtefacto(String artefacto) {
+        this.artefacto = artefacto;
+    }
+
+    public String getNumeroParte() {
+        return numeroParte;
+    }
+
+    public void setNumeroParte(String numeroParte) {
+        this.numeroParte = numeroParte;
+    }
+
+    public String getUnidadMedicion() {
+        return unidadMedicion;
+    }
+
+    public void setUnidadMedicion(String unidadMedicion) {
+        this.unidadMedicion = unidadMedicion;
     }
 
     public Integer getFlag() {
@@ -67,14 +118,6 @@ public class Articulo extends BaseEntity {
 
     public void setFlag(Integer flag) {
         this.flag = flag;
-    }
-
-    public Bodega getBodega() {
-        return bodega;
-    }
-
-    public void setBodega(Bodega bodega) {
-        this.bodega = bodega;
     }
 
     public Usuario getUsername() {
@@ -87,7 +130,7 @@ public class Articulo extends BaseEntity {
 
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 5;
         hash = 37 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
@@ -112,7 +155,7 @@ public class Articulo extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Articulo{" + "codigo=" + codigo + ", nombre=" + nombre + ", unidad=" + unidad + ", flag=" + flag + ", username=" + username + '}';
+        return "Articulo{" + "codigo=" + codigo + ", barcode=" + barcode + ", nombre=" + nombre + ", modelo=" + modelo + ", code=" + code + ", marca=" + marca + ", artefacto=" + artefacto + ", numeroParte=" + numeroParte + ", unidadMedicion=" + unidadMedicion + ", flag=" + flag +", username=" + username + '}';
     }
 
 }

@@ -15,13 +15,12 @@ import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
- * @author luis
- * CREAR ENTRADA EN BLANCO CERO
+ * @author luis CREAR ENTRADA EN BLANCO CERO
  */
 @Entity(value = "Entrada", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Entrada extends BaseEntity{
+public class Entrada extends BaseEntity {
 
     private Integer codigo;
     private String numeroFactura;
@@ -32,6 +31,8 @@ public class Entrada extends BaseEntity{
 
     @Reference
     private Articulo articulo;
+    @Reference
+    private Bodega bodega;
     @Reference
     private Usuario username;
 
@@ -99,6 +100,14 @@ public class Entrada extends BaseEntity{
         this.articulo = articulo;
     }
 
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
     public Usuario getUsername() {
         return username;
     }
@@ -136,5 +145,4 @@ public class Entrada extends BaseEntity{
     public String toString() {
         return "Entrada{" + "codigo=" + codigo + ", numeroFactura=" + numeroFactura + ", cantidad=" + cantidad + ", precioUnit=" + precioUnit + ", precioTotal=" + precioTotal + ", flag=" + flag + ", articulo=" + articulo + ", username=" + username + '}';
     }
-
 }
