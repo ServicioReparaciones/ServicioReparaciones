@@ -23,6 +23,8 @@ import org.mongodb.morphia.annotations.Reference;
 public class Salida extends BaseEntity {
 
     private Integer codigo;
+    private Integer signo;
+    private String concepto;
     private Double cantidad;
     private Double precioUnit;
     private Double precioTotal;
@@ -31,15 +33,19 @@ public class Salida extends BaseEntity {
     @Reference
     private Articulo articulo;
     @Reference
+    private Bodega bodega;
+    @Reference
     private Tecnico recibe;
     @Reference
     private Usuario username;
 
     public Salida() {
+        this.signo = -1;
         this.cantidad = 0.00;
         this.precioUnit = 0.00;
         this.precioTotal = 0.00;
         this.articulo = new Articulo();
+        this.bodega = new Bodega();
         this.recibe = new Tecnico();
         this.username = new Usuario();
     }
@@ -50,6 +56,14 @@ public class Salida extends BaseEntity {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
+    }
+
+    public String getConcepto() {
+        return concepto;
+    }
+
+    public void setConcepto(String concepto) {
+        this.concepto = concepto;
     }
 
     public Double getCantidad() {
@@ -69,7 +83,7 @@ public class Salida extends BaseEntity {
     }
 
     public Double getPrecioTotal() {
-        return precioTotal;
+        return precioTotal = this.getPrecioUnit() * this.getCantidad();
     }
 
     public void setPrecioTotal(Double precioTotal) {
@@ -92,12 +106,28 @@ public class Salida extends BaseEntity {
         this.articulo = articulo;
     }
 
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
     public Tecnico getRecibe() {
         return recibe;
     }
 
     public void setRecibe(Tecnico recibe) {
         this.recibe = recibe;
+    }
+
+    public Integer getSigno() {
+        return signo;
+    }
+
+    public void setSigno(Integer signo) {
+        this.signo = signo;
     }
 
     public Usuario getUsername() {
@@ -137,5 +167,4 @@ public class Salida extends BaseEntity {
     public String toString() {
         return "Salida{" + "codigo=" + codigo + ", cantidad=" + cantidad + ", precioUnit=" + precioUnit + ", precioTotal=" + precioTotal + ", flag=" + flag + ", articulo=" + articulo + ", username=" + username + '}';
     }
-
 }

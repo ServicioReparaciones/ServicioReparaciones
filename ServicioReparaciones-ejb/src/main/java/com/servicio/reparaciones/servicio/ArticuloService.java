@@ -7,7 +7,7 @@ package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Articulo;
-import com.servicio.reparaciones.servicio.Interfaz.Iarticulo;
+import com.servicio.reparaciones.servicio.I.Iarticulo;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class ArticuloService implements Iarticulo, Serializable {
                 set("modelo", articulo.getModelo()).
                 set("code", articulo.getCode()).
                 set("marca", articulo.getMarca()).
-                set("nombre", articulo.getArtefacto()).
+                set("artefacto", articulo.getArtefacto()).
                 set("numeroParte", articulo.getNumeroParte()).
                 set("unidadMedicion", articulo.getUnidadMedicion()).
                 set("username", articulo.getUsername()).
@@ -79,6 +79,17 @@ public class ArticuloService implements Iarticulo, Serializable {
                 set("flag", articulo.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
+    }
+    
+    public Articulo findByNombre(Articulo articulo) {
+        Articulo find = new Articulo();
+        Query<Articulo> result = this.ds.find(Articulo.class).
+                field("nombre").equal(articulo.getNombre()).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
     }
     
     @Override

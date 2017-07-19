@@ -23,6 +23,8 @@ import org.mongodb.morphia.annotations.Reference;
 public class Entrada extends BaseEntity {
 
     private Integer codigo;
+    private Integer signo;
+    private String concepto;
     private String numeroFactura;
     private Double cantidad;
     private Double precioUnit;
@@ -37,10 +39,13 @@ public class Entrada extends BaseEntity {
     private Usuario username;
 
     public Entrada() {
+        this.signo = 1;
+        this.numeroFactura = "";
         this.cantidad = 0.00;
         this.precioUnit = 0.00;
         this.precioTotal = 0.00;
         this.articulo = new Articulo();
+        this.bodega = new Bodega();
         this.username = new Usuario();
     }
 
@@ -50,6 +55,14 @@ public class Entrada extends BaseEntity {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
+    }
+
+    public String getConcepto() {
+        return concepto;
+    }
+
+    public void setConcepto(String concepto) {
+        this.concepto = concepto;
     }
 
     public String getNumeroFactura() {
@@ -77,7 +90,7 @@ public class Entrada extends BaseEntity {
     }
 
     public Double getPrecioTotal() {
-        return precioTotal;
+        return precioTotal = this.getPrecioUnit() * this.getCantidad();
     }
 
     public void setPrecioTotal(Double precioTotal) {
@@ -106,6 +119,14 @@ public class Entrada extends BaseEntity {
 
     public void setBodega(Bodega bodega) {
         this.bodega = bodega;
+    }
+
+    public Integer getSigno() {
+        return signo;
+    }
+
+    public void setSigno(Integer signo) {
+        this.signo = signo;
     }
 
     public Usuario getUsername() {

@@ -7,7 +7,7 @@ package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Producto;
-import com.servicio.reparaciones.servicio.Interfaz.Iproducto;
+import com.servicio.reparaciones.servicio.I.Iproducto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

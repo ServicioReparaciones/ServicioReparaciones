@@ -7,7 +7,7 @@ package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Bodega;
-import com.servicio.reparaciones.servicio.Interfaz.Ibodega;
+import com.servicio.reparaciones.servicio.I.Ibodega;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -76,6 +76,17 @@ public class BodegaService implements Ibodega, Serializable {
         Bodega find = new Bodega();
         Query<Bodega> result = this.ds.find(Bodega.class).
                 field("codigo").equal(bodega.getCodigo()).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+    
+    public Bodega findByNombre(Bodega bodega) {
+        Bodega find = new Bodega();
+        Query<Bodega> result = this.ds.find(Bodega.class).
+                field("nombre").equal(bodega.getNombre()).
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);

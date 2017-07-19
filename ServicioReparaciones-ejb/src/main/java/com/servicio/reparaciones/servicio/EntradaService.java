@@ -6,9 +6,8 @@
 package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
-import com.servicio.reparaciones.modelo.nosql.Articulo;
 import com.servicio.reparaciones.modelo.nosql.Entrada;
-import com.servicio.reparaciones.servicio.Interfaz.Ientrada;
+import com.servicio.reparaciones.servicio.I.Ientrada;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class EntradaService implements Ientrada, Serializable {
         update.set("numeroFactura", entrada.getNumeroFactura()).
                 set("cantidad", entrada.getCantidad()).
                 set("precioUnit", entrada.getPrecioUnit()).
-                set("precioTota", entrada.getPrecioTotal()).
+                set("precioTotal", entrada.getPrecioTotal()).
                 set("articulo", entrada.getArticulo()).
                 set("bodega", entrada.getBodega()).
                 set("username", entrada.getUsername()).
@@ -78,6 +77,17 @@ public class EntradaService implements Ientrada, Serializable {
         Entrada find = new Entrada();
         Query<Entrada> result = this.ds.find(Entrada.class).
                 field("codigo").equal(entrada.getCodigo()).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+
+    public Entrada findByConcepto(Entrada entrada) {
+        Entrada find = new Entrada();
+        Query<Entrada> result = this.ds.find(Entrada.class).
+                field("concepto").equal(entrada.getConcepto()).
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);

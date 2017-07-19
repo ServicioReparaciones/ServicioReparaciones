@@ -7,7 +7,7 @@ package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Cliente;
-import com.servicio.reparaciones.servicio.Interfaz.Icliente;
+import com.servicio.reparaciones.servicio.I.Icliente;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;

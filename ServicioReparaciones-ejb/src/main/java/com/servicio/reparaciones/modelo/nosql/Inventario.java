@@ -5,6 +5,9 @@
  */
 package com.servicio.reparaciones.modelo.nosql;
 
+import com.mongo.persistance.BaseEntity;
+import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -18,24 +21,30 @@ import org.mongodb.morphia.annotations.Reference;
 @Entity(value = "Inventario", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Inventario {
-    
+public class Inventario extends BaseEntity {
+
     private Integer codigo;
-    private Entrada entrada;
-    private Salida  salida;
-    private Double stockUND; //total actual en unidades
-    private Double stockUSD; //total actual en dinero
+    private Integer signo; // 1 entrada -1 salida
+    private Double cantidad;
+    private Double precioUnit;
+    private Double precioTotal;
     private Integer flag;
 
+    @Embedded
+    private Movimiento movieminto;
     @Reference
     private Articulo articulo;
     @Reference
+    private Bodega bodega;
+    @Reference
     private Usuario username;
-    
+
     public Inventario() {
-        this.stockUND = 0.00;
-        this.stockUSD = 0.00;
+        this.cantidad = 0.00;
+        this.precioUnit = 0.00;
+        this.movieminto = new Movimiento();
         this.articulo = new Articulo();
+        this.bodega = new Bodega();
         this.username = new Usuario();
     }
 
@@ -47,36 +56,36 @@ public class Inventario {
         this.codigo = codigo;
     }
 
-    public Entrada getEntrada() {
-        return entrada;
+    public Integer getSigno() {
+        return signo;
     }
 
-    public void setEntrada(Entrada entrada) {
-        this.entrada = entrada;
+    public void setSigno(Integer signo) {
+        this.signo = signo;
     }
 
-    public Salida getSalida() {
-        return salida;
+    public Double getCantidad() {
+        return cantidad;
     }
 
-    public void setSalida(Salida salida) {
-        this.salida = salida;
+    public void setCantidad(Double cantidad) {
+        this.cantidad = cantidad;
     }
 
-    public Double getStockUND() {
-        return stockUND;
+    public Double getPrecioUnit() {
+        return precioUnit;
     }
 
-    public void setStockUND(Double stockUND) {
-        this.stockUND = stockUND;
+    public void setPrecioUnit(Double precioUnit) {
+        this.precioUnit = precioUnit;
     }
 
-    public Double getStockUSD() {
-        return stockUSD;
+    public Double getPrecioTotal() {
+        return precioTotal;
     }
 
-    public void setStockUSD(Double stockUSD) {
-        this.stockUSD = stockUSD;
+    public void setPrecioTotal(Double precioTotal) {
+        this.precioTotal = precioTotal;
     }
 
     public Integer getFlag() {
@@ -87,12 +96,28 @@ public class Inventario {
         this.flag = flag;
     }
 
+    public Movimiento getMovieminto() {
+        return movieminto;
+    }
+
+    public void setMovieminto(Movimiento movieminto) {
+        this.movieminto = movieminto;
+    }
+
     public Articulo getArticulo() {
         return articulo;
     }
 
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
+    }
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
     }
 
     public Usuario getUsername() {
@@ -102,6 +127,35 @@ public class Inventario {
     public void setUsername(Usuario username) {
         this.username = username;
     }
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.codigo);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Inventario other = (Inventario) obj;
+        if (!Objects.equals(this.codigo, other.codigo)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Inventario{" + "codigo=" + codigo + ", signo=" + signo + ", cantidad=" + cantidad + ", precioUnit=" + precioUnit + ", precioTotal=" + precioTotal + ", flag=" + flag + ", movieminto=" + movieminto + ", articulo=" + articulo + ", bodega=" + bodega + ", username=" + username + '}';
+    }
+
 }
