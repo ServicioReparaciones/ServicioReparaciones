@@ -8,6 +8,10 @@ package com.servicio.reparaciones.web.bean;
 import com.servicio.reparaciones.modelo.nosql.Servicio;
 import com.servicio.reparaciones.modelo.nosql.Tecnico;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
+import com.servicio.reparaciones.servicio.ArticuloService;
+import com.servicio.reparaciones.servicio.BodegaService;
+import com.servicio.reparaciones.servicio.EntradaService;
+import com.servicio.reparaciones.servicio.SalidaService;
 import com.servicio.reparaciones.servicio.ServicioServicio;
 import com.servicio.reparaciones.servicio.TecnicoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
@@ -42,6 +46,14 @@ public class LoginBean implements Serializable {
     private TecnicoServicio tecnicoService;
     @Inject
     private ServicioServicio servicioService;
+    @Inject
+    private BodegaService bodegaService;
+    @Inject
+    private ArticuloService articuloService;
+    @Inject
+    private EntradaService entradaService;
+    @Inject
+    private SalidaService salidaService;
 
     @PostConstruct
     public void init() {

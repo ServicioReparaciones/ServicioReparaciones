@@ -57,7 +57,7 @@ public class BodegaBean implements ImethodsBean, Serializable {
     public void init() {
         this.nuevo = new Bodega();
         this.selectedResponsable = new Usuario();
-        this.selected = null;
+        this.selected = new Bodega();
         this.bodegas = this.bodegaService.ObtenerListaBodegas(1);
         this.provincias = this.provinciaService.ObtenerListaProvincias();
         this.cantones = new ArrayList<>();

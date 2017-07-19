@@ -1,8 +1,164 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/template.xhtml">
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
-        content
+    <ui:define name="contsal">
+         <h:form id="fadd">
+            <p:panel header="Registrar Nueva Salrada">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="cantidad" value="Cantidad:"/>
+                    <p:inputNumber id="cantidad" required="true" value="#{salidaBean.nuevo.cantidad}"/>
+                    <p:message for="cantidad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="precioUnit" value="Precio Unit.:"/>
+                    <p:inputNumber id="precioUnit" required="true" value="#{salidaBean.nuevo.precioUnit}"/>
+                    <p:message for="precioUnit" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="articulo" value="Articulo:"/>
+                    <p:selectOneMenu id="articulo" required="true" value="#{salidaBean.nuevo.articulo.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{articuloBean.articulos}" var="art"
+                                       itemLabel="#{art.artefacto}" itemValue="#{art.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="articulo" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="bodega" value="Bodega:"/>
+                    <p:selectOneMenu id="bodega" required="true" value="#{salidaBean.nuevo.bodega.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
+                                       itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="bodega" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":fadd, :fdtsal:dtsal, :fadd:messages"
+                                     actionListener="#{salidaBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>            
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false" />
+        <h:form id="fdtsal">
+            <p:panel>
+                <p:dataTable  id="dtsal" var="sal" value="#{salidaBean.salidas}"
+                              filteredValue="#{salidaBean.filtered}"
+                              rowKey="#{sal.codigo}" rows="5" tableStyle="width: auto"
+                              paginator="true" paginatorPosition="bottom"
+                              reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="ENTRADA"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{sal.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Bodega" style="text-align: center">
+                        <h:outputText value="#{sal.bodega.nombre} " />
+                    </p:column>
+                    <p:column headerText="Articulo" style="text-align: center">
+                        <h:outputText value="#{sal.articulo.nombre} " />
+                        <h:outputText value="#{sal.articulo.artefacto} " />
+                        <h:outputText value="#{sal.articulo.marca} " />
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center" >
+                        <h:outputText value="#{sal.cantidad} " />
+                    </p:column>
+                    <p:column headerText="Precio Unit." style="text-align: center" >
+                        <h:outputText value="#{sal.precioUnit} " />
+                    </p:column>
+                    <p:column headerText="Precio Total." style="text-align: center" >
+                        <h:outputText value="#{sal.precioTotal} " />
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{sal.username.datosPersonales.nombres}" />
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outSal"
+                                         oncomplete="PF('dlgModifySal').show()">
+                            <f:setPropertyActionListener value="#{sal}" target="#{saliculoBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outSal"
+                                         oncomplete="PF('dlgDeleteSal').show()">
+                            <f:setPropertyActionListener value="#{sal}" target="#{saliculoBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Salrada" widgetVar="dlgModifySal" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outSal">
+                    <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="ecantidad" value="Cantidad:"/>
+                    <p:inputNumber id="ecantidad" required="true" value="#{salidaBean.selected.cantidad}"/>
+                    <p:message for="ecantidad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="eprecioUnit" value="Precio Unit.:"/>
+                    <p:inputNumber id="eprecioUnit" required="true" value="#{salidaBean.selected.precioUnit}"/>
+                    <p:message for="eprecioUnit" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="earticulo" value="Articulo:"/>
+                    <p:selectOneMenu id="earticulo" required="true" value="#{salidaBean.selected.articulo.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{articuloBean.articulos}" var="art"
+                                       itemLabel="#{art.artefacto}" itemValue="#{art.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="earticulo" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="ebodega" value="Bodega:"/>
+                    <p:selectOneMenu id="ebodega" required="true" value="#{salidaBean.selected.bodega.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
+                                       itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="ebodega" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtsal:dtsal" 
+                                     actionListener="#{saliculoBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Salrada = Saluesto en Bodega" widgetVar="dlgDeleteSal" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outSal">
+                    <p:outputLabel value="Se eliminara el siguisale registro:"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Articulo:"/>
+                        <p:outputLabel value="#{salidaBean.selected.articulo.nombre}"/>
+                        
+                        <p:outputLabel value="Artefacto:"/>
+                        <p:outputLabel value="#{salidaBean.selected.articulo.artefacto}"/>
+                        
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{salidaBean.selected.articulo.marca}"/>
+
+                        <p:outputLabel value="Cantidad:"/>
+                        <p:outputLabel value="#{salidaBean.selected.cantidad}"/>
+
+                        <p:outputLabel value="Precio Unit.:"/>
+                        <p:outputLabel value="#{salidaBean.selected.precioUnit}"/>
+
+                        <p:outputLabel value="Precio Total:"/>
+                        <p:outputLabel value="#{salidaBean.selected.precioTotal}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtsal:dtsal" 
+                                     actionListener="#{saliculoBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>

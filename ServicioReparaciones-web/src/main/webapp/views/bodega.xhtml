@@ -93,7 +93,7 @@
                     <p:column style="width:32px;text-align: center">
                         <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outBod"
                                          oncomplete="PF('dlgDeleteBod').show()">
-                            <f:setPropertyActionListener value="#{bod}" target="#{bodenteBean.selected}" />
+                            <f:setPropertyActionListener value="#{bod}" target="#{bodegaBean.selected}" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
@@ -149,21 +149,26 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="outBod">
                     <p:outputLabel value="Se eliminara el siguiente registro:"/>
-                    <h:panelGrid columns="4" cellpadding="5">
+                    <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Nombre:"/>
                         <p:outputLabel value="#{bodegaBean.selected.nombre}"/>
+                        <p:outputLabel value="  "/>
 
                         <p:outputLabel value="Responsable:"/>
-                        <p:outputLabel value="#{bodegaBean.selected.responsable}"/>
+                        <p:outputLabel value="#{bodegaBean.selected.responsable.datosPersonales.nombres} "/>
+                        <p:outputLabel value="#{bodegaBean.selected.responsable.datosPersonales.apellidos}"/>
 
                         <p:outputLabel value="Provincia:"/>
                         <p:outputLabel value="#{bodegaBean.selected.provincia}"/>
+                        <p:outputLabel value="  "/>
 
                         <p:outputLabel value="Cantón:"/>
                         <p:outputLabel value="#{bodegaBean.selected.canton}"/>
+                        <p:outputLabel value="  "/>
 
                         <p:outputLabel value="Usuario:"/>
-                        <p:outputLabel value="#{bodegaBean.selected.username}"/>
+                        <p:outputLabel value="#{bodegaBean.selected.username.datosPersonales.nombres} "/>
+                        <p:outputLabel value="#{bodegaBean.selected.username.datosPersonales.apellidos}"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">

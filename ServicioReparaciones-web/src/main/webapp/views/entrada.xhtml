@@ -1,8 +1,212 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/template.xhtml">
+                template="./template/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        content
+        <h:form id="fadd">
+            <p:panel header="Registrar Nueva Entrada">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="numeroFactura" value="Numero de Factura:"/>
+                    <p:inputText id="numeroFactura" value="#{entradaBean.nuevo.numeroFactura}"/>
+                    <p:message for="numeroFactura" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="cantidad" value="Cantidad:"/>
+                    <p:inputNumber id="cantidad" required="true" value="#{entradaBean.nuevo.cantidad}"/>
+                    <p:message for="cantidad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="precioUnit" value="Precio Unit.:"/>
+                    <p:inputNumber id="precioUnit" required="true" value="#{entradaBean.nuevo.precioUnit}"/>
+                    <p:message for="precioUnit" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="bodega" value="Bodega:"/>
+                    <p:selectOneMenu id="bodega" required="true" value="#{entradaBean.nuevo.bodega.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
+                                       itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="bodega" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid cellpadding="5">
+                    <p:outputLabel value="Seleccione un articulo:"/>
+                    <p:dataTable  id="dtart" var="art" value="#{articuloBean.articulos}"
+                                  filteredValue="#{articuloBean.filtered}"
+                                  selectionMode="single" selection="#{entradaBean.nuevo.articulo}"
+                                  rowKey="#{art.codigo}" rows="5" tableStyle="width: auto"
+                                  paginator="true" paginatorPosition="bottom"
+                                  reflow="true">
+                        <p:ajax event="rowSelect" listener="#{entradaBean.onRowSelect}" update=":fadd:articulo"/>
+                        <f:facet name="header">
+                            <h:outputText value="ARTICULOS"/>
+                        </f:facet>
+                        <p:column headerText="Fecha" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                            <h:outputText value="#{art.lastChange}">
+                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column filterBy="#{art.nombre}" headerText="Nombre" style="text-align: center;font-size: 75%">
+                            <h:outputText value="#{art.nombre} " />
+                        </p:column>
+                        <p:column headerText="Artefacto" style="text-align: center;font-size: 75%">
+                            <h:outputText value="#{art.artefacto} " />
+                        </p:column>
+                        <p:column headerText="Marca" style="text-align: center;font-size: 75%">
+                            <h:outputText value="#{art.marca} " />
+                        </p:column>
+                        <p:column filterBy="#{art.modelo}" headerText="Modelo" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                            <h:outputText value="#{art.modelo} " />
+                        </p:column>
+                        <p:column filterBy="#{art.code}" headerText="Código" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                            <h:outputText value="#{art.code} " />
+                        </p:column>
+                        <p:column filterBy="#{art.numeroParte}" headerText="Numéro Parte" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                            <h:outputText value="#{art.numeroParte} " />
+                        </p:column>
+                        <p:column headerText="Unidad/Medida" style="text-align: center;font-size: 75%">
+                            <h:outputText value="#{art.unidadMedicion}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="articulo" value="Articulo:"/>
+                    <p:inputText id="articulo" required="true" value="#{entradaBean.nuevo.articulo.nombre}"/>
+                    <p:message for="articulo" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":fadd, :fdtent:dtent, :fadd:messages"
+                                     actionListener="#{entradaBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>            
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false" />
+        <h:form id="fdtent">
+            <p:panel>
+                <p:dataTable  id="dtent" var="ent" value="#{entradaBean.entradas}"
+                              filteredValue="#{entradaBean.filtered}"
+                              rowKey="#{ent.codigo}" rows="5" tableStyle="width: auto"
+                              paginator="true" paginatorPosition="bottom"
+                              reflow="true">
+                    <f:facet name="header">
+                        <h:outputText value="ENTRADA"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{ent.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Bodega" style="text-align: center">
+                        <h:outputText value="#{ent.bodega.nombre} " />
+                    </p:column>
+                    <p:column headerText="Articulo" style="text-align: center">
+                        <h:outputText value="#{ent.articulo.nombre} " />
+                        <h:outputText value="#{ent.articulo.artefacto} " />
+                        <h:outputText value="#{ent.articulo.marca} " />
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center" >
+                        <h:outputText value="#{ent.cantidad} " />
+                    </p:column>
+                    <p:column headerText="Precio Unit." style="text-align: center" >
+                        <h:outputText value="#{ent.precioUnit} " />
+                    </p:column>
+                    <p:column headerText="Precio Total." style="text-align: center" >
+                        <h:outputText value="#{ent.precioTotal} " />
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{ent.username.datosPersonales.nombres}" />
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outEnt"
+                                         oncomplete="PF('dlgModifyEnt').show()">
+                            <f:setPropertyActionListener value="#{ent}" target="#{enticuloBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outEnt"
+                                         oncomplete="PF('dlgDeleteEnt').show()">
+                            <f:setPropertyActionListener value="#{ent}" target="#{enticuloBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Entrada" widgetVar="dlgModifyEnt" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outEnt">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="enumeroFactura" value="Numero de Factura:"/>
+                        <p:inputText id="enumeroFactura" required="true" value="#{entradaBean.selected.numeroFactura}"/>
+                        <p:message for="enumeroFactura" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecantidad" value="Cantidad:"/>
+                        <p:inputNumber id="ecantidad" required="true" value="#{entradaBean.selected.cantidad}"/>
+                        <p:message for="ecantidad" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eprecioUnit" value="Precio Unit.:"/>
+                        <p:inputNumber id="eprecioUnit" required="true" value="#{entradaBean.selected.precioUnit}"/>
+                        <p:message for="eprecioUnit" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="earticulo" value="Articulo:"/>
+                        <p:selectOneMenu id="earticulo" required="true" value="#{entradaBean.selected.articulo.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{articuloBean.articulos}" var="art"
+                                           itemLabel="#{art.artefacto}" itemValue="#{art.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="earticulo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ebodega" value="Bodega:"/>
+                        <p:selectOneMenu id="ebodega" required="true" value="#{entradaBean.selected.bodega.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
+                                           itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="ebodega" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtent:dtent" 
+                                     actionListener="#{enticuloBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Entrada = Entuesto en Bodega" widgetVar="dlgDeleteEnt" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outEnt">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Numero de Factura:"/>
+                        <p:outputLabel value="#{entradaBean.selected.numeroFactura}"/>
+
+                        <p:outputLabel value="Articulo:"/>
+                        <p:outputLabel value="#{entradaBean.selected.articulo.nombre}"/>
+
+                        <p:outputLabel value="Artefacto:"/>
+                        <p:outputLabel value="#{entradaBean.selected.articulo.artefacto}"/>
+
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{entradaBean.selected.articulo.marca}"/>
+
+                        <p:outputLabel value="Cantidad:"/>
+                        <p:outputLabel value="#{entradaBean.selected.cantidad}"/>
+
+                        <p:outputLabel value="Precio Unit.:"/>
+                        <p:outputLabel value="#{entradaBean.selected.precioUnit}"/>
+
+                        <p:outputLabel value="Precio Total:"/>
+                        <p:outputLabel value="#{entradaBean.selected.precioTotal}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtent:dtent" 
+                                     actionListener="#{enticuloBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
