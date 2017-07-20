@@ -8,10 +8,12 @@ package com.servicio.reparaciones.web.bean;
 import com.servicio.reparaciones.modelo.nosql.Articulo;
 import com.servicio.reparaciones.modelo.nosql.Bodega;
 import com.servicio.reparaciones.modelo.nosql.Salida;
+import com.servicio.reparaciones.modelo.nosql.Tecnico;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.servicio.ArticuloService;
 import com.servicio.reparaciones.servicio.BodegaService;
 import com.servicio.reparaciones.servicio.SalidaService;
+import com.servicio.reparaciones.servicio.TecnicoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
 import com.servicio.reparaciones.web.util.FacesUtil;
@@ -23,6 +25,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -48,6 +51,8 @@ public class SalidaBean implements ImethodsBean, Serializable {
     @Inject
     private SalidaService salidaService;
     @Inject
+    private TecnicoServicio tecnicoService;
+    @Inject
     private UsuarioServicio usarioService;
 
     @PostConstruct
@@ -55,6 +60,7 @@ public class SalidaBean implements ImethodsBean, Serializable {
         this.nuevo = new Salida();
         this.selected = new Salida();
         this.filtered = null;
+        this.salidas = this.salidaService.ObtenerListaSalidas(1);
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -63,6 +69,8 @@ public class SalidaBean implements ImethodsBean, Serializable {
     public void add(ActionEvent evt) {
         this.usuario = this.usarioService.findByCodigo(this.usuario);
         this.nuevo.setUsername(this.usuario);
+        Tecnico tecnico = this.tecnicoService.findByCodigo(this.nuevo.getQuienRecibe());
+        this.nuevo.setQuienRecibe(tecnico);
         Articulo articulo = articuloService.findByCode(this.nuevo.getArticulo());
         this.nuevo.setArticulo(articulo);
         Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
@@ -82,9 +90,11 @@ public class SalidaBean implements ImethodsBean, Serializable {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
-            Articulo articulo = articuloService.findByCode(this.nuevo.getArticulo());
+            Tecnico tecnico = this.tecnicoService.findByCodigo(this.selected.getQuienRecibe());
+            this.selected.setQuienRecibe(tecnico);
+            Articulo articulo = articuloService.findByCode(this.selected.getArticulo());
             this.selected.setArticulo(articulo);
-            Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+            Bodega bodega = this.bodegaService.findByCodigo(this.selected.getBodega());
             this.selected.setBodega(bodega);
             Boolean exito = this.salidaService.update(this.selected);
             if (exito) {
@@ -114,6 +124,20 @@ public class SalidaBean implements ImethodsBean, Serializable {
             }
         } else {
             FacesUtil.addMessageInfo("Seleccione un registro.");
+        }
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        Articulo art = (Articulo) event.getObject();
+        if (art != null) {
+            this.nuevo.setArticulo(art);
+        }
+    }
+
+    public void onRowSelectModify(SelectEvent event) {
+        Articulo art = (Articulo) event.getObject();
+        if (art != null && this.selected != null) {
+            this.selected.setArticulo(art);
         }
     }
 
@@ -149,6 +173,4 @@ public class SalidaBean implements ImethodsBean, Serializable {
         this.filtered = filtered;
     }
 
-    
-    
 }

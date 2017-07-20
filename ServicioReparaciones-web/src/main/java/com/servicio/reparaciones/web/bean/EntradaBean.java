@@ -32,16 +32,16 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "entradaBean")
 @ViewScoped
 public class EntradaBean implements ImethodsBean, Serializable {
-    
+
     private static final long serialVersionUID = 5300101900815373900L;
-    
+
     private Entrada nuevo;
     private Entrada selected;
     private List<Entrada> entradas;
     private List<Entrada> filtered;
-    
+
     private Usuario usuario;
-    
+
     @Inject
     private ArticuloService articuloService;
     @Inject
@@ -50,16 +50,17 @@ public class EntradaBean implements ImethodsBean, Serializable {
     private EntradaService entradaService;
     @Inject
     private UsuarioServicio usarioService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new Entrada();
         this.selected = new Entrada();
         this.filtered = null;
+        this.entradas = this.entradaService.ObtenerListaEntradas(1);
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
-    
+
     @Override
     public void add(ActionEvent evt) {
         this.usuario = this.usarioService.findByCodigo(this.usuario);
@@ -77,15 +78,15 @@ public class EntradaBean implements ImethodsBean, Serializable {
             this.init();
         }
     }
-    
+
     @Override
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
-            Articulo articulo = articuloService.findByCode(this.nuevo.getArticulo());
+            Articulo articulo = articuloService.findByCode(this.selected.getArticulo());
             this.selected.setArticulo(articulo);
-            Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+            Bodega bodega = this.bodegaService.findByCodigo(this.selected.getBodega());
             this.selected.setBodega(bodega);
             Boolean exito = this.entradaService.update(this.selected);
             if (exito) {
@@ -99,7 +100,7 @@ public class EntradaBean implements ImethodsBean, Serializable {
             FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-    
+
     @Override
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
@@ -117,44 +118,51 @@ public class EntradaBean implements ImethodsBean, Serializable {
             FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         Articulo art = (Articulo) event.getObject();
         if (art != null) {
             this.nuevo.setArticulo(art);
         }
     }
-    
+
+    public void onRowSelectModify(SelectEvent event) {
+        Articulo art = (Articulo) event.getObject();
+        if (art != null && this.selected != null) {
+            this.selected.setArticulo(art);
+        }
+    }
+
     public Entrada getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(Entrada nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public Entrada getSelected() {
         return selected;
     }
-    
+
     public void setSelected(Entrada selected) {
         this.selected = selected;
     }
-    
+
     public List<Entrada> getEntradas() {
         return entradas;
     }
-    
+
     public void setEntradas(List<Entrada> entradas) {
         this.entradas = entradas;
     }
-    
+
     public List<Entrada> getFiltered() {
         return filtered;
     }
-    
+
     public void setFiltered(List<Entrada> filtered) {
         this.filtered = filtered;
     }
-    
+
 }

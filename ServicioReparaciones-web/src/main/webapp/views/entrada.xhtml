@@ -12,6 +12,10 @@
                     <p:inputText id="numeroFactura" value="#{entradaBean.nuevo.numeroFactura}"/>
                     <p:message for="numeroFactura" display="tooltip" severity="error"/>
 
+                    <p:outputLabel for="concepto" value="Concepto:"/>
+                    <p:inputText id="concepto" value="#{entradaBean.nuevo.concepto}"/>
+                    <p:message for="concepto" display="tooltip" severity="error"/>
+
                     <p:outputLabel for="cantidad" value="Cantidad:"/>
                     <p:inputNumber id="cantidad" required="true" value="#{entradaBean.nuevo.cantidad}"/>
                     <p:message for="cantidad" display="tooltip" severity="error"/>
@@ -85,52 +89,61 @@
         <h:outputText value="&lt;br/&gt;" escape="false" />
         <h:form id="fdtent">
             <p:panel>
-                <p:dataTable  id="dtent" var="ent" value="#{entradaBean.entradas}"
-                              filteredValue="#{entradaBean.filtered}"
-                              rowKey="#{ent.codigo}" rows="5" tableStyle="width: auto"
-                              paginator="true" paginatorPosition="bottom"
-                              reflow="true">
-                    <f:facet name="header">
-                        <h:outputText value="ENTRADA"/>
-                    </f:facet>
-                    <p:column headerText="Fecha" style="text-align: center">
-                        <h:outputText value="#{ent.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Bodega" style="text-align: center">
-                        <h:outputText value="#{ent.bodega.nombre} " />
-                    </p:column>
-                    <p:column headerText="Articulo" style="text-align: center">
-                        <h:outputText value="#{ent.articulo.nombre} " />
-                        <h:outputText value="#{ent.articulo.artefacto} " />
-                        <h:outputText value="#{ent.articulo.marca} " />
-                    </p:column>
-                    <p:column headerText="Cantidad" style="text-align: center" >
-                        <h:outputText value="#{ent.cantidad} " />
-                    </p:column>
-                    <p:column headerText="Precio Unit." style="text-align: center" >
-                        <h:outputText value="#{ent.precioUnit} " />
-                    </p:column>
-                    <p:column headerText="Precio Total." style="text-align: center" >
-                        <h:outputText value="#{ent.precioTotal} " />
-                    </p:column>
-                    <p:column headerText="Usuario" style="text-align: center">
-                        <h:outputText value="#{ent.username.datosPersonales.nombres}" />
-                    </p:column>
-                    <p:column style="width:32px;text-align: center">
-                        <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outEnt"
-                                         oncomplete="PF('dlgModifyEnt').show()">
-                            <f:setPropertyActionListener value="#{ent}" target="#{enticuloBean.selected}"/>
-                        </p:commandButton>
-                    </p:column>
-                    <p:column style="width:32px;text-align: center">
-                        <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outEnt"
-                                         oncomplete="PF('dlgDeleteEnt').show()">
-                            <f:setPropertyActionListener value="#{ent}" target="#{enticuloBean.selected}" />
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:dataTable  id="dtent" var="ent" value="#{entradaBean.entradas}"
+                                  filteredValue="#{entradaBean.filtered}"
+                                  rowKey="#{ent.codigo}" rows="5" tableStyle="width: auto"
+                                  paginator="true" paginatorPosition="bottom"
+                                  reflow="true">
+                        <f:facet name="header">
+                            <h:outputText value="ENTRADAS"/>
+                        </f:facet>
+                        <p:column headerText="Fecha" style="text-align">
+                            <h:outputText value="#{ent.lastChange}">
+                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Numero de Factura" style="text-align">
+                            <h:outputText value="#{ent.numeroFactura}" />
+                        </p:column>
+                        <p:column headerText="Concepto" style="text-align">
+                            <h:outputText value="#{ent.concepto}" />
+                        </p:column>
+                        <p:column headerText="Articulo = Repuesto en Bodega" style="text-align">
+                            <h:outputText value="#{ent.articulo.nombre} - " />
+                            <h:outputText value="#{ent.articulo.artefacto} - " />
+                            <h:outputText value="#{ent.articulo.marca} - " />
+                            <h:outputText value="#{ent.articulo.unidadMedicion}" />
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align" >
+                            <h:outputText value="#{ent.cantidad} " />
+                        </p:column>
+                        <p:column headerText="Precio Unit." style="text-align" >
+                            <h:outputText value="#{ent.precioUnit} " />
+                        </p:column>
+                        <p:column headerText="Precio Total." style="text-align" >
+                            <h:outputText value="#{ent.precioTotal} " />
+                        </p:column>
+                        <p:column headerText="Bodega" style="text-align">
+                            <h:outputText value="#{ent.bodega.nombre}" />
+                        </p:column>
+                        <p:column headerText="Usuario" style="text-align">
+                            <h:outputText value="#{ent.username.datosPersonales.nombres}" />
+                        </p:column>
+                        <p:column style="width:32px;text-align: center">
+                            <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outEnt"
+                                             oncomplete="PF('dlgModifyEnt').show()">
+                                <f:setPropertyActionListener value="#{ent}" target="#{entradaBean.selected}"/>
+                            </p:commandButton>
+                        </p:column>
+                        <p:column style="width:32px;text-align: center">
+                            <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outEnt"
+                                             oncomplete="PF('dlgDeleteEnt').show()">
+                                <f:setPropertyActionListener value="#{ent}" target="#{entradaBean.selected}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
             </p:panel>
         </h:form>
         <h:form id="fedit">
@@ -142,6 +155,10 @@
                         <p:inputText id="enumeroFactura" required="true" value="#{entradaBean.selected.numeroFactura}"/>
                         <p:message for="enumeroFactura" display="tooltip" severity="error"/>
 
+                        <p:outputLabel for="econcepto" value="Concepto:"/>
+                        <p:inputText id="econcepto" value="#{entradaBean.selected.concepto}"/>
+                        <p:message for="econcepto" display="tooltip" severity="error"/>
+
                         <p:outputLabel for="ecantidad" value="Cantidad:"/>
                         <p:inputNumber id="ecantidad" required="true" value="#{entradaBean.selected.cantidad}"/>
                         <p:message for="ecantidad" display="tooltip" severity="error"/>
@@ -149,14 +166,6 @@
                         <p:outputLabel for="eprecioUnit" value="Precio Unit.:"/>
                         <p:inputNumber id="eprecioUnit" required="true" value="#{entradaBean.selected.precioUnit}"/>
                         <p:message for="eprecioUnit" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="earticulo" value="Articulo:"/>
-                        <p:selectOneMenu id="earticulo" required="true" value="#{entradaBean.selected.articulo.codigo}">
-                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{articuloBean.articulos}" var="art"
-                                           itemLabel="#{art.artefacto}" itemValue="#{art.codigo}"/>
-                        </p:selectOneMenu>
-                        <p:message for="earticulo" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="ebodega" value="Bodega:"/>
                         <p:selectOneMenu id="ebodega" required="true" value="#{entradaBean.selected.bodega.codigo}">
@@ -166,10 +175,55 @@
                         </p:selectOneMenu>
                         <p:message for="ebodega" display="tooltip" severity="error"/>
                     </h:panelGrid>
+                    <h:panelGrid cellpadding="5">
+                        <p:outputLabel value="Seleccione un articulo:"/>
+                        <p:dataTable  id="edtart" var="eart" value="#{articuloBean.articulos}"
+                                      filteredValue="#{articuloBean.filtered}"
+                                      selectionMode="single" selection="#{entradaBean.selected.articulo}"
+                                      rowKey="#{eart.codigo}" rows="5" tableStyle="width: auto"
+                                      paginator="true" paginatorPosition="bottom"
+                                      reflow="true">
+                            <p:ajax event="rowSelect" listener="#{entradaBean.onRowSelectModify}" update=":fedit:earticulo"/>
+                            <f:facet name="header">
+                                <h:outputText value="ARTICULOS"/>
+                            </f:facet>
+                            <p:column headerText="Fecha" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                                <h:outputText value="#{eart.lastChange}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{eart.nombre}" headerText="Nombre" style="text-align: center;font-size: 75%">
+                                <h:outputText value="#{eart.nombre} " />
+                            </p:column>
+                            <p:column headerText="Artefacto" style="text-align: center;font-size: 75%">
+                                <h:outputText value="#{eart.artefacto} " />
+                            </p:column>
+                            <p:column headerText="Marca" style="text-align: center;font-size: 75%">
+                                <h:outputText value="#{eart.marca} " />
+                            </p:column>
+                            <p:column filterBy="#{eart.modelo}" headerText="Modelo" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                                <h:outputText value="#{eart.modelo} " />
+                            </p:column>
+                            <p:column filterBy="#{eart.code}" headerText="Código" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                                <h:outputText value="#{eart.code} " />
+                            </p:column>
+                            <p:column filterBy="#{eart.numeroParte}" headerText="Numéro Pearte" style="text-align: center;font-size: 75%" filterMatchMode="contains">
+                                <h:outputText value="#{eart.numeroParte} " />
+                            </p:column>
+                            <p:column headerText="Unidad/Medida" style="text-align: center;font-size: 75%">
+                                <h:outputText value="#{eart.unidadMedicion}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="earticulo" value="Articulo:"/>
+                        <p:inputText id="earticulo" required="true" value="#{entradaBean.selected.articulo.nombre}"/>
+                        <p:message for="earticulo" display="tooltip" severity="error"/>
+                    </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtent:dtent" 
-                                     actionListener="#{enticuloBean.modify(evt)}"/>
+                                     actionListener="#{entradaBean.modify(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>
@@ -181,6 +235,9 @@
                     <h:panelGrid columns="4" cellpadding="5">
                         <p:outputLabel value="Numero de Factura:"/>
                         <p:outputLabel value="#{entradaBean.selected.numeroFactura}"/>
+
+                        <p:outputLabel value="Concepto:"/>
+                        <p:inputText id="concepto" value="#{entradaBean.selected.concepto}"/>
 
                         <p:outputLabel value="Articulo:"/>
                         <p:outputLabel value="#{entradaBean.selected.articulo.nombre}"/>
@@ -203,7 +260,7 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtent:dtent" 
-                                     actionListener="#{enticuloBean.remove(evt)}"/>
+                                     actionListener="#{entradaBean.remove(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>

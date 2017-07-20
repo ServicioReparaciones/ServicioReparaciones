@@ -7,8 +7,14 @@ package com.servicio.reparaciones.web.bean;
 
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
+import com.servicio.reparaciones.web.auth.AuthorizationListener;
+import com.servicio.reparaciones.web.auth.GoogleAnalyticsTracking;
 import com.servicio.reparaciones.web.util.FacesUtil;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -25,14 +31,24 @@ import org.primefaces.context.RequestContext;
 @SessionScoped
 public class CredencialBean implements Serializable {
 
+    private static final Logger LOG = Logger.getLogger(AuthorizationListener.class.getName());
     private static final long serialVersionUID = -3799042563216409371L;
 
     private Usuario userSession = new Usuario();
     private String confirmationPassword;
     private String password;
+    private GoogleAnalyticsTracking tracking;
 
     @Inject
     private UsuarioServicio usuarioService;
+
+    public CredencialBean() {
+        try {
+            this.tracking = new GoogleAnalyticsTracking("UA-102903071-1");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, "GoogleAnalyticsTracking", ex.getMessage());
+        }
+    }
 
     private void init() {
         this.userSession = new Usuario();
@@ -52,7 +68,7 @@ public class CredencialBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().
                 put("admin", usuario.getAdmin());
     }
-    
+
     public void modifyInfo(ActionEvent evt) {
         this.userSession.setPassword(this.password);
         Boolean exito = this.usuarioService.update(this.userSession);
@@ -62,7 +78,7 @@ public class CredencialBean implements Serializable {
             FacesUtil.addMessageError(null, "No actualizo.");
         }
     }
-    
+
     public void changePassword(ActionEvent evt) {
         if (this.userSession.getPassword().equals(this.confirmationPassword)) {
             Boolean exito = this.usuarioService.updatePassword(this.userSession);
