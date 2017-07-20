@@ -24,14 +24,16 @@ import org.mongodb.morphia.annotations.Reference;
 public class Inventario extends BaseEntity {
 
     private Integer codigo;
+    private Integer index;
     private Integer signo; // 1 entrada -1 salida
+    private Integer codigoMovimiento;
     private Double cantidad;
     private Double precioUnit;
     private Double precioTotal;
     private Integer flag;
 
     @Embedded
-    private Movimiento movieminto;
+    private Movimiento movimiento;
     @Reference
     private Articulo articulo;
     @Reference
@@ -42,7 +44,7 @@ public class Inventario extends BaseEntity {
     public Inventario() {
         this.cantidad = 0.00;
         this.precioUnit = 0.00;
-        this.movieminto = new Movimiento();
+        this.movimiento = new Movimiento();
         this.articulo = new Articulo();
         this.bodega = new Bodega();
         this.username = new Usuario();
@@ -50,6 +52,14 @@ public class Inventario extends BaseEntity {
 
     public Integer getCodigo() {
         return codigo;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
     public void setCodigo(Integer codigo) {
@@ -62,6 +72,14 @@ public class Inventario extends BaseEntity {
 
     public void setSigno(Integer signo) {
         this.signo = signo;
+    }
+
+    public Integer getCodigoMovimiento() {
+        return codigoMovimiento;
+    }
+
+    public void setCodigoMovimiento(Integer codigoMovimiento) {
+        this.codigoMovimiento = codigoMovimiento;
     }
 
     public Double getCantidad() {
@@ -96,12 +114,12 @@ public class Inventario extends BaseEntity {
         this.flag = flag;
     }
 
-    public Movimiento getMovieminto() {
-        return movieminto;
+    public Movimiento getMovimiento() {
+        return movimiento;
     }
 
-    public void setMovieminto(Movimiento movieminto) {
-        this.movieminto = movieminto;
+    public void setMovimiento(Movimiento movimiento) {
+        this.movimiento = movimiento;
     }
 
     public Articulo getArticulo() {
@@ -155,7 +173,6 @@ public class Inventario extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Inventario{" + "codigo=" + codigo + ", signo=" + signo + ", cantidad=" + cantidad + ", precioUnit=" + precioUnit + ", precioTotal=" + precioTotal + ", flag=" + flag + ", movieminto=" + movieminto + ", articulo=" + articulo + ", bodega=" + bodega + ", username=" + username + '}';
+        return "Inventario{" + "codigo=" + codigo + ", signo=" + signo + ", cantidad=" + cantidad + ", precioUnit=" + precioUnit + ", precioTotal=" + precioTotal + ", flag=" + flag + ", movieminto=" + movimiento + ", articulo=" + articulo + ", bodega=" + bodega + ", username=" + username + '}';
     }
-
 }

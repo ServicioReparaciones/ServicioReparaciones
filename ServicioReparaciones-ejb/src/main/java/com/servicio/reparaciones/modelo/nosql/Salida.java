@@ -35,7 +35,7 @@ public class Salida extends BaseEntity {
     @Reference
     private Bodega bodega;
     @Reference
-    private Tecnico recibe;
+    private Tecnico quienRecibe;
     @Reference
     private Usuario username;
 
@@ -46,7 +46,7 @@ public class Salida extends BaseEntity {
         this.precioTotal = 0.00;
         this.articulo = new Articulo();
         this.bodega = new Bodega();
-        this.recibe = new Tecnico();
+        this.quienRecibe = new Tecnico();
         this.username = new Usuario();
     }
 
@@ -114,12 +114,12 @@ public class Salida extends BaseEntity {
         this.bodega = bodega;
     }
 
-    public Tecnico getRecibe() {
-        return recibe;
+    public Tecnico getQuienRecibe() {
+        return quienRecibe;
     }
 
-    public void setRecibe(Tecnico recibe) {
-        this.recibe = recibe;
+    public void setQuienRecibe(Tecnico quienRecibe) {
+        this.quienRecibe = quienRecibe;
     }
 
     public Integer getSigno() {

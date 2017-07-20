@@ -63,7 +63,7 @@ public class SalidaService implements Isalida, Serializable {
                 set("precioTotal", salida.getPrecioTotal()).
                 set("articulo", salida.getArticulo()).
                 set("bodega", salida.getBodega()).
-                set("recibe", salida.getRecibe()).
+                set("quienRecibe", salida.getQuienRecibe()).
                 set("username", salida.getUsername()).
                 set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", salida.getFlag());
