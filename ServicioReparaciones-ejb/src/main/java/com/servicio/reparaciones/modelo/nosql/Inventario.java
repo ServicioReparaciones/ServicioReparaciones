@@ -24,8 +24,7 @@ import org.mongodb.morphia.annotations.Reference;
 public class Inventario extends BaseEntity {
 
     private Integer codigo;
-    private Integer index;
-    private Integer signo; // 1 entrada -1 salida
+    private Double signo; // 1 entrada -1 salida
     private Integer codigoMovimiento;
     private Double cantidad;
     private Double precioUnit;
@@ -54,23 +53,15 @@ public class Inventario extends BaseEntity {
         return codigo;
     }
 
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 
-    public Integer getSigno() {
+    public Double getSigno() {
         return signo;
     }
 
-    public void setSigno(Integer signo) {
+    public void setSigno(Double signo) {
         this.signo = signo;
     }
 

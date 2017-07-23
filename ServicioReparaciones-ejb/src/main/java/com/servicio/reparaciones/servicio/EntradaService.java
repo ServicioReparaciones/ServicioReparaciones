@@ -59,7 +59,9 @@ public class EntradaService implements Ientrada, Serializable {
                 query.criteria("codigo").equal(entrada.getCodigo())
         );
         UpdateOperations<Entrada> update = this.ds.createUpdateOperations(Entrada.class);
-        update.set("numeroFactura", entrada.getNumeroFactura()).
+        update.set("signo", entrada.getSigno()).
+                set("concepto", entrada.getConcepto()).
+                set("numeroFactura", entrada.getNumeroFactura()).
                 set("cantidad", entrada.getCantidad()).
                 set("precioUnit", entrada.getPrecioUnit()).
                 set("precioTotal", entrada.getPrecioTotal()).

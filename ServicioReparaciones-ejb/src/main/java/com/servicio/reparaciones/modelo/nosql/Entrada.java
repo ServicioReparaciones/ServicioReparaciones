@@ -23,7 +23,7 @@ import org.mongodb.morphia.annotations.Reference;
 public class Entrada extends BaseEntity {
 
     private Integer codigo;
-    private Integer signo;
+    private Double signo;
     private String concepto;
     private String numeroFactura;
     private Double cantidad;
@@ -39,7 +39,7 @@ public class Entrada extends BaseEntity {
     private Usuario username;
 
     public Entrada() {
-        this.signo = 1;
+        this.signo = 1.00;
         this.numeroFactura = "";
         this.cantidad = 0.00;
         this.precioUnit = 0.00;
@@ -121,11 +121,11 @@ public class Entrada extends BaseEntity {
         this.bodega = bodega;
     }
 
-    public Integer getSigno() {
+    public Double getSigno() {
         return signo;
     }
 
-    public void setSigno(Integer signo) {
+    public void setSigno(Double signo) {
         this.signo = signo;
     }
 

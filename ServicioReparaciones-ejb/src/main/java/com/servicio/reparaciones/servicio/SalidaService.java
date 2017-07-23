@@ -58,7 +58,9 @@ public class SalidaService implements Isalida, Serializable {
                 query.criteria("codigo").equal(salida.getCodigo())
         );
         UpdateOperations<Salida> update = this.ds.createUpdateOperations(Salida.class);
-        update.set("cantidad", salida.getCantidad()).
+        update.set("signo", salida.getSigno()).
+                set("concepto", salida.getConcepto()).
+                set("cantidad", salida.getCantidad()).
                 set("precioUnit", salida.getPrecioUnit()).
                 set("precioTotal", salida.getPrecioTotal()).
                 set("articulo", salida.getArticulo()).
