@@ -8,10 +8,12 @@ package com.servicio.reparaciones.web.bean;
 import com.servicio.reparaciones.modelo.nosql.Articulo;
 import com.servicio.reparaciones.modelo.nosql.Bodega;
 import com.servicio.reparaciones.modelo.nosql.Entrada;
+import com.servicio.reparaciones.modelo.nosql.Inventario;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.servicio.ArticuloService;
 import com.servicio.reparaciones.servicio.BodegaService;
 import com.servicio.reparaciones.servicio.EntradaService;
+import com.servicio.reparaciones.servicio.InventarioServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
 import com.servicio.reparaciones.web.util.FacesUtil;
@@ -47,6 +49,8 @@ public class EntradaBean implements ImethodsBean, Serializable {
     @Inject
     private BodegaService bodegaService;
     @Inject
+    private InventarioServicio inventarioService;
+    @Inject
     private EntradaService entradaService;
     @Inject
     private UsuarioServicio usarioService;
@@ -70,7 +74,23 @@ public class EntradaBean implements ImethodsBean, Serializable {
         Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
         this.nuevo.setBodega(bodega);
         Boolean exito = this.entradaService.insert(this.nuevo);
+        Inventario entrada = new Inventario();
+        entrada.setSigno(this.nuevo.getSigno());
+        entrada.setCodigoMovimiento(this.entradaService.generatedCodigo());
+        entrada.getMovimiento().setEntrada(this.nuevo);
         if (exito) {
+            entrada.setArticulo(this.nuevo.getArticulo());
+            entrada.setBodega(this.nuevo.getBodega());
+            entrada.setCantidad(this.nuevo.getCantidad());
+            entrada.setUsername(this.nuevo.getUsername());
+            if (this.inventarioService.ObtenerListaInventarios(1).isEmpty()) {
+                entrada.setPrecioUnit(this.nuevo.getPrecioUnit());
+                entrada.setPrecioTotal(this.nuevo.getPrecioTotal());
+                entrada.getMovimiento().setSalida(null);
+                this.inventarioService.insert(entrada);
+            } else {
+                this.inventarioService.promediosPonderados(entrada);
+            }
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();
         } else {

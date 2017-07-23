@@ -16,15 +16,12 @@
                     <p:inputNumber id="cantidad" required="true" value="#{salidaBean.nuevo.cantidad}"/>
                     <p:message for="cantidad" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="precioUnit" value="Precio Unit.:"/>
-                    <p:inputNumber id="precioUnit" required="true" value="#{salidaBean.nuevo.precioUnit}"/>
-                    <p:message for="precioUnit" display="tooltip" severity="error"/>
-
                     <p:outputLabel for="bodega" value="Bodega:"/>
                     <p:selectOneMenu id="bodega" required="true" value="#{salidaBean.nuevo.bodega.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
                                        itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
+                        <p:ajax update=":fadd:dtart" listener="#{salidaBean.loadBodega}"/>
                     </p:selectOneMenu>
                     <p:message for="bodega" display="tooltip" severity="error"/>
 
@@ -39,13 +36,13 @@
                 </h:panelGrid>
                 <h:panelGrid cellpadding="5">
                     <p:outputLabel value="Seleccione un articulo:"/>
-                    <p:dataTable  id="dtart" var="art" value="#{articuloBean.articulos}"
-                                  filteredValue="#{articuloBean.filtered}"
+                    <p:dataTable  id="dtart" var="art" value="#{salidaBean.articulos}"
+                                  filteredValue="#{salidaBean.filteredArticulos}"
                                   selectionMode="single" selection="#{salidaBean.nuevo.articulo}"
                                   rowKey="#{art.codigo}" rows="5" tableStyle="width: auto"
                                   paginator="true" paginatorPosition="bottom"
                                   reflow="true">
-                        <p:ajax event="rowSelect" listener="#{salidaBean.onRowSelect}" update=":fadd:articulo"/>
+                        <p:ajax event="rowSelect" listener="#{salidaBean.onRowSelect}" update=":fadd:inv_tory"/>
                         <f:facet name="header">
                             <h:outputText value="ARTICULOS"/>
                         </f:facet>
@@ -77,11 +74,21 @@
                         </p:column>
                     </p:dataTable>
                 </h:panelGrid>
-                <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="articulo" value="Articulo:"/>
-                    <p:inputText id="articulo" required="true" value="#{salidaBean.nuevo.articulo.nombre}"/>
-                    <p:message for="articulo" display="tooltip" severity="error"/>
-                </h:panelGrid>
+                <p:outputPanel id="inv_tory">
+                    <h:panelGrid columns="9" cellpadding="5">
+                        <p:outputLabel for="articulo" value="Articulo:"/>
+                        <p:inputText id="articulo" required="true" value="#{salidaBean.nuevo.articulo.nombre}"/>
+                        <p:message for="articulo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel value="Cantidad Existente:"/>
+                        <p:outputLabel value="#{salidaBean.inventario.cantidad}"/>
+                        <p:outputLabel value=" "/>
+
+                        <p:outputLabel value="Precio Unitario:"/>
+                        <p:outputLabel value="#{salidaBean.inventario.precioUnit}"/>
+                        <p:outputLabel value=" "/>
+                    </h:panelGrid>
+                </p:outputPanel>
                 <h:panelGrid style="margin: 0 auto;">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                 </h:panelGrid>
@@ -161,10 +168,6 @@
                         <p:inputNumber id="ecantidad" required="true" value="#{salidaBean.selected.cantidad}"/>
                         <p:message for="ecantidad" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="eprecioUnit" value="Precio Unit.:"/>
-                        <p:inputNumber id="eprecioUnit" required="true" value="#{salidaBean.selected.precioUnit}"/>
-                        <p:message for="eprecioUnit" display="tooltip" severity="error"/>
-
                         <p:outputLabel for="ebodega" value="Bodega:"/>
                         <p:selectOneMenu id="ebodega" required="true" value="#{salidaBean.selected.bodega.codigo}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
@@ -184,8 +187,8 @@
                     </h:panelGrid>
                     <h:panelGrid cellpadding="5">
                         <p:outputLabel value="Seleccione un articulo:"/>
-                        <p:dataTable  id="edtart" var="eart" value="#{articuloBean.articulos}"
-                                      filteredValue="#{articuloBean.filtered}"
+                        <p:dataTable  id="edtart" var="eart" value="#{salidaBean.articulos}"
+                                      filteredValue="#{salidaBean.filteredArticulos}"
                                       selectionMode="single" selection="#{salidaBean.selected.articulo}"
                                       rowKey="#{eart.codigo}" rows="5" tableStyle="width: auto"
                                       paginator="true" paginatorPosition="bottom"
