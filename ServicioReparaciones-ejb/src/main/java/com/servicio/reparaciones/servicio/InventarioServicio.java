@@ -107,12 +107,13 @@ public class InventarioServicio implements Iinventario, Serializable {
         return results.getUpdatedExisting();
     }
 
+    //hay que mejoarar este codigo
     public void promediosPonderados(Inventario inventario) {
         List<Inventario> inventariosBodega = ObtenerListaInventarioBodega(inventario.getBodega(), inventario.getArticulo());
         int index = inventariosBodega.size() - 1;
         if (inventario.getSigno() == 1.0) {
             Double cantidad = inventariosBodega.get(index).getCantidad() + inventario.getMovimiento().getEntrada().getCantidad() * inventario.getSigno();
-            Double precioTotal = inventariosBodega.get(index).getPrecioTotal() + inventario.getMovimiento().getEntrada().getPrecioTotal()*inventario.getSigno();
+            Double precioTotal = inventariosBodega.get(index).getPrecioTotal() + inventario.getMovimiento().getEntrada().getPrecioTotal() * inventario.getSigno();
             Double precioUnit = precioTotal / cantidad;
             inventario.setCantidad(cantidad);
             inventario.setPrecioUnit(precioUnit);
@@ -121,7 +122,7 @@ public class InventarioServicio implements Iinventario, Serializable {
             insert(inventario);
         } else if (inventario.getSigno() == -1.0) {
             Double cantidad = inventariosBodega.get(index).getCantidad() + inventario.getMovimiento().getSalida().getCantidad() * inventario.getSigno();
-            Double precioTotal = inventariosBodega.get(index).getPrecioTotal() + inventario.getMovimiento().getSalida().getPrecioTotal()*inventario.getSigno();
+            Double precioTotal = inventariosBodega.get(index).getPrecioTotal() + inventario.getMovimiento().getSalida().getPrecioTotal() * inventario.getSigno();
             Double precioUnit = precioTotal / cantidad;
             inventario.setCantidad(cantidad);
             inventario.setPrecioUnit(precioUnit);
@@ -130,29 +131,110 @@ public class InventarioServicio implements Iinventario, Serializable {
             insert(inventario);
         }
     }
-    
+
+    //hay que mejoarar este codigo
     public void updatePromediosPonderados(Inventario inventario) {
         List<Inventario> inventariosBodega = ObtenerListaInventarioBodega(inventario.getBodega(), inventario.getArticulo());
-        int index = inventariosBodega.size() - 1;
-        if (inventario.getSigno() == 1.0) {
-            Double cantidad = inventariosBodega.get(index).getCantidad() + inventario.getMovimiento().getEntrada().getCantidad() * inventario.getSigno();
-            Double precioTotal = inventariosBodega.get(index).getPrecioTotal() + inventario.getMovimiento().getEntrada().getPrecioTotal()*inventario.getSigno();
-            Double precioUnit = precioTotal / cantidad;
-            inventario.setCantidad(cantidad);
-            inventario.setPrecioUnit(precioUnit);
-            inventario.setPrecioTotal(precioTotal);
-            inventario.getMovimiento().setSalida(null);
-            insert(inventario);
-        } else if (inventario.getSigno() == -1.0) {
-            Double cantidad = inventariosBodega.get(index).getCantidad() + inventario.getMovimiento().getSalida().getCantidad() * inventario.getSigno();
-            Double precioTotal = inventariosBodega.get(index).getPrecioTotal() + inventario.getMovimiento().getSalida().getPrecioTotal()*inventario.getSigno();
-            Double precioUnit = precioTotal / cantidad;
-            inventario.setCantidad(cantidad);
-            inventario.setPrecioUnit(precioUnit);
-            inventario.setPrecioTotal(precioTotal);
-            inventario.getMovimiento().setEntrada(null);
-            insert(inventario);
+        inventariosBodega = this.findInventario(inventariosBodega, inventario);
+        for (int i = 0; i < inventariosBodega.size() - 1; i++) {
+            if (inventario.getSigno() == 1.0) {
+                Double cantidad = inventariosBodega.get(i).getCantidad() + inventariosBodega.get(i + 1).getMovimiento().getEntrada().getCantidad() * inventario.getSigno();
+                Double precioTotal = inventariosBodega.get(i).getPrecioTotal() + inventariosBodega.get(i + 1).getMovimiento().getEntrada().getPrecioTotal() * inventario.getSigno();
+                Double precioUnit = precioTotal / cantidad;
+                inventariosBodega.get(i + 1).setCantidad(cantidad);
+                inventariosBodega.get(i + 1).setPrecioUnit(precioUnit);
+                inventariosBodega.get(i + 1).setPrecioTotal(precioTotal);
+                inventariosBodega.get(i + 1).getMovimiento().setSalida(null);
+            } else if (inventario.getSigno() == -1.0) {
+                Double cantidad = inventariosBodega.get(i).getCantidad() + inventariosBodega.get(i + 1).getMovimiento().getSalida().getCantidad() * inventario.getSigno();
+                Double precioTotal = inventariosBodega.get(i).getPrecioTotal() + inventariosBodega.get(i + 1).getMovimiento().getSalida().getPrecioTotal() * inventario.getSigno();
+                Double precioUnit = precioTotal / cantidad;
+                inventariosBodega.get(i + 1).setCantidad(cantidad);
+                inventariosBodega.get(i + 1).setPrecioUnit(precioUnit);
+                inventariosBodega.get(i + 1).setPrecioTotal(precioTotal);
+                inventariosBodega.get(i + 1).getMovimiento().setEntrada(null);
+            }
         }
+        if ((inventariosBodega.size() - 1) == 0) {
+            inventariosBodega.get(0).setCantidad(inventario.getCantidad());
+            inventariosBodega.get(0).setPrecioUnit(inventario.getPrecioUnit());
+            inventariosBodega.get(0).setPrecioTotal(inventario.getPrecioTotal());
+        }
+        for (Inventario in : inventariosBodega) {
+            if (inventario.getSigno() == 1.0) {
+                in.getMovimiento().setSalida(null);
+            } else if (inventario.getSigno() == -1.0) {
+                in.getMovimiento().setEntrada(null);
+            }
+            update(in);
+        }
+    }
+
+    private List<Inventario> findInventario(List<Inventario> list, Inventario update) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getEntrada().getCodigo())) {
+                list.get(i).getMovimiento().setEntrada(update.getMovimiento().getEntrada());
+                if (i == 0) {
+                    list.get(i).setCantidad(update.getMovimiento().getEntrada().getCantidad());
+                    list.get(i).setPrecioUnit(update.getMovimiento().getEntrada().getPrecioUnit());
+                    list.get(i).setPrecioTotal(update.getMovimiento().getEntrada().getPrecioTotal());
+                }
+            } else if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getSalida().getCodigo())) {
+                list.get(i).getMovimiento().setSalida(update.getMovimiento().getSalida());
+                if (i == 0) {
+                    list.get(i).setCantidad(update.getMovimiento().getSalida().getCantidad());
+                    list.get(i).setPrecioUnit(update.getMovimiento().getSalida().getPrecioUnit());
+                    list.get(i).setPrecioTotal(update.getMovimiento().getSalida().getPrecioTotal());
+                }
+            }
+        }
+        return list;
+    }
+
+    //hay que mejoarar este codigo
+    public void updateDeletePromediosPonderados(Inventario inventario) {
+        List<Inventario> inventariosBodega = ObtenerListaInventarioBodega(inventario.getBodega(), inventario.getArticulo());
+        inventariosBodega = this.delteInventario(inventariosBodega, inventario);
+        for (int i = 0; i < inventariosBodega.size() - 1; i++) {
+            if (inventario.getSigno() == 1.0) {
+                Double cantidad = inventariosBodega.get(i).getCantidad() + inventariosBodega.get(i + 1).getMovimiento().getEntrada().getCantidad() * inventario.getSigno();
+                Double precioTotal = inventariosBodega.get(i).getPrecioTotal() + inventariosBodega.get(i + 1).getMovimiento().getEntrada().getPrecioTotal() * inventario.getSigno();
+                Double precioUnit = precioTotal / cantidad;
+                inventariosBodega.get(i + 1).setCantidad(cantidad);
+                inventariosBodega.get(i + 1).setPrecioUnit(precioUnit);
+                inventariosBodega.get(i + 1).setPrecioTotal(precioTotal);
+                inventariosBodega.get(i + 1).getMovimiento().setSalida(null);
+            } else if (inventario.getSigno() == -1.0) {
+                Double cantidad = inventariosBodega.get(i).getCantidad() + inventariosBodega.get(i + 1).getMovimiento().getSalida().getCantidad() * inventario.getSigno();
+                Double precioTotal = inventariosBodega.get(i).getPrecioTotal() + inventariosBodega.get(i + 1).getMovimiento().getSalida().getPrecioTotal() * inventario.getSigno();
+                Double precioUnit = precioTotal / cantidad;
+                inventariosBodega.get(i + 1).setCantidad(cantidad);
+                inventariosBodega.get(i + 1).setPrecioUnit(precioUnit);
+                inventariosBodega.get(i + 1).setPrecioTotal(precioTotal);
+                inventariosBodega.get(i + 1).getMovimiento().setEntrada(null);
+            }
+        }
+        for (Inventario in : inventariosBodega) {
+            if (inventario.getSigno() == 1.0) {
+                in.getMovimiento().setSalida(null);
+            } else if (inventario.getSigno() == -1.0) {
+                in.getMovimiento().setEntrada(null);
+            }
+            update(in);
+        }
+    }
+
+    private List<Inventario> delteInventario(List<Inventario> list, Inventario update) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getEntrada().getCodigo())) {
+                deleteFlag(list.get(i));
+                list.remove(i);
+            } else if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getSalida().getCodigo())) {
+                deleteFlag(list.get(i));
+                list.remove(i);
+            }
+        }
+        return list;
     }
 
     @Override
@@ -214,14 +296,6 @@ public class InventarioServicio implements Iinventario, Serializable {
         }
         if (list == null) {
             list = new ArrayList<>();
-        } else {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getMovimiento().getSalida() == null) {
-                    list.get(i).getMovimiento().setSalida(new Salida());
-                } else if (list.get(i).getMovimiento().getEntrada() == null) {
-                    list.get(i).getMovimiento().setEntrada(new Entrada());
-                }
-            }
         }
         return list;
     }

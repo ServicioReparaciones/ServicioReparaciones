@@ -39,6 +39,7 @@ public class Entrada extends BaseEntity {
     private Usuario username;
 
     public Entrada() {
+        this.codigo = 0;
         this.signo = 1.00;
         this.numeroFactura = "";
         this.cantidad = 0.00;

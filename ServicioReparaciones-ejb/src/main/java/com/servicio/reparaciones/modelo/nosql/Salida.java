@@ -25,6 +25,7 @@ public class Salida extends BaseEntity {
     private Integer codigo;
     private Double signo;
     private String concepto;
+    private String numeroFactura;
     private Double cantidad;
     private Double precioUnit;
     private Double precioTotal;
@@ -40,6 +41,7 @@ public class Salida extends BaseEntity {
     private Usuario username;
 
     public Salida() {
+        this.codigo = 0;
         this.signo = -1.00;
         this.cantidad = 0.00;
         this.precioUnit = 0.00;
@@ -64,6 +66,14 @@ public class Salida extends BaseEntity {
 
     public void setConcepto(String concepto) {
         this.concepto = concepto;
+    }
+
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 
     public Double getCantidad() {
