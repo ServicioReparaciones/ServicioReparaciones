@@ -76,14 +76,14 @@ public class EntradaBean implements ImethodsBean, Serializable {
         Boolean exito = this.entradaService.insert(this.nuevo);
         Inventario entrada = new Inventario();
         entrada.setSigno(this.nuevo.getSigno());
-        entrada.setCodigoMovimiento(this.entradaService.generatedCodigo());
+        entrada.setCodigoMovimiento(this.entradaService.generatedCodigo()-1);
         entrada.getMovimiento().setEntrada(this.nuevo);
         if (exito) {
             entrada.setArticulo(this.nuevo.getArticulo());
             entrada.setBodega(this.nuevo.getBodega());
             entrada.setCantidad(this.nuevo.getCantidad());
             entrada.setUsername(this.nuevo.getUsername());
-            if (this.inventarioService.ObtenerListaInventarios(1).isEmpty()) {
+            if (this.inventarioService.ObtenerListaInventarioBodega(bodega, articulo).isEmpty()) {
                 entrada.setPrecioUnit(this.nuevo.getPrecioUnit());
                 entrada.setPrecioTotal(this.nuevo.getPrecioTotal());
                 entrada.getMovimiento().setSalida(null);
@@ -109,7 +109,18 @@ public class EntradaBean implements ImethodsBean, Serializable {
             Bodega bodega = this.bodegaService.findByCodigo(this.selected.getBodega());
             this.selected.setBodega(bodega);
             Boolean exito = this.entradaService.update(this.selected);
+            Inventario entrada = new Inventario();
+            entrada.setSigno(this.selected.getSigno());
+            entrada.setCodigoMovimiento(this.selected.getCodigo());
+            entrada.getMovimiento().setEntrada(this.selected);
             if (exito) {
+                entrada.setArticulo(this.selected.getArticulo());
+                entrada.setBodega(this.selected.getBodega());
+                entrada.setCantidad(this.selected.getCantidad());
+                entrada.setUsername(this.selected.getUsername());
+                entrada.setPrecioUnit(this.selected.getPrecioUnit());
+                entrada.setPrecioTotal(this.selected.getPrecioTotal());
+                this.inventarioService.updatePromediosPonderados(entrada);
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
             } else {
@@ -127,7 +138,18 @@ public class EntradaBean implements ImethodsBean, Serializable {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
             Boolean exito = this.entradaService.deleteFlag(this.selected);
+            Inventario entrada = new Inventario();
+            entrada.setSigno(this.selected.getSigno());
+            entrada.setCodigoMovimiento(this.selected.getCodigo());
+            entrada.getMovimiento().setEntrada(this.selected);
             if (exito) {
+                entrada.setArticulo(this.selected.getArticulo());
+                entrada.setBodega(this.selected.getBodega());
+                entrada.setCantidad(this.selected.getCantidad());
+                entrada.setUsername(this.selected.getUsername());
+                entrada.setPrecioUnit(this.selected.getPrecioUnit());
+                entrada.setPrecioTotal(this.selected.getPrecioTotal());
+                this.inventarioService.updateDeletePromediosPonderados(entrada);
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
             } else {

@@ -90,14 +90,14 @@ public class SalidaBean implements ImethodsBean, Serializable {
         Boolean exito = this.salidaService.insert(this.nuevo);
         Inventario salida = new Inventario();
         salida.setSigno(this.nuevo.getSigno());
-        salida.setCodigoMovimiento(this.salidaService.generatedCodigo());
+        salida.setCodigoMovimiento(this.salidaService.generatedCodigo() - 1);
         if (exito) {
             salida.getMovimiento().setSalida(this.nuevo);
             salida.setArticulo(this.nuevo.getArticulo());
             salida.setBodega(this.nuevo.getBodega());
             salida.setCantidad(this.nuevo.getCantidad());
             salida.setUsername(this.nuevo.getUsername());
-            if (this.inventarioService.ObtenerListaInventarios(1).isEmpty()) {
+            if (this.inventarioService.ObtenerListaInventarioBodega(bodega, articulo).isEmpty()) {
                 salida.setPrecioUnit(this.nuevo.getPrecioUnit());
                 salida.setPrecioTotal(this.nuevo.getPrecioTotal());
                 salida.getMovimiento().setEntrada(null);
@@ -125,7 +125,18 @@ public class SalidaBean implements ImethodsBean, Serializable {
             Bodega bodega = this.bodegaService.findByCodigo(this.selected.getBodega());
             this.selected.setBodega(bodega);
             Boolean exito = this.salidaService.update(this.selected);
+            Inventario salida = new Inventario();
+            salida.setSigno(this.selected.getSigno());
+            salida.setCodigoMovimiento(this.selected.getCodigo());
             if (exito) {
+                salida.getMovimiento().setSalida(this.selected);
+                salida.setArticulo(this.selected.getArticulo());
+                salida.setBodega(this.selected.getBodega());
+                salida.setCantidad(this.selected.getCantidad());
+                salida.setUsername(this.selected.getUsername());
+                salida.setPrecioUnit(this.selected.getPrecioUnit());
+                salida.setPrecioTotal(this.selected.getPrecioTotal());
+                this.inventarioService.updatePromediosPonderados(salida);
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
             } else {
@@ -143,7 +154,18 @@ public class SalidaBean implements ImethodsBean, Serializable {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
             Boolean exito = this.salidaService.deleteFlag(this.selected);
+            Inventario salida = new Inventario();
+            salida.setSigno(this.selected.getSigno());
+            salida.setCodigoMovimiento(this.selected.getCodigo());
             if (exito) {
+                salida.getMovimiento().setSalida(this.selected);
+                salida.setArticulo(this.selected.getArticulo());
+                salida.setBodega(this.selected.getBodega());
+                salida.setCantidad(this.selected.getCantidad());
+                salida.setUsername(this.selected.getUsername());
+                salida.setPrecioUnit(this.selected.getPrecioUnit());
+                salida.setPrecioTotal(this.selected.getPrecioTotal());
+                this.inventarioService.updateDeletePromediosPonderados(salida);
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
             } else {
@@ -198,7 +220,14 @@ public class SalidaBean implements ImethodsBean, Serializable {
         if (inventarioBodega != null && !inventarioBodega.isEmpty()) {
             for (Inventario i : inventarioBodega) {
                 this.articulos.add(i.getArticulo());
+                HashSet<Articulo> hs = new HashSet<Articulo>();
+                hs.addAll(this.articulos);
+                this.articulos.clear();
+                this.articulos.addAll(hs);
             }
+        } else {
+            this.articulos = new ArrayList<>();
+
         }
     }
 
