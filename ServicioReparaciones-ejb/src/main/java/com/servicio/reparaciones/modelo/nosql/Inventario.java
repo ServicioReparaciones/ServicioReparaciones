@@ -25,7 +25,7 @@ public class Inventario extends BaseEntity {
 
     private Integer codigo;
     private Double signo; // 1 entrada -1 salida
-    private Integer codigoMovimiento;
+    private String codigoMovimiento;
     private Double cantidad;
     private Double precioUnit;
     private Double precioTotal;
@@ -57,20 +57,20 @@ public class Inventario extends BaseEntity {
         this.codigo = codigo;
     }
 
+    public String getCodigoMovimiento() {
+        return codigoMovimiento;
+    }
+
+    public void setCodigoMovimiento(String codigoMovimiento) {
+        this.codigoMovimiento = codigoMovimiento;
+    }
+
     public Double getSigno() {
         return signo;
     }
 
     public void setSigno(Double signo) {
         this.signo = signo;
-    }
-
-    public Integer getCodigoMovimiento() {
-        return codigoMovimiento;
-    }
-
-    public void setCodigoMovimiento(Integer codigoMovimiento) {
-        this.codigoMovimiento = codigoMovimiento;
     }
 
     public Double getCantidad() {

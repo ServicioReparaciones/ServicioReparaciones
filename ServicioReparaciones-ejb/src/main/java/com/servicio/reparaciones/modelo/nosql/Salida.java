@@ -23,6 +23,7 @@ import org.mongodb.morphia.annotations.Reference;
 public class Salida extends BaseEntity {
 
     private Integer codigo;
+    private String code;
     private Double signo;
     private String concepto;
     private String numeroFactura;
@@ -58,6 +59,14 @@ public class Salida extends BaseEntity {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getConcepto() {

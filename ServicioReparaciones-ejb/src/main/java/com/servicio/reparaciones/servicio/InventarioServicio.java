@@ -170,16 +170,17 @@ public class InventarioServicio implements Iinventario, Serializable {
         }
     }
 
+    //mejorar proceso
     private List<Inventario> findInventario(List<Inventario> list, Inventario update) {
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getEntrada().getCodigo())) {
+            if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getEntrada().getCode())) {
                 list.get(i).getMovimiento().setEntrada(update.getMovimiento().getEntrada());
                 if (i == 0) {
                     list.get(i).setCantidad(update.getMovimiento().getEntrada().getCantidad());
                     list.get(i).setPrecioUnit(update.getMovimiento().getEntrada().getPrecioUnit());
                     list.get(i).setPrecioTotal(update.getMovimiento().getEntrada().getPrecioTotal());
                 }
-            } else if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getSalida().getCodigo())) {
+            } else if (list.get(i).getCodigoMovimiento().equals(update.getMovimiento().getSalida().getCode())) {
                 list.get(i).getMovimiento().setSalida(update.getMovimiento().getSalida());
                 if (i == 0) {
                     list.get(i).setCantidad(update.getMovimiento().getSalida().getCantidad());
