@@ -143,14 +143,12 @@
                             <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outSal"
                                              oncomplete="PF('dlgModifySal').show()">
                                 <f:setPropertyActionListener value="#{sal}" target="#{salidaBean.selected}"/>
-                                <p:ajax update=":fedit:edtart" listener="#{salidaBean.loadSelectBodega}"/>
                             </p:commandButton>
                         </p:column>
                         <p:column style="width:32px;text-align: center">
                             <p:commandButton icon="fa fa-fw fa-remove" update=":fdelete:outSal"
                                              oncomplete="PF('dlgDeleteSal').show()">
                                 <f:setPropertyActionListener value="#{sal}" target="#{salidaBean.selected}" />
-                                <p:ajax update=":fedit:edtart" listener="#{salidaBean.loadSelectBodega}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

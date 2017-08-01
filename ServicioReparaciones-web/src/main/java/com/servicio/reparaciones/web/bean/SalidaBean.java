@@ -87,10 +87,11 @@ public class SalidaBean implements ImethodsBean, Serializable {
         Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
         this.nuevo.setBodega(bodega);
         this.nuevo.setPrecioUnit(this.inventario.getPrecioUnit());
+        this.nuevo.setCode("SROUT" + (this.salidaService.generatedCodigo() - 1));
         Boolean exito = this.salidaService.insert(this.nuevo);
         Inventario salida = new Inventario();
         salida.setSigno(this.nuevo.getSigno());
-        salida.setCodigoMovimiento(this.salidaService.generatedCodigo() - 1);
+        salida.setCodigoMovimiento(this.nuevo.getCode());
         if (exito) {
             salida.getMovimiento().setSalida(this.nuevo);
             salida.setArticulo(this.nuevo.getArticulo());
@@ -127,7 +128,7 @@ public class SalidaBean implements ImethodsBean, Serializable {
             Boolean exito = this.salidaService.update(this.selected);
             Inventario salida = new Inventario();
             salida.setSigno(this.selected.getSigno());
-            salida.setCodigoMovimiento(this.selected.getCodigo());
+            salida.setCodigoMovimiento(this.selected.getCode());
             if (exito) {
                 salida.getMovimiento().setSalida(this.selected);
                 salida.setArticulo(this.selected.getArticulo());
@@ -156,7 +157,7 @@ public class SalidaBean implements ImethodsBean, Serializable {
             Boolean exito = this.salidaService.deleteFlag(this.selected);
             Inventario salida = new Inventario();
             salida.setSigno(this.selected.getSigno());
-            salida.setCodigoMovimiento(this.selected.getCodigo());
+            salida.setCodigoMovimiento(this.selected.getCode());
             if (exito) {
                 salida.getMovimiento().setSalida(this.selected);
                 salida.setArticulo(this.selected.getArticulo());
@@ -220,11 +221,12 @@ public class SalidaBean implements ImethodsBean, Serializable {
         if (inventarioBodega != null && !inventarioBodega.isEmpty()) {
             for (Inventario i : inventarioBodega) {
                 this.articulos.add(i.getArticulo());
-                HashSet<Articulo> hs = new HashSet<Articulo>();
-                hs.addAll(this.articulos);
-                this.articulos.clear();
-                this.articulos.addAll(hs);
             }
+            HashSet<Articulo> hs = new HashSet<Articulo>();
+            hs.addAll(this.articulos);
+            this.articulos.clear();
+            this.articulos.addAll(hs);
+
         } else {
             this.articulos = new ArrayList<>();
 

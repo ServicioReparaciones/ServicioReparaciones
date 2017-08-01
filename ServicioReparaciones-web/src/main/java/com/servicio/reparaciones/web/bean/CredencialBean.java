@@ -12,7 +12,6 @@ import com.servicio.reparaciones.web.auth.GoogleAnalyticsTracking;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;

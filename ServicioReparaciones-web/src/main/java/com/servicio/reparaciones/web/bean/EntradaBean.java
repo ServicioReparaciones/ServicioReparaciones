@@ -73,10 +73,11 @@ public class EntradaBean implements ImethodsBean, Serializable {
         this.nuevo.setArticulo(articulo);
         Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
         this.nuevo.setBodega(bodega);
+        this.nuevo.setCode("SRIN" + (this.entradaService.generatedCodigo() - 1));
         Boolean exito = this.entradaService.insert(this.nuevo);
         Inventario entrada = new Inventario();
         entrada.setSigno(this.nuevo.getSigno());
-        entrada.setCodigoMovimiento(this.entradaService.generatedCodigo()-1);
+        entrada.setCodigoMovimiento(this.nuevo.getCode());
         entrada.getMovimiento().setEntrada(this.nuevo);
         if (exito) {
             entrada.setArticulo(this.nuevo.getArticulo());
@@ -111,7 +112,7 @@ public class EntradaBean implements ImethodsBean, Serializable {
             Boolean exito = this.entradaService.update(this.selected);
             Inventario entrada = new Inventario();
             entrada.setSigno(this.selected.getSigno());
-            entrada.setCodigoMovimiento(this.selected.getCodigo());
+            entrada.setCodigoMovimiento(this.selected.getCode());
             entrada.getMovimiento().setEntrada(this.selected);
             if (exito) {
                 entrada.setArticulo(this.selected.getArticulo());
@@ -140,7 +141,7 @@ public class EntradaBean implements ImethodsBean, Serializable {
             Boolean exito = this.entradaService.deleteFlag(this.selected);
             Inventario entrada = new Inventario();
             entrada.setSigno(this.selected.getSigno());
-            entrada.setCodigoMovimiento(this.selected.getCodigo());
+            entrada.setCodigoMovimiento(this.selected.getCode());
             entrada.getMovimiento().setEntrada(this.selected);
             if (exito) {
                 entrada.setArticulo(this.selected.getArticulo());
