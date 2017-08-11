@@ -25,7 +25,7 @@
                     </p:selectOneMenu>
                     <p:message for="bodega" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="quienRecibe" value="Que Recibe:"/>
+                    <p:outputLabel for="quienRecibe" value="Quien Recibe:"/>
                     <p:selectOneMenu id="quienRecibe" required="true" value="#{salidaBean.nuevo.quienRecibe.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{tecnicoBean.tecnicos}" var="tec"
@@ -79,14 +79,6 @@
                         <p:outputLabel for="articulo" value="Articulo:"/>
                         <p:inputText id="articulo" required="true" value="#{salidaBean.nuevo.articulo.nombre}"/>
                         <p:message for="articulo" display="tooltip" severity="error"/>
-
-                        <p:outputLabel value="Cantidad Existente:"/>
-                        <p:outputLabel value="#{salidaBean.inventario.cantidad}"/>
-                        <p:outputLabel value=" "/>
-
-                        <p:outputLabel value="Precio Unitario:"/>
-                        <p:outputLabel value="#{salidaBean.inventario.precioUnit}"/>
-                        <p:outputLabel value=" "/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <h:panelGrid style="margin: 0 auto;">
