@@ -6,7 +6,10 @@
 package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
+import com.servicio.reparaciones.modelo.nosql.Articulo;
+import com.servicio.reparaciones.modelo.nosql.Bodega;
 import com.servicio.reparaciones.modelo.nosql.Entrada;
+import com.servicio.reparaciones.modelo.nosql.Inventario;
 import com.servicio.reparaciones.servicio.I.Ientrada;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
@@ -33,6 +37,9 @@ public class EntradaService implements Ientrada, Serializable {
     private Datastore ds = conn.context();
     private Calendario calendario = new Calendario();
 
+    @Inject
+    private InventarioService inventarioService;
+
     @Override
     public Integer generatedCodigo() {
         Integer size = ObtenerListaEntradas().size();
@@ -47,6 +54,10 @@ public class EntradaService implements Ientrada, Serializable {
             entrada.setCodigo(generatedCodigo());
             entrada.setFlag(1);
             this.ds.save(entrada);
+            this.inventarioService.insert(new Inventario(entrada.getCode(),
+                    entrada.getCantidad() * entrada.getSigno(),
+                    entrada.getBodega(),
+                    entrada.getArticulo()));
             exito = Boolean.TRUE;
         }
         return exito;
@@ -71,6 +82,11 @@ public class EntradaService implements Ientrada, Serializable {
                 set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", entrada.getFlag());
         UpdateResults results = this.ds.update(query, update);
+        Inventario in = this.inventarioService.findByCodigo(entrada.getCode());
+        in.setBodega(entrada.getBodega());
+        in.setArticulo(entrada.getArticulo());
+        in.setCantidad(entrada.getCantidad() * entrada.getSigno());
+        this.inventarioService.update(in);
         return results.getUpdatedExisting();
     }
 
@@ -97,6 +113,18 @@ public class EntradaService implements Ientrada, Serializable {
         return find;
     }
 
+    public List<Entrada> findByBodegaArticulo(Bodega bodega, Articulo articulo) {
+        List<Entrada> find = new ArrayList<>();
+        Query<Entrada> result = this.ds.find(Entrada.class).
+                field("articulo").equal(articulo).
+                field("bodega").equal(bodega).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList();
+        }
+        return find;
+    }
+
     @Override
     public void delete(Entrada entrada) {
         this.delete(entrada);
@@ -112,6 +140,8 @@ public class EntradaService implements Ientrada, Serializable {
         UpdateOperations<Entrada> update = this.ds.createUpdateOperations(Entrada.class);
         update.set("flag", entrada.getFlag());
         UpdateResults results = this.ds.update(query, update);
+        Inventario in = this.inventarioService.findByCodigo(entrada.getCode());
+        this.inventarioService.deleteFlag(in);
         return results.getUpdatedExisting();
     }
 

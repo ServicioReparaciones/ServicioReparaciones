@@ -42,6 +42,7 @@ public class Salida extends BaseEntity {
     private Usuario username;
 
     public Salida() {
+        this.numeroFactura = "";
         this.codigo = 0;
         this.signo = -1.00;
         this.cantidad = 0.00;

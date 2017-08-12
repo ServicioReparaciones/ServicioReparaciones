@@ -53,6 +53,8 @@ public class Orden extends BaseEntity {
     private List<ItemServicio> detalleServicios;
     @Embedded
     private TrabajoFinalEjecutado trabajoFinalEjecutado;
+    @Embedded
+    private List<String> movimientosInternos;
 
     @Reference
     private Usuario username;
@@ -72,6 +74,7 @@ public class Orden extends BaseEntity {
         this.detalleRepuestos = new ArrayList<>();
         this.detalleServicios = new ArrayList<>();
         this.trabajoFinalEjecutado = new TrabajoFinalEjecutado();
+        this.movimientosInternos = new ArrayList<>();
         this.username = new Usuario();
     }
 
@@ -226,6 +229,14 @@ public class Orden extends BaseEntity {
         this.trabajoFinalEjecutado = trabajoFinalEjecutado;
     }
 
+    public List<String> getMovimientosInternos() {
+        return movimientosInternos;
+    }
+
+    public void setMovimientosInternos(List<String> movimientosInternos) {
+        this.movimientosInternos = movimientosInternos;
+    }
+
     public Usuario getUsername() {
         return username;
     }
@@ -271,5 +282,4 @@ public class Orden extends BaseEntity {
     public String toString() {
         return "Orden{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subtotalKilometraje=" + subTotalKilometraje + ", url=" + url + ", flag=" + flag + ", ciclo=" + ciclo + ", cliente=" + cliente + ", vista=" + visita + ", producto=" + producto + ", tecnico=" + tecnico + ", kilometrosRuta=" + kilometrosRuta + ", detalleRepuestos=" + detalleRepuestos + ", detalleServicios=" + detalleServicios + ", trabajoFinaEjecutado=" + trabajoFinalEjecutado + ", username=" + username + '}';
     }
-
 }

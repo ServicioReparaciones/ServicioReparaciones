@@ -6,6 +6,9 @@
 package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
+import com.servicio.reparaciones.modelo.nosql.Articulo;
+import com.servicio.reparaciones.modelo.nosql.Bodega;
+import com.servicio.reparaciones.modelo.nosql.Inventario;
 import com.servicio.reparaciones.modelo.nosql.Salida;
 import com.servicio.reparaciones.servicio.I.Isalida;
 import com.servicio.reparaciones.servicio.util.Calendario;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
@@ -32,6 +36,9 @@ public class SalidaService implements Isalida, Serializable {
     private Datastore ds = conn.context();
     private Calendario calendario = new Calendario();
 
+    @Inject
+    private InventarioService inventarioService;
+
     @Override
     public Integer generatedCodigo() {
         Integer size = ObtenerListaSalidas().size();
@@ -46,6 +53,10 @@ public class SalidaService implements Isalida, Serializable {
             salida.setCodigo(generatedCodigo());
             salida.setFlag(1);
             this.ds.save(salida);
+            this.inventarioService.insert(new Inventario(salida.getCode(),
+                    salida.getCantidad() * salida.getSigno(),
+                    salida.getBodega(),
+                    salida.getArticulo()));
             exito = Boolean.TRUE;
         }
         return exito;
@@ -70,6 +81,11 @@ public class SalidaService implements Isalida, Serializable {
                 set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", salida.getFlag());
         UpdateResults results = this.ds.update(query, update);
+        Inventario in = this.inventarioService.findByCodigo(salida.getCode());
+        in.setBodega(salida.getBodega());
+        in.setArticulo(salida.getArticulo());
+        in.setCantidad(salida.getCantidad() * salida.getSigno());
+        this.inventarioService.update(in);
         return results.getUpdatedExisting();
     }
 
@@ -96,6 +112,18 @@ public class SalidaService implements Isalida, Serializable {
         return find;
     }
 
+    public List<Salida> findByBodegaArticulo(Bodega bodega, Articulo articulo) {
+        List<Salida> find = new ArrayList<>();
+        Query<Salida> result = this.ds.find(Salida.class).
+                field("articulo").equal(articulo).
+                field("bodega").equal(bodega).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList();
+        }
+        return find;
+    }
+
     @Override
     public void delete(Salida salida) {
         this.delete(salida);
@@ -111,6 +139,11 @@ public class SalidaService implements Isalida, Serializable {
         UpdateOperations<Salida> update = this.ds.createUpdateOperations(Salida.class);
         update.set("flag", salida.getFlag());
         UpdateResults results = this.ds.update(query, update);
+        Inventario in = this.inventarioService.findByCodigo(salida.getCode());
+        in.setBodega(salida.getBodega());
+        in.setArticulo(salida.getArticulo());
+        in.setCantidad(salida.getCantidad() * salida.getSigno());
+        this.inventarioService.update(in);
         return results.getUpdatedExisting();
     }
 

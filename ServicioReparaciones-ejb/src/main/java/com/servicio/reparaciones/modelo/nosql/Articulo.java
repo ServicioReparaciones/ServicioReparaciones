@@ -157,5 +157,4 @@ public class Articulo extends BaseEntity {
     public String toString() {
         return "Articulo{" + "codigo=" + codigo + ", barcode=" + barcode + ", nombre=" + nombre + ", modelo=" + modelo + ", code=" + code + ", marca=" + marca + ", artefacto=" + artefacto + ", numeroParte=" + numeroParte + ", unidadMedicion=" + unidadMedicion + ", flag=" + flag +", username=" + username + '}';
     }
-
 }
