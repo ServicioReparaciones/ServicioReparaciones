@@ -34,13 +34,13 @@ public class ProductoServicio implements Iproducto, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer size = ObtenerListaProductos().size();
+        Integer size = count();
         Integer code = 1000 + 1 * size;
         return code;
     }
 
     public String generatedBarcode() {
-        return "SR-PRO" + RandomStringUtils.randomNumeric(4) + "" + ObtenerListaProductos(1).size();
+        return "SR-PRO" + RandomStringUtils.randomNumeric(4) + "" + count(1);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ProductoServicio implements Iproducto, Serializable {
                 set("garantia", producto.getGarantia()).
                 set("codesWarranty", producto.getCodesWarranty()).
                 set("username", producto.getUsername()).
-                set("lastChange",producto.getLastChange()).
+                set("lastChange", producto.getLastChange()).
                 set("flag", producto.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -103,7 +103,7 @@ public class ProductoServicio implements Iproducto, Serializable {
         }
         return find;
     }
-    
+
     public Producto findByBarcode(Producto producto) {
         Producto find = new Producto();
         Query<Producto> result = this.ds.find(Producto.class).
@@ -181,7 +181,7 @@ public class ProductoServicio implements Iproducto, Serializable {
         }
         return list;
     }
-    
+
     public List<Producto> ObtenerListaProductos() {
         List<Producto> list = new ArrayList<>();
         Query<Producto> result = this.ds.find(Producto.class);
@@ -192,6 +192,22 @@ public class ProductoServicio implements Iproducto, Serializable {
             list = new ArrayList<>();
         }
         return list;
+    }
+
+    @Override
+    public Integer count() {
+        Integer count = 0;
+        Long result = this.ds.find(Producto.class).count();
+        count = new Integer(result.intValue());
+        return count;
+    }
+
+    @Override
+    public Integer count(Integer flag) {
+        Integer count = 0;
+        Long result = this.ds.find(Producto.class).field("flag").equal(flag).count();
+        count = new Integer(result.intValue());
+        return count;
     }
 
 }

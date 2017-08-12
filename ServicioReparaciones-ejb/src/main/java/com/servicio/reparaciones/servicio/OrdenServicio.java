@@ -46,13 +46,13 @@ public class OrdenServicio implements Iorden, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer size = ObtenerListaOrdens().size();
+        Integer size = count();
         Integer code = 1000 + 1 * size;
         return code;
     }
 
     public String generatedBarcode() {
-        return "SR-ORD" + RandomStringUtils.randomNumeric(4) + "" + ObtenerListaOrdens(1).size();
+        return "SR-ORD" + RandomStringUtils.randomNumeric(4) + "" + count(1);
     }
 
     @Override
@@ -91,9 +91,10 @@ public class OrdenServicio implements Iorden, Serializable {
                 set("detalleRepuestos", orden.getDetalleRepuestos()).
                 set("detalleServicios", orden.getDetalleServicios()).
                 set("trabajoFinalEjecutado", orden.getTrabajoFinalEjecutado()).
+                set("movimientosInternos", orden.getMovimientosInternos()).
                 set("url", orden.getUrl()).
                 set("username", orden.getUsername()).
-                set("lastChange",this.calendario.getCalendario().getTime()).
+                set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", orden.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -295,10 +296,43 @@ public class OrdenServicio implements Iorden, Serializable {
         }
         return list;
     }
-    
+
     public List<Orden> ObtenerListaOrdens() {
         List<Orden> list = new ArrayList<>();
         Query<Orden> result = this.ds.find(Orden.class);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    @Override
+    public Integer count() {
+        Integer count = 0;
+        Long result = this.ds.find(Orden.class).count();
+        count = new Integer(result.intValue());
+        return count;
+    }
+
+    @Override
+    public Integer count(Integer flag) {
+        Integer count = 0;
+        Long result = this.ds.find(Orden.class).field("flag").equal(flag).count();
+        count = new Integer(result.intValue());
+        return count;
+    }
+
+    //int first, int pageSize => lo = int first, lf = int first + int pageSize
+    @Override
+    public List<Orden> lazy(int first, int pageSize, Integer flag) {
+        List<Orden> list = new ArrayList<>();
+        Query<Orden> result = this.ds.createQuery(Orden.class).
+                field("flag").equal(flag).
+                offset(first).
+                limit(first + pageSize);
         if (result.asList() != null && !result.asList().isEmpty()) {
             list = result.asList();
         }

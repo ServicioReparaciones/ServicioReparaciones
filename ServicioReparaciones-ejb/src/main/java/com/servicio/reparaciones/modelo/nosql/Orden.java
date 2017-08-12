@@ -54,7 +54,7 @@ public class Orden extends BaseEntity {
     @Embedded
     private TrabajoFinalEjecutado trabajoFinalEjecutado;
     @Embedded
-    private List<String> movimientosInternos;
+    private List<Comentario> movimientosInternos;
 
     @Reference
     private Usuario username;
@@ -229,11 +229,11 @@ public class Orden extends BaseEntity {
         this.trabajoFinalEjecutado = trabajoFinalEjecutado;
     }
 
-    public List<String> getMovimientosInternos() {
+    public List<Comentario> getMovimientosInternos() {
         return movimientosInternos;
     }
 
-    public void setMovimientosInternos(List<String> movimientosInternos) {
+    public void setMovimientosInternos(List<Comentario> movimientosInternos) {
         this.movimientosInternos = movimientosInternos;
     }
 

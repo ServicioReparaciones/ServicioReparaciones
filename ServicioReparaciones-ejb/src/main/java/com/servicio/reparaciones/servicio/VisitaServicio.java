@@ -6,6 +6,7 @@
 package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
+import com.servicio.reparaciones.modelo.nosql.Producto;
 import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.I.Ivisita;
 import com.servicio.reparaciones.servicio.util.Calendario;
@@ -37,13 +38,13 @@ public class VisitaServicio implements Ivisita, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer size = ObtenerListaVisitas().size();
+        Integer size = count();
         Integer code = 1000 + 1 * size;
         return code;
     }
 
     public String generatedUnique() {
-        return "SR-VIS" + RandomStringUtils.randomNumeric(4) + "" + ObtenerListaVisitas().size();
+        return "SR-VIS" + RandomStringUtils.randomNumeric(4) + "" + count();
     }
 
     @Override
@@ -79,7 +80,7 @@ public class VisitaServicio implements Ivisita, Serializable {
                 set("observacionCliente", Visita.getObservacionCliente()).
                 set("posibleFalla", Visita.getPosibleFalla()).
                 set("username", Visita.getUsername()).
-                set("lastChange",this.calendario.getCalendario().getTime()).
+                set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", Visita.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -161,6 +162,22 @@ public class VisitaServicio implements Ivisita, Serializable {
             list = new ArrayList<>();
         }
         return list;
+    }
+
+    @Override
+    public Integer count() {
+        Integer count = 0;
+        Long result = this.ds.find(Visita.class).count();
+        count = new Integer(result.intValue());
+        return count;
+    }
+
+    @Override
+    public Integer count(Integer flag) {
+        Integer count = 0;
+        Long result = this.ds.find(Visita.class).field("flag").equal(flag).count();
+        count = new Integer(result.intValue());
+        return count;
     }
 
 }

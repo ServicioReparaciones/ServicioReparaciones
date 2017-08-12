@@ -35,7 +35,7 @@ public class ClienteServicio implements Icliente, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer size = ObtenerListaClientes().size();
+        Integer size = count();
         Integer code = 1000 + 1 * size;
         return code;
     }
@@ -73,7 +73,7 @@ public class ClienteServicio implements Icliente, Serializable {
                 set("direccion", cliente.getDireccion()).
                 set("referencia", cliente.getReferencia()).
                 set("username", cliente.getUsername()).
-                set("lastChange",this.calendario.getCalendario().getTime()).
+                set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", cliente.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -170,6 +170,22 @@ public class ClienteServicio implements Icliente, Serializable {
             list = new ArrayList<>();
         }
         return list;
+    }
+
+    @Override
+    public Integer count() {
+        Integer count = 0;
+        Long result = this.ds.find(Cliente.class).count();
+        count = new Integer(result.intValue());
+        return count;
+    }
+
+    @Override
+    public Integer count(Integer flag) {
+        Integer count = 0;
+        Long result = this.ds.find(Cliente.class).field("flag").equal(flag).count();
+        count = new Integer(result.intValue());
+        return count;
     }
 
 }

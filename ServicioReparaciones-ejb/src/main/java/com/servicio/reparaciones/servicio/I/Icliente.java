@@ -19,7 +19,7 @@ public interface Icliente {
     public Boolean insert(Cliente cliente);
 
     public Boolean update(Cliente cliente);
-    
+
     public Cliente findByCodigo(Cliente cliente);
 
     public void delete(Cliente cliente);
@@ -27,4 +27,8 @@ public interface Icliente {
     public Boolean deleteFlag(Cliente cliente);
 
     public List<Cliente> ObtenerListaClientes(Integer flag);
+
+    public Integer count();
+    
+    public Integer count(Integer flag);
 }

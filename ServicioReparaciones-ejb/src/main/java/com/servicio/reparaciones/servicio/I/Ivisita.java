@@ -27,4 +27,8 @@ public interface Ivisita {
     public Boolean deleteFlag(Visita visita);
 
     public List<Visita> ObtenerListaVisitas(Integer flag);
+
+    public Integer count();
+
+    public Integer count(Integer flag);
 }

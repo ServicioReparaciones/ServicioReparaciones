@@ -21,6 +21,8 @@ public class Ciclo {
     private Estado cerrada;
     @Embedded
     private Estado pendiente;
+    @Embedded
+    private Estado cancelada;
     @Reference
     private Integer flag;
 
@@ -28,6 +30,7 @@ public class Ciclo {
         this.abierta = new Estado(Boolean.FALSE, "ABIERTA", "", new Usuario());
         this.cerrada = new Estado(Boolean.FALSE, "CERRADA", "", new Usuario());
         this.pendiente = new Estado(Boolean.FALSE, "PENDIENTE", "", new Usuario());
+        this.cancelada = new Estado(Boolean.FALSE, "CANCELADA", "", new Usuario());
         this.flag = 1;
     }
 
@@ -55,6 +58,14 @@ public class Ciclo {
         this.pendiente = pendiente;
     }
 
+    public Estado getCancelada() {
+        return cancelada;
+    }
+
+    public void setCancelada(Estado cancelada) {
+        this.cancelada = cancelada;
+    }
+
     public Integer getFlag() {
         return flag;
     }
@@ -62,5 +73,5 @@ public class Ciclo {
     public void setFlag(Integer flag) {
         this.flag = flag;
     }
-    
+
 }

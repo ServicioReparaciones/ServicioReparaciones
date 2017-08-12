@@ -27,4 +27,10 @@ public interface Iorden {
     public Boolean deleteFlag(Orden orden);
 
     public List<Orden> ObtenerListaOrdens(Integer flag);
+
+    public List<Orden> lazy(int first, int pageSize, Integer flag);
+
+    public Integer count();
+
+    public Integer count(Integer flag);
 }

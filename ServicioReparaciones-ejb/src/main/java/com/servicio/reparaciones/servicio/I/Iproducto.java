@@ -27,4 +27,8 @@ public interface Iproducto {
     public Boolean deleteFlag(Producto repuesto);
 
     public List<Producto> ObtenerListaProductos(Integer flag);
+    
+    public Integer count();
+    
+    public Integer count(Integer flag);
 }
