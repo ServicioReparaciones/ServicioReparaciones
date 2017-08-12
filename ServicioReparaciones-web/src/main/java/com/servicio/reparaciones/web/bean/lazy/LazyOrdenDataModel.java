@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-import org.bson.types.ObjectId;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -22,26 +21,28 @@ import org.primefaces.model.SortOrder;
  * @author luis
  */
 public class LazyOrdenDataModel extends LazyDataModel<Orden> {
-    
+
     private static final long serialVersionUID = 4757257950045668804L;
-    
+
     @Inject
     private OrdenServicio ordenService;
-    
+
     private List<Orden> datasource;
     private Boolean parameter;
-    
-    public LazyOrdenDataModel() {
+    private Integer flag;
+
+    public LazyOrdenDataModel(Integer flag) {
         this.datasource = new ArrayList<>();
         this.ordenService = new OrdenServicio();
         this.parameter = Boolean.FALSE;
+        this.flag = flag;
     }
-    
+
     public LazyOrdenDataModel(List<Orden> datasource) {
         this.datasource = datasource;
         this.parameter = Boolean.TRUE;
     }
-    
+
     @Override
     public Orden getRowData(String rowKey) {
         for (Orden orden : datasource) {
@@ -51,20 +52,20 @@ public class LazyOrdenDataModel extends LazyDataModel<Orden> {
         }
         return null;
     }
-    
+
     @Override
     public Object getRowKey(Orden orden) {
         return orden.getId();
     }
-    
+
     @Override
     public List load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         List<Orden> data = new ArrayList<Orden>();
-        
+
         if (!parameter) {
-            this.datasource = this.ordenService.lazy(first, first + pageSize, 1);
+            this.datasource = this.ordenService.lazy(first, first + pageSize, this.flag);
         }
-        
+
         for (Orden ord : datasource) {
             boolean match = true;
             if (filters != null) {
@@ -73,7 +74,7 @@ public class LazyOrdenDataModel extends LazyDataModel<Orden> {
                         String filterProperty = it.next();
                         Object filterValue = filters.get(filterProperty);
                         String fieldValue = String.valueOf(ord.getClass().getField(filterProperty).get(ord));
-                        
+
                         if (filterValue == null || fieldValue.startsWith(filterValue.toString())) {
                             match = true;
                         } else {
@@ -100,7 +101,7 @@ public class LazyOrdenDataModel extends LazyDataModel<Orden> {
         if (parameter) {
             dataSize = data.size();
         } else {
-            dataSize = this.ordenService.count(1);
+            dataSize = this.ordenService.count(this.flag);
         }
         this.setRowCount(dataSize);
 
@@ -119,5 +120,5 @@ public class LazyOrdenDataModel extends LazyDataModel<Orden> {
             return data;
         }
     }
-    
+
 }

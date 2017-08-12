@@ -60,7 +60,7 @@ public class MovimientoInternoBean implements ImethodsFindBeans, Serializable {
         this.texto = "";
         this.find = new Orden();
         this.selected = null;
-        this.lazyModel = new LazyOrdenDataModel();
+        this.lazyModel = new LazyOrdenDataModel(1);
         this.findOrdenes = new ArrayList<>();
         this.active = Boolean.FALSE;
         this.usuario = new Usuario();
