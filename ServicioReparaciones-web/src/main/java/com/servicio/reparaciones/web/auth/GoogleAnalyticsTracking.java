@@ -18,7 +18,6 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -33,7 +32,7 @@ public class GoogleAnalyticsTracking {
     private static final HTTPHeader CONTENT_TYPE_HEADER
             = new HTTPHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    private final String gaTrackingId;  // Tracking ID / Web property / Property ID
+    private final String gaTrackingId ;  // Tracking ID / Web property / Property ID
     private String gaClientId = "555";  // Anonymous Client ID.
     // Used to override the existing factory with perhaps a mock one for testing.
     private URLFetchService urlFetchService = URLFetchServiceFactory.getURLFetchService();

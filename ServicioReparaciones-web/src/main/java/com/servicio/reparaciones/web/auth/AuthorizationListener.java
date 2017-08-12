@@ -79,6 +79,7 @@ public class AuthorizationListener implements PhaseListener {
 
     public List<String> obtenerUrlsAdmin() {
         List<String> urls = new ArrayList<>();
+        urls.add("/faces/views/movimientosinternos.xhtml");
         urls.add("/faces/views/bodega.xhtml");
         urls.add("/faces/views/articulo.xhtml");
         urls.add("/faces/views/entrada.xhtml");

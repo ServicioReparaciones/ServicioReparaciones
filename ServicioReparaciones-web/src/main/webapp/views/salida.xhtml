@@ -8,6 +8,10 @@
         <h:form id="fadd">
             <p:panel header="Registrar Nueva Salida">
                 <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="numeroFactura" value="Numero Factura:"/>
+                    <p:inputText id="numeroFactura" value="#{salidaBean.nuevo.numeroFactura}"/>
+                    <p:message for="numeroFactura" display="tooltip" severity="error"/>
+
                     <p:outputLabel for="concepto" value="Concepto:"/>
                     <p:inputText id="concepto" value="#{salidaBean.nuevo.concepto}"/>
                     <p:message for="concepto" display="tooltip" severity="error"/>
@@ -21,7 +25,7 @@
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
                                        itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
-                        <p:ajax update=":fadd:dtart" listener="#{salidaBean.loadBodega}"/>
+                        <p:ajax update=":fadd:dtart" listener="#{salidaBean.loadArticulos}"/>
                     </p:selectOneMenu>
                     <p:message for="bodega" display="tooltip" severity="error"/>
 
@@ -75,10 +79,14 @@
                     </p:dataTable>
                 </h:panelGrid>
                 <p:outputPanel id="inv_tory">
-                    <h:panelGrid columns="9" cellpadding="5">
+                    <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel for="articulo" value="Articulo:"/>
                         <p:inputText id="articulo" required="true" value="#{salidaBean.nuevo.articulo.nombre}"/>
                         <p:message for="articulo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="existentes" value="Cantidad Existente:"/>
+                        <p:inputText id="existentes" required="true" value="#{salidaBean.cantidadExistente}"/>
+                        <p:message for="existentes" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <h:panelGrid style="margin: 0 auto;">
@@ -119,12 +127,6 @@
                         <p:column headerText="Cantidad" style="text-align" >
                             <h:outputText value="#{sal.cantidad} " />
                         </p:column>
-                        <p:column headerText="Precio Unit." style="text-align" >
-                            <h:outputText value="#{sal.precioUnit} " />
-                        </p:column>
-                        <p:column headerText="Precio Total." style="text-align" >
-                            <h:outputText value="#{sal.precioTotal} " />
-                        </p:column>
                         <p:column headerText="Bodega" style="text-align">
                             <h:outputText value="#{sal.bodega.nombre}" />
                         </p:column>
@@ -133,6 +135,7 @@
                         </p:column>
                         <p:column style="width:32px;text-align: center">
                             <p:commandButton icon="fa fa-fw fa-edit" update=":fedit:outSal"
+                                             action="#{salidaBean.loadSelectArticulos(sal)}"
                                              oncomplete="PF('dlgModifySal').show()">
                                 <f:setPropertyActionListener value="#{sal}" target="#{salidaBean.selected}"/>
                             </p:commandButton>
@@ -152,6 +155,10 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="outSal">
                     <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="enumeroFactura" value="Numero Factura:"/>
+                        <p:inputText id="enumeroFactura" value="#{salidaBean.selected.numeroFactura}"/>
+                        <p:message for="enumeroFactura" display="tooltip" severity="error"/>
+
                         <p:outputLabel for="econcepto" value="Concepto:"/>
                         <p:inputText id="econcepto" required="true" value="#{salidaBean.selected.concepto}"/>
                         <p:message for="econcepto" display="tooltip" severity="error"/>
@@ -165,7 +172,7 @@
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{bodegaBean.bodegas}" var="bod"
                                            itemLabel="#{bod.nombre}" itemValue="#{bod.codigo}"/>
-                            <p:ajax update=":fedit:edtart" listener="#{salidaBean.loadSelectBodega}"/>
+                            <p:ajax update=":fedit:edtart" listener="#{salidaBean.loadSelectArticulos}"/>
                         </p:selectOneMenu>
                         <p:message for="ebodega" display="tooltip" severity="error"/>
 
@@ -222,6 +229,10 @@
                         <p:outputLabel for="earticulo" value="Articulo:"/>
                         <p:inputText id="earticulo" required="true" value="#{salidaBean.selected.articulo.nombre}"/>
                         <p:message for="earticulo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="eexistentes" value="Cantidad Existente:"/>
+                        <p:inputText id="eexistentes" required="true" value="#{salidaBean.cantidadExistente}"/>
+                        <p:message for="eexistentes" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">

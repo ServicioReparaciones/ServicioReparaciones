@@ -17,6 +17,7 @@ import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -57,6 +58,7 @@ public class EntradaBean implements ImethodsBean, Serializable {
         this.selected = new Entrada();
         this.filtered = null;
         this.entradas = this.entradaService.ObtenerListaEntradas(1);
+        Collections.reverse(this.entradas);
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -70,13 +72,17 @@ public class EntradaBean implements ImethodsBean, Serializable {
         Bodega bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
         this.nuevo.setBodega(bodega);
         this.nuevo.setCode("SRIN" + (this.entradaService.generatedCodigo() - 1));
-        Boolean exito = this.entradaService.insert(this.nuevo);
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
+        if (this.nuevo.getBodega().getUsername().equals(this.nuevo.getUsername())) {
+            Boolean exito = this.entradaService.insert(this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+                this.init();
+            }
         } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+            FacesUtil.addMessageInfo("Usted no está autorizado.");
         }
     }
 
@@ -89,13 +95,17 @@ public class EntradaBean implements ImethodsBean, Serializable {
             this.selected.setArticulo(articulo);
             Bodega bodega = this.bodegaService.findByCodigo(this.selected.getBodega());
             this.selected.setBodega(bodega);
-            Boolean exito = this.entradaService.update(this.selected);
-            if (exito) {
-                FacesUtil.addMessageInfo("Se ha modifcado con exito.");
-                this.init();
+            if (this.nuevo.getBodega().getUsername().equals(this.nuevo.getUsername())) {
+                Boolean exito = this.entradaService.update(this.selected);
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha modifcado con exito.");
+                    this.init();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
+                    this.init();
+                }
             } else {
-                FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
-                this.init();
+                FacesUtil.addMessageInfo("Usted no está autorizado");
             }
         } else {
             FacesUtil.addMessageInfo("Seleccione un registro.");
@@ -107,13 +117,17 @@ public class EntradaBean implements ImethodsBean, Serializable {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
-            Boolean exito = this.entradaService.deleteFlag(this.selected);
-            if (exito) {
-                FacesUtil.addMessageInfo("Se ha eliminado con exito.");
-                this.init();
+            if (this.nuevo.getBodega().getUsername().equals(this.nuevo.getUsername())) {
+                Boolean exito = this.entradaService.deleteFlag(this.selected);
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha eliminado con exito.");
+                    this.init();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
+                    this.init();
+                }
             } else {
-                FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
-                this.init();
+                FacesUtil.addMessageInfo("Usted no está autorizado.");
             }
         } else {
             FacesUtil.addMessageInfo("Seleccione un registro.");
