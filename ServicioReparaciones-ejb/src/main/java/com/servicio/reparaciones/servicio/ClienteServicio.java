@@ -188,4 +188,35 @@ public class ClienteServicio implements Icliente, Serializable {
         return count;
     }
 
+    @Override
+    public List<Cliente> lazy(int first, int pageSize, Integer flag) {
+        List<Cliente> list = new ArrayList<>();
+        Query<Cliente> result = this.ds.createQuery(Cliente.class).
+                field("flag").equal(flag).
+                offset(first).
+                limit(first + pageSize);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    @Override
+    public List<Cliente> filterd(String filterProperty, String filterValue, Integer flag) {
+        List<Cliente> list = new ArrayList<>();
+        Query<Cliente> result = this.ds.find(Cliente.class).
+                field(filterProperty).equal(filterValue).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
 }

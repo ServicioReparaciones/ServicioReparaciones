@@ -210,4 +210,35 @@ public class ProductoServicio implements Iproducto, Serializable {
         return count;
     }
 
+    @Override
+    public List<Producto> lazy(int first, int pageSize, Integer flag) {
+        List<Producto> list = new ArrayList<>();
+        Query<Producto> result = this.ds.createQuery(Producto.class).
+                field("flag").equal(flag).
+                offset(first).
+                limit(first + pageSize);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    @Override
+    public List<Producto> filterd(String filterProperty, String filterValue, Integer flag) {
+        List<Producto> list = new ArrayList<>();
+        Query<Producto> result = this.ds.find(Producto.class).
+                field(filterProperty).equal(filterValue).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
 }

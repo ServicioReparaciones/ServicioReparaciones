@@ -27,8 +27,12 @@ public interface Iproducto {
     public Boolean deleteFlag(Producto repuesto);
 
     public List<Producto> ObtenerListaProductos(Integer flag);
-    
+
+    public List<Producto> lazy(int first, int pageSize, Integer flag);
+
+    public List<Producto> filterd(String filterProperty, String filterValue,Integer flag);
+
     public Integer count();
-    
+
     public Integer count(Integer flag);
 }

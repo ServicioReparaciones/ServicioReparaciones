@@ -6,6 +6,7 @@
 package com.servicio.reparaciones.servicio.I;
 
 import com.servicio.reparaciones.modelo.nosql.Cliente;
+import com.servicio.reparaciones.modelo.nosql.Cliente;
 import java.util.List;
 
 /**
@@ -28,7 +29,11 @@ public interface Icliente {
 
     public List<Cliente> ObtenerListaClientes(Integer flag);
 
+    public List<Cliente> lazy(int first, int pageSize, Integer flag);
+
+    public List<Cliente> filterd(String filterProperty, String filterValue, Integer flag);
+
     public Integer count();
-    
+
     public Integer count(Integer flag);
 }
