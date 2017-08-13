@@ -95,6 +95,7 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.nuevo.getCiclo().getAbierta().setUsername(this.usuario);
         this.nuevo.getCiclo().getCerrada().setUsername(this.usuario);
         this.nuevo.getCiclo().getPendiente().setUsername(this.usuario);
+        this.nuevo.getCiclo().getCancelada().setUsername(this.usuario);
     }
 
     @Override

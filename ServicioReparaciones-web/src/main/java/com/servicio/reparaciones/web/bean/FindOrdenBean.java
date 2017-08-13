@@ -22,11 +22,11 @@ import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.servicio.VisitaServicio;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsFindBeans;
+import com.servicio.reparaciones.web.bean.lazy.LazyOrdenDataModel;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -37,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.LazyDataModel;
 
 /**
  *
@@ -49,6 +50,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     private static final long serialVersionUID = 4230889177898245141L;
     private Calendario calendario = new Calendario();
 
+    private LazyDataModel<Orden> lazyModel;
+    
     private String pattern;
     private String value;
     private Orden find;
@@ -86,8 +89,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
         this.value = "";
         this.find = new Orden();
         this.selected = null;
-        this.findOrdenes = this.ordenService.ObtenerListaOrdens(1);
-        Collections.reverse(this.findOrdenes);
+        this.lazyModel = new LazyOrdenDataModel(1);
+        this.findOrdenes = new ArrayList<>();
         this.active = Boolean.FALSE;
         this.servicios = new ArrayList<>();
         this.repuestos = new ArrayList<>();
@@ -170,36 +173,44 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-
-    public void findOrden(ActionEvent evt) {
+public void findOrden(ActionEvent evt) {
         if (this.value != null && !this.value.equals("")) {
             switch (this.pattern) {
                 case "CLI01":
                     this.findOrdenes = findByCedula();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "CLI02":
                     this.findOrdenes = findByTelefono();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "CLI03":
                     this.findOrdenes = findByMovil();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "PRO02":
                     this.findOrdenes = findBySerie();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "PRO03":
                     this.findOrdenes = findByPNC();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "PRO04":
                     this.findOrdenes = findByPlaca();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "ORD01":
                     this.findOrdenes = findByCodigoORD();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "ORD02":
                     this.findOrdenes = findByNuemeroORD();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 case "ORD03":
                     this.findOrdenes = findByNuemeroTicket();
+                    this.lazyModel = new LazyOrdenDataModel(this.findOrdenes);
                     break;
                 default:
                     FacesUtil.addMessageInfo("Vuelva a intentarlo.");
@@ -430,6 +441,14 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
 
     public void setRepuestos(List<Repuesto> repuestos) {
         this.repuestos = repuestos;
+    }
+
+    public LazyDataModel<Orden> getLazyModel() {
+        return lazyModel;
+    }
+
+    public void setLazyModel(LazyDataModel<Orden> lazyModel) {
+        this.lazyModel = lazyModel;
     }
 
 }

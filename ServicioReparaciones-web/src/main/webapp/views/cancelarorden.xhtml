@@ -139,13 +139,14 @@
                         <p:column headerText="Serie" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.producto.serie}"/>
                         </p:column>
-                        <p:column headerText="PNC" style="text-align: center;font-size: 75%">
-                            <h:outputText value="#{ordc.producto.pnc}"/>
+                        <p:column headerText="Razón" style="text-align: center;font-size: 75%">
+                            <h:outputText value="#{ordc.ciclo.cancelada.comentario}"/>
                         </p:column>
-                        <p:column headerText="Placa" style="text-align: center;font-size: 75%">
-                            <h:outputText value="#{ordc.producto.placa}"/>
+                        <p:column headerText="Cancelado" style="text-align: center;font-size: 75%">
+                            <h:outputText value="#{ordc.ciclo.cancelada.username.datosPersonales.nombres}   "/>
+                            <h:outputText value="#{ordc.ciclo.cancelada.username.datosPersonales.apellidos}"/>
                         </p:column>
-                        <p:column headerText="Usuario" style="text-align: center;font-size: 75%">
+                        <p:column headerText="Creado" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.username.datosPersonales.nombres}"/>
                         </p:column>
                         <p:column headerText="Estado" style="text-align: center;font-size: 75%">
@@ -165,7 +166,7 @@
             <p:outputPanel id="outWizard">
                 <p:panel header="Registro de Moviemintos Internos" rendered="#{ordenCanceladaBean.active}">
                     <h:panelGrid columns="2" cellpadding="5">
-                        <p:outputLabel value="Razon por la cual cancela la orden seleccionada:"/>
+                        <p:outputLabel value="Razón por la cual cancela la orden seleccionada:"/>
                         <p:inputTextarea value="#{ordenCanceladaBean.texto}" rows="6" cols="60" style="width: auto"/>
                         <p:commandButton value="Cancelar" icon="fa fa-close" update=":ford:outWizard"
                                          actionListener="#{ordenCanceladaBean.add(evt)}"/>

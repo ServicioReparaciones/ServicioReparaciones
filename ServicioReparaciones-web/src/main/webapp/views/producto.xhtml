@@ -8,11 +8,9 @@
         <h:form id="fdtpro">
             <p:panel>
                 <h:panelGrid style="margin: 0 auto;">
-                    <p:dataTable  id="dtpro" var="pro" value="#{productoBean.productos}" 
-                                  filteredValue="#{productoBean.filterProductos}"
-                                  rowKey="#{pro.codigo}" rows="5"
-                                  paginator="true" tableStyle="width: auto"
-                                  paginatorPosition="bottom" reflow="true">
+                    <p:dataTable  id="dtpro" var="pro" value="#{productoBean.lazyModel}"
+                                  rows="5" paginator="true" tableStyle="width: auto"
+                                  paginatorPosition="bottom" lazy="true" reflow="true">
                         <f:facet name="header">
                             <h:outputText value="PRODUCTOS"/>
                         </f:facet>

@@ -17,9 +17,11 @@ import com.servicio.reparaciones.servicio.MarcaServicio;
 import com.servicio.reparaciones.servicio.ProductoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
+import com.servicio.reparaciones.web.bean.lazy.LazyProductoDataModel;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -28,6 +30,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.LazyDataModel;
 
 /**
  *
@@ -38,6 +41,8 @@ import org.primefaces.event.SelectEvent;
 public class ProductoBean implements ImethodsBean, Serializable {
 
     private static final long serialVersionUID = 8212433807349133095L;
+
+    private LazyDataModel<Producto> lazyModel;
 
     private Producto nuevo;
     private Producto selected;
@@ -68,13 +73,13 @@ public class ProductoBean implements ImethodsBean, Serializable {
         this.nuevo = new Producto();
         this.nuevo.setBarcode(this.productoService.generatedBarcode());
         this.selected = null;
-        this.productos = this.productoService.ObtenerListaProductos(1);
-        Collections.reverse(this.productos);
+        this.lazyModel = new LazyProductoDataModel(1);
+        this.productos = new ArrayList<>();
+        this.filterProductos = null;
         this.almacenes = this.almacenService.ObtenerListaAlmacenes();
         this.artefactos = this.artefactoService.ObtenerListaArtefactos();
         this.marcas = this.marcaService.ObtenerListaMarcas();
         this.garantia = Boolean.FALSE;
-        this.filterProductos = null;
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -89,7 +94,6 @@ public class ProductoBean implements ImethodsBean, Serializable {
         this.artefactos = this.artefactoService.ObtenerListaArtefactos();
         this.marcas = this.marcaService.ObtenerListaMarcas();
         this.garantia = Boolean.FALSE;
-        this.filterProductos = null;
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -213,14 +217,6 @@ public class ProductoBean implements ImethodsBean, Serializable {
         this.productos = productos;
     }
 
-    public List<Producto> getFilterProductos() {
-        return filterProductos;
-    }
-
-    public void setFilterProductos(List<Producto> filterProductos) {
-        this.filterProductos = filterProductos;
-    }
-
     public List<Artefacto> getArtefactos() {
         return artefactos;
     }
@@ -259,6 +255,22 @@ public class ProductoBean implements ImethodsBean, Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public LazyDataModel<Producto> getLazyModel() {
+        return lazyModel;
+    }
+
+    public void setLazyModel(LazyDataModel<Producto> lazyModel) {
+        this.lazyModel = lazyModel;
+    }
+
+    public List<Producto> getFilterProductos() {
+        return filterProductos;
+    }
+
+    public void setFilterProductos(List<Producto> filterProductos) {
+        this.filterProductos = filterProductos;
     }
 
 }

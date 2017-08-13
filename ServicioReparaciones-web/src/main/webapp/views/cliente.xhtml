@@ -82,11 +82,9 @@
         <h:outputText value="&lt;br/&gt;" escape="false" />
         <h:form id="fdtcli">
             <p:panel>
-                <p:dataTable  id="dtcli" var="cli" value="#{clienteBean.clientes}" 
-                              filteredValue="#{clienteBean.filterClientes}"
-                              rowKey="#{cli.codigo}" rows="5"
-                              paginator="true" tableStyle="width: auto"
-                              paginatorPosition="bottom" reflow="true">
+                <p:dataTable  id="dtcli" var="cli" value="#{clienteBean.lazyModel}" 
+                              rows="5" paginator="true" tableStyle="width: auto"
+                              paginatorPosition="bottom" lazy="true" reflow="true">
                     <f:facet name="header">
                         <h:outputText value="CLIENTES"/>
                     </f:facet>

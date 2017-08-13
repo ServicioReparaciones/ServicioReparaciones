@@ -36,10 +36,10 @@
         <h:outputText value="&lt;br/&gt;" escape="false"/>
         <h:form id="fdtord">
             <p:panel>
-                <p:dataTable id="dtord" var="ord" value="#{recordOrdenBean.recordOrdenes}"
+                <p:dataTable id="dtord" var="ord" value="#{recordOrdenBean.lazyModel}"
                              selectionMode="single" selection="#{recordOrdenBean.selected}"
-                             rowKey="#{ord.codigo}" rows="5" paginator="true"
-                             paginatorPosition="bottom" reflow="true">
+                             rows="5" paginator="true"
+                             paginatorPosition="bottom" lazy="true" reflow="true">
 
                     <p:ajax event="rowSelect" listener="#{recordOrdenBean.onRowSelect}"
                             update=":fdata:outOrd"/>

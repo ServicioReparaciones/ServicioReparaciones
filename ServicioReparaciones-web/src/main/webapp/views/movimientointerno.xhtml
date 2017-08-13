@@ -38,7 +38,8 @@
             <p:panel>
                 <p:dataTable id="dtord" var="ord" value="#{movimientoInternoBean.lazyModel}"
                              selectionMode="single" selection="#{movimientoInternoBean.selected}"
-                             rows="5" paginator="true" paginatorPosition="bottom" reflow="true" lazy="true">
+                             rows="5" paginator="true" paginatorPosition="bottom" 
+                             reflow="true" lazy="true">
 
                     <p:ajax event="rowSelect" listener="#{movimientoInternoBean.onRowSelect}" 
                             update=":ford:outWizard"/>
