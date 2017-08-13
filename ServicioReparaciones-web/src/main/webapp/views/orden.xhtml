@@ -473,10 +473,14 @@
                         <h:panelGrid columns="6" cellpadding="5">
                             <p:outputLabel for="ealmacen" value="Almacén:"/>
                             <p:selectOneMenu id="ealmacen" required="true" 
-                                             value="#{ordenBean.productoBean.nuevo.garantia.almacen}">
+                                             value="#{ordenBean.productoBean.nuevo.garantia.almacen}"
+                                             effect="fade" var="t" filter="true" filterMatchMode="startsWith">
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                 <f:selectItems value="#{ordenBean.productoBean.almacenes}" var="alm"
                                                itemLabel="#{alm.almacen}" itemValue="#{alm.almacen}"/>
+                                <p:column>
+                                    <h:outputText value="#{t}" />
+                                </p:column>
                             </p:selectOneMenu>
                             <p:message for="ealmacen" display="tooltip" severity="error"/>
 

@@ -250,10 +250,14 @@
                                 <h:panelGrid columns="3" cellpadding="5">
                                     <p:outputLabel for="almacen" value="Almacén:"/>
                                     <p:selectOneMenu id="almacen" required="true"
-                                                     value="#{findOrden.find.producto.garantia.almacen}">
+                                                     value="#{findOrden.find.producto.garantia.almacen}"
+                                                     effect="fade" var="t" filter="true" filterMatchMode="startsWith">
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                         <f:selectItems value="#{productoBean.almacenes}" var="ealm"
                                                        itemLabel="#{ealm.almacen}" itemValue="#{ealm.almacen}"/>
+                                        <p:column>
+                                            <h:outputText value="#{t}" />
+                                        </p:column>
                                     </p:selectOneMenu>
                                     <p:message for="almacen" display="tooltip" severity="error"/>
 

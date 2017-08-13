@@ -20,7 +20,6 @@ import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -126,6 +125,10 @@ public class ClienteBean implements ImethodsBean, Serializable {
         }
     }
 
+    public void sendSelectedCli(ActionEvent evt, Cliente cli) {
+        this.selected = cli;
+    }
+
     public void loadCantones() {
         if (this.nuevo.getProvincia() != null && !this.nuevo.getProvincia().equals("")) {
             this.cantones = this.provinciaService.ObtenerProvincia(this.nuevo.getProvincia()).getCantonList();
@@ -169,6 +172,8 @@ public class ClienteBean implements ImethodsBean, Serializable {
         this.selected = (Cliente) event.getObject();
         if (this.selected != null) {
             this.setNuevo(this.selected);
+        } else {
+            this.selected = null;
         }
     }
 

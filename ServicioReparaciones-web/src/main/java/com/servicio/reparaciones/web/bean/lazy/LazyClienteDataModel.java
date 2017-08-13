@@ -82,7 +82,6 @@ public class LazyClienteDataModel extends LazyDataModel<Cliente> {
                             this.filter = Boolean.TRUE;
                             data.clear();
                             data.addAll(objectsfilter);
-                            this.datasource.addAll(objectsfilter);
                             break;
                         }
                     } catch (Exception e) {
@@ -109,6 +108,7 @@ public class LazyClienteDataModel extends LazyDataModel<Cliente> {
             dataSize = data.size();
         } else if (filter) {
             dataSize = data.size();
+            this.datasource.addAll(data);
         } else {
             dataSize = this.clienteService.count(this.flag);
         }

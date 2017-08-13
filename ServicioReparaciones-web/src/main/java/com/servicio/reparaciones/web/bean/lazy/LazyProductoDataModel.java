@@ -110,6 +110,7 @@ public class LazyProductoDataModel extends LazyDataModel<Producto> {
             dataSize = data.size();
         } else if (filter) {
             dataSize = data.size();
+            this.datasource.addAll(data);
         } else {
             dataSize = this.productoService.count(this.flag);
         }
