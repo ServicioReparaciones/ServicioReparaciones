@@ -10,7 +10,7 @@ import com.servicio.reparaciones.xml.modelo.ClienteXml;
 import com.servicio.reparaciones.xml.modelo.OrdenXml;
 import com.servicio.reparaciones.xml.modelo.ProductoXml;
 import com.servicio.reparaciones.xml.modelo.VisitaXml;
-import com.servicio.reparaciones.xml.servidor.interfaz.IordenServidorXml;
+import com.servicio.reparaciones.xml.servidor.i.IordenServidorXml;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
