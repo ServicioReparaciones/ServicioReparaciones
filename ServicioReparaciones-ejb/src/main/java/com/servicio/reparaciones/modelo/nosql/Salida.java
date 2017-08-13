@@ -30,6 +30,7 @@ public class Salida extends BaseEntity {
     private Double cantidad;
     private Double precioUnit;
     private Double precioTotal;
+    private String url;
     private Integer flag;
 
     @Reference
@@ -156,6 +157,14 @@ public class Salida extends BaseEntity {
 
     public void setUsername(Usuario username) {
         this.username = username;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

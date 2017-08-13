@@ -57,6 +57,7 @@ public class XMLtoHtml implements Serializable {
                     xslDoc = new StreamSource(new File("/var/www/html/pdf/resources/vaucher/vaucher.xsl"));
                     break;
                 case 1:
+                    xslDoc = new StreamSource(new File("/var/www/html/pdf/resources/salida/salida.xsl"));
                     break;
                 case 2:
                     break;

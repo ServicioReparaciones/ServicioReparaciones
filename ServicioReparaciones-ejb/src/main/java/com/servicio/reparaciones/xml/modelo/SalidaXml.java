@@ -18,11 +18,13 @@ public class SalidaXml {
     private String barcode;
     private String signo;
     private String numeroFactura;
+    private String concepto;
     private String cantidad;
     private String articulo;
     private String bodega;
     private String recibe;
     private String entrega;
+    private String fechaSalidaArticulo;
 
     public SalidaXml() {
     }
@@ -97,5 +99,22 @@ public class SalidaXml {
     @XmlElement
     public void setEntrega(String entrega) {
         this.entrega = entrega;
+    }
+
+    public String getFechaSalidaArticulo() {
+        return fechaSalidaArticulo;
+    }
+
+    @XmlElement
+    public void setFechaSalidaArticulo(String fechaSalidaArticulo) {
+        this.fechaSalidaArticulo = fechaSalidaArticulo;
+    }
+
+    public String getConcepto() {
+        return concepto;
+    }
+
+    public void setConcepto(String concepto) {
+        this.concepto = concepto;
     }
 }
