@@ -18,18 +18,22 @@ import com.servicio.reparaciones.servicio.SalidaService;
 import com.servicio.reparaciones.servicio.TecnicoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
+import com.servicio.reparaciones.web.bean.util.GeneratedHtml;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
+import com.servicio.reparaciones.xml.servidor.SalidaServidorXml;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -63,6 +67,8 @@ public class SalidaBean implements ImethodsBean, Serializable {
     @Inject
     private TecnicoServicio tecnicoService;
     @Inject
+    private SalidaServidorXml ordenServerXml;
+    @Inject
     private UsuarioServicio usarioService;
 
     @PostConstruct
@@ -94,10 +100,22 @@ public class SalidaBean implements ImethodsBean, Serializable {
                     CalcularExistenciasBodegaArticulo(
                             this.nuevo.getBodega(), this.nuevo.getArticulo());
             if (this.cantidadExistente >= this.nuevo.getCantidad()) {
+                String barcode = this.nuevo.getCode();
+                String url = "/var/www/html/pdf/" + barcode + "/";
+                HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                String ipAdress = request.getLocalAddr();
+                String filepath = "http://" + ipAdress + "/pdf/" + barcode + "/" + barcode + ".html";
+                this.nuevo.setUrl(filepath);
                 Boolean exito = this.salidaService.insert(this.nuevo);
                 if (exito) {
-                    FacesUtil.addMessageInfo("Se ha guardado con exito.");
-                    this.init();
+                    this.ordenServerXml.generatedXML(barcode, url, barcode, this.nuevo);
+                    GeneratedHtml runHtml = new GeneratedHtml(url, url + barcode + ".xml", url + barcode + ".html", url + barcode + ".pdf", barcode, 1);
+                    runHtml.run();
+                    exito = runHtml.getExito();
+                    if (exito) {
+                        FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                        this.init();
+                    }
                 } else {
                     FacesUtil.addMessageError(null, "No se ha guardado.");
                     this.init();

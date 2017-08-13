@@ -53,10 +53,7 @@ public class GeneratedHtml extends Thread implements Serializable {
         try {
             Boolean html = this.xmlToHtmlServer.createHTML(direccionDestino, direccionDestinoHtml, direccionDestinoXml, barcode, Type);
             if (html) {
-//                Boolean pdf = this.htmlToPDFServer.createPDF(direccionDestinoHtml, direccionDestinoPdf);
-//                if (pdf) {
                 this.exito = Boolean.TRUE;
-//                }
             }
 
         } catch (IOException ex) {
