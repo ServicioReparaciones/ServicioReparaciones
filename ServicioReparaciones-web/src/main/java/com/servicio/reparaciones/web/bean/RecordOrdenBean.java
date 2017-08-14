@@ -12,7 +12,6 @@ import com.servicio.reparaciones.web.bean.lazy.LazyOrdenDataModel;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;

@@ -9,7 +9,6 @@ import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.VisitaServicio;
 import com.servicio.reparaciones.web.util.SessionUtil;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;

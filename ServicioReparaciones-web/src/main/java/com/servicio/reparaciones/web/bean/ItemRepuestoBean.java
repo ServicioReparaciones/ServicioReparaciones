@@ -6,7 +6,6 @@
 package com.servicio.reparaciones.web.bean;
 
 import com.servicio.reparaciones.modelo.nosql.ItemRepuesto;
-import com.servicio.reparaciones.modelo.nosql.ItemServicio;
 import com.servicio.reparaciones.modelo.nosql.Repuesto;
 import com.servicio.reparaciones.servicio.RepuestoServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;

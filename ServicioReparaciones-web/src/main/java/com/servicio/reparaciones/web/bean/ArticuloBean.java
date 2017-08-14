@@ -10,7 +10,6 @@ import com.servicio.reparaciones.modelo.nosql.Bodega;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.modelo.sql.Marca;
 import com.servicio.reparaciones.servicio.ArticuloService;
-import com.servicio.reparaciones.servicio.BodegaService;
 import com.servicio.reparaciones.servicio.MarcaServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
