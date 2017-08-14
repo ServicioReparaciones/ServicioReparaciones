@@ -20,7 +20,7 @@
                     </f:facet>
                     <p:column headerText="Fecha" style="text-align: center">
                         <h:outputText value="#{usu.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Username" style="text-align: center">
@@ -75,7 +75,7 @@
 
                         <p:outputLabel value="Fecha Nacimiento:" />
                         <h:outputText value="#{usuarioBean.selected.datosPersonales.fechaNacimiento}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
                         <p:outputLabel value="Genero:"/>
@@ -126,7 +126,7 @@
 
                         <p:outputLabel value="Fecha Nacimiento:" />
                         <h:outputText value="#{usuarioBean.selected.datosPersonales.fechaNacimiento}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
                         <p:outputLabel value="Genero:"/>

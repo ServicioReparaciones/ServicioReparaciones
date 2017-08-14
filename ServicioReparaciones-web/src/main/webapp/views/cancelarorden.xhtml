@@ -46,7 +46,7 @@
                     </f:facet>
                     <p:column headerText="Fecha" style="text-align: center;font-size: 75%">
                         <h:outputText value="#{ord.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Código ORD" style="text-align: center;font-size: 75%">
@@ -108,7 +108,7 @@
                         </f:facet>
                         <p:column headerText="Fecha" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.lastChange}">
-                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Código ORD" style="text-align: center;font-size: 75%">

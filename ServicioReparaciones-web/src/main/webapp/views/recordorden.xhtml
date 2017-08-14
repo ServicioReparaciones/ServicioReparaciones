@@ -49,7 +49,7 @@
                     </f:facet>
                     <p:column headerText="Fecha" style="text-align: center;font-size: 75%">
                         <h:outputText value="#{ord.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Código ORD" style="text-align: center;font-size: 75%">
@@ -176,22 +176,22 @@
                     <h:panelGrid columns="4" cellpadding="5">
                         <p:outputLabel value="Fecha Vista:"/>
                         <h:outputText value="#{recordOrdenBean.find.visita.fechaVisitaCliente}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
                         <p:outputLabel value="Fecha llegada al cliente:"/>
                         <h:outputText value="#{recordOrdenBean.find.visita.fechaLlegadaCliente}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
                         <p:outputLabel value="Fecha salida del cliente:"/>
                         <h:outputText value="#{recordOrdenBean.find.visita.fechaSalidaCliente}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
                         <p:outputLabel value="Fecha entrega del producto:"/>
                         <h:outputText value="#{recordOrdenBean.find.visita.fechaEntregaProducto}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
                         <p:outputLabel value="Lugar de Atencón::"/>
