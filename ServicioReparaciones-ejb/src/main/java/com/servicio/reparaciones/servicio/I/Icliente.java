@@ -6,7 +6,6 @@
 package com.servicio.reparaciones.servicio.I;
 
 import com.servicio.reparaciones.modelo.nosql.Cliente;
-import com.servicio.reparaciones.modelo.nosql.Cliente;
 import java.util.List;
 
 /**
