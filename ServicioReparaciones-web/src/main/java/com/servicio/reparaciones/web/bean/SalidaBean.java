@@ -34,6 +34,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -113,8 +114,7 @@ public class SalidaBean implements ImethodsBean, Serializable {
                     runHtml.run();
                     exito = runHtml.getExito();
                     if (exito) {
-                        FacesUtil.addMessageInfo("Se ha guardado con exito.");
-                        this.init();
+                        RequestContext.getCurrentInstance().execute("PF('dlgSalidaGenerada').show();");
                     }
                 } else {
                     FacesUtil.addMessageError(null, "No se ha guardado.");
