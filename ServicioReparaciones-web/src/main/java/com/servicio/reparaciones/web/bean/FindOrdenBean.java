@@ -51,7 +51,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     private Calendario calendario = new Calendario();
 
     private LazyDataModel<Orden> lazyModel;
-    
+
     private String pattern;
     private String value;
     private Orden find;
@@ -111,8 +111,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.selected.setUsername(this.usuario);
             this.find.getVisita().setUsername(this.usuario);
             this.visitaService.update(this.find.getVisita());
-            String unique = this.find.getVisita().getUnique();
-            this.find.setVisita(this.visitaService.findByUnique(new Visita(unique)));
+            this.find.setVisita(this.visitaService.findByUnique(this.find.getVisita()));//>>>
             this.productoService.update(this.find.getProducto());
             this.find.setTecnico(this.tecnicoService.findByCodigo(this.find.getTecnico()));
             this.find.setDetalleServicios(this.itemsServicio.getItems());
@@ -129,8 +128,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.getCiclo().getCancelada().setUsername(this.usuario);
             Boolean exito = this.ordenService.update(this.find);
             if (exito) {
-                this.find.getVisita().setFlag(0);
-                this.visitaService.update(this.find.getVisita());
+                this.visitaService.deleteFlag(this.find.getVisita());
                 this.init();
                 this.beanInit();
                 RequestContext.getCurrentInstance().execute("PF('dlgOrdenCerrada').show();");
@@ -149,8 +147,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.selected.setUsername(this.usuario);
             this.find.getVisita().setUsername(this.usuario);
             this.visitaService.update(this.find.getVisita());
-            String unique = this.find.getVisita().getUnique();
-            this.find.setVisita(this.visitaService.findByUnique(new Visita(unique)));
+            this.find.setVisita(this.visitaService.findByUnique(this.find.getVisita()));//>>>
             this.productoService.update(this.find.getProducto());
             this.find.setTecnico(this.tecnicoService.findByCodigo(this.find.getTecnico()));
             this.find.setDetalleServicios(this.itemsServicio.getItems());
@@ -175,7 +172,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-public void findOrden(ActionEvent evt) {
+
+    public void findOrden(ActionEvent evt) {
         if (this.value != null && !this.value.equals("")) {
             switch (this.pattern) {
                 case "CLI01":
@@ -339,6 +337,7 @@ public void findOrden(ActionEvent evt) {
             } else {
                 this.active = Boolean.TRUE;
                 Visita v = new Visita();
+                v.setId(this.selected.getId());
                 v.setCodigo(this.selected.getVisita().getCodigo());
                 v.setUnique(this.selected.getVisita().getUnique());
                 v.setCliente(this.selected.getVisita().getCliente());

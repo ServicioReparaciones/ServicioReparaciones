@@ -98,7 +98,7 @@
             </p:panel>
         </h:form>
         <h:outputText value="&lt;br/&gt;" escape="false"/>
-        <h:form>
+        <h:form id="ordCancel">
             <p:accordionPanel>
                 <p:tab title="Ordenes Canceladas">
                     <p:dataTable id="dtordc" var="ordc" value="#{ordenCanceladaBean.lazyModelCanceladas}"
@@ -162,7 +162,7 @@
                     <h:panelGrid columns="2" cellpadding="5">
                         <p:outputLabel value="Razón por la cual cancela la orden seleccionada:"/>
                         <p:inputTextarea required="true" value="#{ordenCanceladaBean.texto}" rows="6" cols="60" style="width: auto"/>
-                        <p:commandButton value="Cancelar" icon="fa fa-close" update=":ford:outWizard"
+                        <p:commandButton value="Cancelar" icon="fa fa-close" update=":ford:outWizard, :ordCancel"
                                          actionListener="#{ordenCanceladaBean.add(evt)}"/>
                     </h:panelGrid>
                 </p:panel>
