@@ -32,6 +32,7 @@ public class Producto extends BaseEntity {
     private String pnc;
     private String placa;
     private Boolean warranty;
+    private Boolean stock;
     private Integer flag;
 
     @Reference
@@ -47,6 +48,7 @@ public class Producto extends BaseEntity {
         this.placa = "";
         this.pnc = "";
         this.warranty = Boolean.FALSE;
+        this.stock = Boolean.FALSE;
         this.garantia = new Garantia();
         this.codesWarranty = new CodesWarranty();
         this.username = new Usuario();
@@ -122,6 +124,14 @@ public class Producto extends BaseEntity {
 
     public void setWarranty(Boolean warranty) {
         this.warranty = warranty;
+    }
+
+    public Boolean getStock() {
+        return stock;
+    }
+
+    public void setStock(Boolean stock) {
+        this.stock = stock;
     }
 
     public Integer getFlag() {

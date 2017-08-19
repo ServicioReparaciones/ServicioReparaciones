@@ -46,8 +46,7 @@ public class OrdenServicio implements Iorden, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer size = count();
-        Integer code = 1000 + 1 * size;
+        Integer code = 2000 + 1 * count();
         return code;
     }
 

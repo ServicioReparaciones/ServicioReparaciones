@@ -34,8 +34,7 @@ public class ProductoServicio implements Iproducto, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer size = count();
-        Integer code = 1000 + 1 * size;
+        Integer code = 2000 + 1 * count();
         return code;
     }
 
@@ -72,6 +71,7 @@ public class ProductoServicio implements Iproducto, Serializable {
                 set("placa", producto.getPlaca()).
                 set("cliente", producto.getCliente()).
                 set("warranty", producto.getWarranty()).
+                set("stock", producto.getStock()).
                 set("garantia", producto.getGarantia()).
                 set("codesWarranty", producto.getCodesWarranty()).
                 set("username", producto.getUsername()).

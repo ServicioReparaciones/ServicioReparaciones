@@ -16,15 +16,15 @@ public interface Iproducto {
 
     public Integer generatedCodigo();
 
-    public Boolean insert(Producto repuesto);
+    public Boolean insert(Producto producto);
 
-    public Boolean update(Producto repuesto);
+    public Boolean update(Producto producto);
 
-    public Producto findByCodigo(Producto repuesto);
+    public Producto findByCodigo(Producto producto);
 
-    public void delete(Producto repuesto);
+    public void delete(Producto producto);
 
-    public Boolean deleteFlag(Producto repuesto);
+    public Boolean deleteFlag(Producto producto);
 
     public List<Producto> ObtenerListaProductos(Integer flag);
 
