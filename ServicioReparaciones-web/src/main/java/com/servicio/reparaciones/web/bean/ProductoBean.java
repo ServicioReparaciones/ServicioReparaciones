@@ -108,6 +108,22 @@ public class ProductoBean implements ImethodsBean, Serializable {
         this.usuario = this.usarioService.findByCodigo(this.usuario);
         this.nuevo.setUsername(this.usuario);
         this.nuevo.setCliente(this.cliente);
+        if (this.nuevo.getModelo() != null && !this.nuevo.getModelo().equals("")) {
+            this.nuevo.setModelo(this.nuevo.getModelo().trim());
+            this.nuevo.setModelo(this.nuevo.getModelo().toUpperCase());
+        }
+        if (this.nuevo.getSerie() != null && !this.nuevo.getSerie().equals("")) {
+            this.nuevo.setSerie(this.nuevo.getSerie().trim());
+            this.nuevo.setSerie(this.nuevo.getSerie().toUpperCase());
+        }
+        if (this.nuevo.getPlaca() != null && !this.nuevo.getPlaca().equals("")) {
+            this.nuevo.setPlaca(this.nuevo.getPlaca().trim());
+            this.nuevo.setPlaca(this.nuevo.getPlaca().toUpperCase());
+        }
+        if (this.nuevo.getPnc() != null && !this.nuevo.getPnc().equals("")) {
+            this.nuevo.setPnc(this.nuevo.getPnc().trim());
+            this.nuevo.setPnc(this.nuevo.getPnc().toUpperCase());
+        }
         Boolean exito = this.productoService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -124,6 +140,22 @@ public class ProductoBean implements ImethodsBean, Serializable {
             this.nuevo.setUsername(this.usuario);
             this.nuevo.setCliente(this.cliente);
             this.nuevo.setWarranty(warranty);
+            if (this.nuevo.getModelo() != null && !this.nuevo.getModelo().equals("")) {
+                this.nuevo.setModelo(this.nuevo.getModelo().trim());
+                this.nuevo.setModelo(this.nuevo.getModelo().toUpperCase());
+            }
+            if (this.nuevo.getSerie() != null && !this.nuevo.getSerie().equals("")) {
+                this.nuevo.setSerie(this.nuevo.getSerie().trim());
+                this.nuevo.setSerie(this.nuevo.getSerie().toUpperCase());
+            }
+            if (this.nuevo.getPlaca() != null && !this.nuevo.getPlaca().equals("")) {
+                this.nuevo.setPlaca(this.nuevo.getPlaca().trim());
+                this.nuevo.setPlaca(this.nuevo.getPlaca().toUpperCase());
+            }
+            if (this.nuevo.getPnc() != null && !this.nuevo.getPnc().equals("")) {
+                this.nuevo.setPnc(this.nuevo.getPnc().trim());
+                this.nuevo.setPnc(this.nuevo.getPnc().toUpperCase());
+            }
             Boolean exito = this.productoService.insert(this.nuevo);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -140,6 +172,22 @@ public class ProductoBean implements ImethodsBean, Serializable {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
+            if (this.selected.getModelo() != null && !this.selected.getModelo().equals("")) {
+                this.selected.setModelo(this.selected.getModelo().trim());
+                this.selected.setModelo(this.selected.getModelo().toUpperCase());
+            }
+            if (this.selected.getSerie() != null && !this.selected.getSerie().equals("")) {
+                this.selected.setSerie(this.selected.getSerie().trim());
+                this.selected.setSerie(this.selected.getSerie().toUpperCase());
+            }
+            if (this.selected.getPlaca() != null && !this.selected.getPlaca().equals("")) {
+                this.selected.setPlaca(this.selected.getPlaca().trim());
+                this.selected.setPlaca(this.selected.getPlaca().toUpperCase());
+            }
+            if (this.selected.getPnc() != null && !this.selected.getPnc().equals("")) {
+                this.selected.setPnc(this.selected.getPnc().trim());
+                this.selected.setPnc(this.selected.getPnc().toUpperCase());
+            }
             Boolean exito = this.productoService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
