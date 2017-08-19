@@ -5,10 +5,6 @@
  */
 package com.servicio.reparaciones.web.auth;
 
-/**
- *
- * @author luis
- */
 import com.google.appengine.api.urlfetch.HTTPHeader;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
@@ -24,15 +20,21 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-
+/**
+ *
+ * @author luis
+ */
 public class GoogleAnalyticsTracking {
 
+    private static final Logger LOG = Logger.getLogger(GoogleAnalyticsTracking.class.getName());
     private static final URL GA_URL_ENDPOINT = getGoogleAnalyticsEndpoint();
     private static final HTTPHeader CONTENT_TYPE_HEADER
             = new HTTPHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    private final String gaTrackingId ;  // Tracking ID / Web property / Property ID
+    private final String gaTrackingId;  // Tracking ID / Web property / Property ID
     private String gaClientId = "555";  // Anonymous Client ID.
     // Used to override the existing factory with perhaps a mock one for testing.
     private URLFetchService urlFetchService = URLFetchServiceFactory.getURLFetchService();
@@ -47,6 +49,7 @@ public class GoogleAnalyticsTracking {
 
     public GoogleAnalyticsTracking(String gaTrackingId) throws IOException {
         if (gaTrackingId == null) {
+            LOG.log(Level.SEVERE, "gaTrackingId == null ");
             throw new IllegalArgumentException("Can't set gaTrackingId to a null value.");
         }
         this.gaTrackingId = gaTrackingId;
@@ -55,6 +58,7 @@ public class GoogleAnalyticsTracking {
     public GoogleAnalyticsTracking setGoogleAnalyticsClientId(String gaClientId)
             throws IOException {
         if (gaClientId == null) {
+            LOG.log(Level.SEVERE, "gaClientId == null ");
             throw new IllegalArgumentException("Can't set gaClientId to a null value.");
         }
         this.gaClientId = gaClientId;
@@ -64,6 +68,7 @@ public class GoogleAnalyticsTracking {
     public GoogleAnalyticsTracking setUrlFetchService(URLFetchService urlFetchService)
             throws IOException {
         if (urlFetchService == null) {
+            LOG.log(Level.SEVERE, "urlFetchService == null ");
             throw new IllegalArgumentException("Can't set urlFetchService to a null value.");
         }
         this.urlFetchService = urlFetchService;

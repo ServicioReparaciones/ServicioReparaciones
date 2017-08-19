@@ -10,6 +10,7 @@ import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.servicio.OrdenServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
+import com.servicio.reparaciones.servicio.VisitaServicio;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsFindBeans;
 import com.servicio.reparaciones.web.bean.lazy.LazyOrdenDataModel;
@@ -50,6 +51,8 @@ public class OrdenCanceladaBean implements ImethodsFindBeans, Serializable {
 
     @Inject
     private OrdenServicio ordenService;
+    @Inject
+    private VisitaServicio visitaService;
     @Inject
     private UsuarioServicio usuarioService;
 
@@ -212,10 +215,11 @@ public class OrdenCanceladaBean implements ImethodsFindBeans, Serializable {
             this.find.setUsername(this.usuario);
             Boolean exito = this.ordenService.update(this.find);
             if (exito) {
-                FacesUtil.addMessageInfo("Se ha agregado");
+                exito = this.visitaService.deleteFlag(this.find.getVisita());
+                FacesUtil.addMessageInfo("Se ha cancelado");
                 this.init();
             } else {
-                FacesUtil.addMessageError(null, "No se ha agregado.");
+                FacesUtil.addMessageError(null, "No se ha cancelado.");
             }
         }
     }

@@ -114,12 +114,6 @@
                         <p:column headerText="Código ORD" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.codigo}"/>
                         </p:column>
-                        <p:column headerText="Número ORD" style="text-align: center;font-size: 75%">
-                            <h:outputText value="#{ordc.numeroOrden}"/>
-                        </p:column>
-                        <p:column headerText="Número Ticket" style="text-align: center;font-size: 75%">
-                            <h:outputText value="#{ordc.numeroTicket}"/>
-                        </p:column>
                         <p:column headerText="Cliente" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.cliente.nombres}  "/>
                             <h:outputText value="#{ordc.cliente.apellidos}"/>
@@ -144,10 +138,10 @@
                         </p:column>
                         <p:column headerText="Cancelado" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.ciclo.cancelada.username.datosPersonales.nombres}   "/>
-                            <h:outputText value="#{ordc.ciclo.cancelada.username.datosPersonales.apellidos}"/>
-                        </p:column>
-                        <p:column headerText="Creado" style="text-align: center;font-size: 75%">
-                            <h:outputText value="#{ordc.username.datosPersonales.nombres}"/>
+                            <h:outputText value="#{ordc.ciclo.cancelada.username.datosPersonales.apellidos}   "/>
+                            <h:outputText value="#{ordc.ciclo.cancelada.creationDate}   ">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
                         </p:column>
                         <p:column headerText="Estado" style="text-align: center;font-size: 75%">
                             <h:outputText value="#{ordc.ciclo.abierta.alias} " rendered="#{ordc.ciclo.abierta.active}"/>
@@ -167,7 +161,7 @@
                 <p:panel header="Registro de Moviemintos Internos" rendered="#{ordenCanceladaBean.active}">
                     <h:panelGrid columns="2" cellpadding="5">
                         <p:outputLabel value="Razón por la cual cancela la orden seleccionada:"/>
-                        <p:inputTextarea value="#{ordenCanceladaBean.texto}" rows="6" cols="60" style="width: auto"/>
+                        <p:inputTextarea required="true" value="#{ordenCanceladaBean.texto}" rows="6" cols="60" style="width: auto"/>
                         <p:commandButton value="Cancelar" icon="fa fa-close" update=":ford:outWizard"
                                          actionListener="#{ordenCanceladaBean.add(evt)}"/>
                     </h:panelGrid>

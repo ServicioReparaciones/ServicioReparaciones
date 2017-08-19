@@ -123,7 +123,7 @@
                     </p:dataTable>
                     <h:panelGrid columns="2" cellpadding="5">
                         <p:outputLabel value="Comentario:"/>
-                        <p:inputTextarea value="#{movimientoInternoBean.texto}" rows="6" cols="30" style="width: auto"/>
+                        <p:inputTextarea required="true" value="#{movimientoInternoBean.texto}" rows="6" cols="30" style="width: auto"/>
                         <p:commandButton value="Guardar" update=":ford:outWizard"
                                          actionListener="#{movimientoInternoBean.add(evt)}"/>
                     </h:panelGrid>
