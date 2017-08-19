@@ -126,7 +126,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.getCiclo().getCerrada().setCreationDate(this.calendario.getCalendario().getTime());
             this.find.getCiclo().getCerrada().setUsername(this.usuario);
             this.find.getCiclo().setFlag(0);
-            Boolean exito = this.ordenService.update(this.selected);
+            this.find.getCiclo().getCancelada().setUsername(this.usuario);
+            Boolean exito = this.ordenService.update(this.find);
             if (exito) {
                 this.find.getVisita().setFlag(0);
                 this.visitaService.update(this.find.getVisita());
@@ -161,7 +162,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.getCiclo().getPendiente().setActive(Boolean.TRUE);
             this.find.getCiclo().getPendiente().setCreationDate(this.calendario.getCalendario().getTime());
             this.find.getCiclo().getPendiente().setUsername(this.usuario);
-            Boolean exito = this.ordenService.update(this.selected);
+            this.find.getCiclo().getCancelada().setUsername(this.usuario);
+            Boolean exito = this.ordenService.update(this.find);
             if (exito) {
                 this.init();
                 this.beanInit();
