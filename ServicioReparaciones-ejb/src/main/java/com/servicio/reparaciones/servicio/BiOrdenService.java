@@ -20,6 +20,8 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.UpdateResults;
 
 /**
  *
@@ -36,7 +38,7 @@ public class BiOrdenService implements Ibi, Serializable {
 
     @Override
     public Integer generatedCodigo() {
-        Integer code = 1000 + 1 * count();
+        Integer code = 3000 + 1 * count();
         return code;
     }
 
@@ -56,7 +58,7 @@ public class BiOrdenService implements Ibi, Serializable {
 
         BiOrden biOrden = new BiOrden();
 
-        biOrden.setBarcode(orden.getBarcode());
+        biOrden.setBarcode(orden.getCodigo() + "");
         biOrden.setNumeroOrden(orden.getNumeroOrden());
         biOrden.setNumeroTicket(orden.getNumeroTicket());
 
@@ -110,6 +112,18 @@ public class BiOrdenService implements Ibi, Serializable {
         biOrden.setWarranty(orden.getProducto().getWarranty());
         biOrden.setStock(orden.getProducto().getStock());
 
+        if (orden.getProducto().getWarranty()) {
+            biOrden.setAlmacen(orden.getProducto().getGarantia().getAlmacen());
+            biOrden.setTelefonoAlmacen(orden.getProducto().getGarantia().getTelefonoAlmacen());
+            biOrden.setNumeroFactura(orden.getProducto().getGarantia().getNumeroFactura());
+            biOrden.setFechaFactura(orden.getProducto().getGarantia().getFechaFactura());
+        } else {
+            biOrden.setAlmacen("S/N");
+            biOrden.setTelefonoAlmacen("S/N");
+            biOrden.setNumeroFactura("S/N");
+            biOrden.setFechaFactura(new Date());
+        }
+
         if (orden.getTecnico().getCargo() != null && !orden.getTecnico().getCargo().equals("blank")) {
             biOrden.setTecnico_codigo(orden.getTecnico().getCodigo());
             biOrden.setTecnico(orden.getTecnico().getDatosPersonales().getNombres() + " " + orden.getTecnico().getDatosPersonales().getApellidos());
@@ -120,7 +134,6 @@ public class BiOrdenService implements Ibi, Serializable {
 
         biOrden.setKmRecorridos(orden.getKilometrosRuta().getKmRecorridos());
         biOrden.setValorPorKmRecorrido(orden.getKilometrosRuta().getValorPorKmRecorrido());
-        biOrden.setSubTotal(orden.getKilometrosRuta().getSubTotal());
         biOrden.setObservacionRuta(orden.getKilometrosRuta().getObservacionRuta());
 
         biOrden.setDesperfecto(orden.getTrabajoFinalEjecutado().getDesperfecto());
@@ -190,7 +203,82 @@ public class BiOrdenService implements Ibi, Serializable {
 
     @Override
     public Boolean update(BiOrden biOrden) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query<Orden> query = this.ds.createQuery(Orden.class);
+        query.and(
+                query.criteria("barcode").equal(biOrden.getBarcode())
+        );
+        UpdateOperations<Orden> update = this.ds.createUpdateOperations(Orden.class);
+        update.set("numeroOrden", biOrden.getNumeroOrden()).
+                set("numeroTicket", biOrden.getNumeroTicket()).
+                set("cliente", biOrden.getCliente()).
+                set("cedula", biOrden.getCedula()).
+                set("telefono", biOrden.getTelefono()).
+                set("movil", biOrden.getMovil()).
+                set("provincia", biOrden.getProvincia()).
+                set("canton", biOrden.getCanton()).
+                set("parroquia", biOrden.getParroquia()).
+                set("direccion", biOrden.getDireccion()).
+                set("referencia", biOrden.getReferencia()).
+                set("fechaVisitaCliente", biOrden.getFechaVisitaCliente()).
+                set("fechaEntregaProducto", biOrden.getFechaEntregaProducto()).
+                set("fechaLlegadaCliente", biOrden.getFechaLlegadaCliente()).
+                set("fechaSalidaCliente", biOrden.getFechaSalidaCliente()).
+                set("lugarAtencion", biOrden.getLugarAtencion()).
+                set("observacionCliente", biOrden.getObservacionCliente()).
+                set("posibleFalla", biOrden.getPosibleFalla()).
+                set("artefacto", biOrden.getArtefacto()).
+                set("marca", biOrden.getMarca()).
+                set("modelo", biOrden.getModelo()).
+                set("serie", biOrden.getSerie()).
+                set("pnc", biOrden.getPnc()).
+                set("placa", biOrden.getPlaca()).
+                set("warranty", biOrden.getWarranty()).
+                set("stock", biOrden.getStock()).
+                set("almacen", biOrden.getAlmacen()).
+                set("telefonoAlmacen", biOrden.getTelefonoAlmacen()).
+                set("numeroFactura", biOrden.getNumeroFactura()).
+                set("fechaFactura", biOrden.getFechaFactura()).
+                set("tecnico_codigo", biOrden.getTecnico_codigo()).
+                set("tecnico_cargo", biOrden.getTecnico_cargo()).
+                set("tecnico", biOrden.getTecnico()).
+                set("usuario_codigo", biOrden.getUsuario_codigo()).
+                set("usuario", biOrden.getUsuario()).
+                set("kmRecorridos", biOrden.getKmRecorridos()).
+                set("valorPorKmRecorrido", biOrden.getValorPorKmRecorrido()).
+                set("observacionRuta", biOrden.getObservacionRuta()).
+                set("desperfecto", biOrden.getDesperfecto()).
+                set("trabajoRealizado", biOrden.getTrabajoRealizado()).
+                set("observaciones", biOrden.getObservaciones()).
+                set("subTotalRepuestos", biOrden.getSubTotalRepuestos()).
+                set("subTotalServicios", biOrden.getSubTotalServicios()).
+                set("subTotalKilometraje", biOrden.getSubTotalKilometraje()).
+                set("abierta_active", biOrden.getAbierta_active()).
+                set("abierta_alias", biOrden.getAbierta_alias()).
+                set("abierta_comentario", biOrden.getAbierta_comentario()).
+                set("abierta_dd", biOrden.getAbierta_dd()).
+                set("abierta_mm", biOrden.getAbierta_mm()).
+                set("abierta_yyyy", biOrden.getAbierta_yyyy()).
+                set("cerrada_active", biOrden.getCerrada_active()).
+                set("cerrada_alias", biOrden.getCerrada_alias()).
+                set("cerrada_comentario", biOrden.getCerrada_comentario()).
+                set("cerrada_dd", biOrden.getCerrada_dd()).
+                set("cerrada_mm", biOrden.getCerrada_mm()).
+                set("cerrada_yyyy", biOrden.getCerrada_yyyy()).
+                set("pendiente_active", biOrden.getPendiente_active()).
+                set("pendiente_alias", biOrden.getPendiente_alias()).
+                set("pendiente_comentario", biOrden.getPendiente_comentario()).
+                set("pendiente_dd", biOrden.getPendiente_dd()).
+                set("pendiente_mm", biOrden.getPendiente_mm()).
+                set("pendiente_yyyy", biOrden.getPendiente_yyyy()).
+                set("cancelada_active", biOrden.getCancelada_active()).
+                set("cancelada_alias", biOrden.getCancelada_alias()).
+                set("cancelada_comentario", biOrden.getCancelada_comentario()).
+                set("cancelada_dd", biOrden.getCancelada_dd()).
+                set("cancelada_mm", biOrden.getCancelada_mm()).
+                set("cancelada_yyyy", biOrden.getCancelada_yyyy()).
+                set("flag", biOrden.getFlag());
+        UpdateResults results = this.ds.update(query, update);
+        return results.getUpdatedExisting();
     }
 
     @Override

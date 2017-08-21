@@ -61,7 +61,7 @@ public class BiOrden extends BaseEntity {
     private Date fechaFactura;
 
     private Integer tecnico_codigo;
-    private String cargo;
+    private String tecnico_cargo;
     private String tecnico;
 
     private Integer usuario_codigo;
@@ -69,7 +69,6 @@ public class BiOrden extends BaseEntity {
 
     private Double kmRecorridos;
     private Double valorPorKmRecorrido;
-    private Double subTotal;
     private String observacionRuta;
 
     private String desperfecto;
@@ -377,12 +376,12 @@ public class BiOrden extends BaseEntity {
         this.tecnico_codigo = tecnico_codigo;
     }
 
-    public String getCargo() {
-        return cargo;
+    public String getTecnico_cargo() {
+        return tecnico_cargo;
     }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
+    public void setTecnico_cargo(String tecnico_cargo) {
+        this.tecnico_cargo = tecnico_cargo;
     }
 
     public String getTecnico() {
@@ -423,14 +422,6 @@ public class BiOrden extends BaseEntity {
 
     public void setValorPorKmRecorrido(Double valorPorKmRecorrido) {
         this.valorPorKmRecorrido = valorPorKmRecorrido;
-    }
-
-    public Double getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(Double subTotal) {
-        this.subTotal = subTotal;
     }
 
     public String getObservacionRuta() {
@@ -720,7 +711,7 @@ public class BiOrden extends BaseEntity {
 
     @Override
     public String toString() {
-        return "BiOrden{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", cliente=" + cliente + ", cedula=" + cedula + ", provincia=" + provincia + ", canton=" + canton + ", parroquia=" + parroquia + ", direccion=" + direccion + ", referencia=" + referencia + ", telefono=" + telefono + ", movil=" + movil + ", fechaVisitaCliente=" + fechaVisitaCliente + ", fechaEntregaProducto=" + fechaEntregaProducto + ", fechaLlegadaCliente=" + fechaLlegadaCliente + ", fechaSalidaCliente=" + fechaSalidaCliente + ", lugarAtencion=" + lugarAtencion + ", observacionCliente=" + observacionCliente + ", posibleFalla=" + posibleFalla + ", artefacto=" + artefacto + ", marca=" + marca + ", modelo=" + modelo + ", serie=" + serie + ", pnc=" + pnc + ", placa=" + placa + ", warranty=" + warranty + ", stock=" + stock + ", almacen=" + almacen + ", telefonoAlmacen=" + telefonoAlmacen + ", numeroFactura=" + numeroFactura + ", fechaFactura=" + fechaFactura + ", tecnico_codigo=" + tecnico_codigo + ", cargo=" + cargo + ", tecnico=" + tecnico + ", usuario_codigo=" + usuario_codigo + ", usuario=" + usuario + ", kmRecorridos=" + kmRecorridos + ", valorPorKmRecorrido=" + valorPorKmRecorrido + ", subTotal=" + subTotal + ", observacionRuta=" + observacionRuta + ", desperfecto=" + desperfecto + ", trabajoRealizado=" + trabajoRealizado + ", observaciones=" + observaciones + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subTotalKilometraje=" + subTotalKilometraje + ", abierta_active=" + abierta_active + ", abierta_alias=" + abierta_alias + ", abierta_comentario=" + abierta_comentario + ", abierta_dd=" + abierta_dd + ", abierta_mm=" + abierta_mm + ", abierta_yyyy=" + abierta_yyyy + ", cerrada_active=" + cerrada_active + ", cerrada_alias=" + cerrada_alias + ", cerrada_comentario=" + cerrada_comentario + ", cerrada_dd=" + cerrada_dd + ", cerrada_mm=" + cerrada_mm + ", cerrada_yyyy=" + cerrada_yyyy + ", pendiente_active=" + pendiente_active + ", pendiente_alias=" + pendiente_alias + ", pendiente_comentario=" + pendiente_comentario + ", pendiente_dd=" + pendiente_dd + ", pendiente_mm=" + pendiente_mm + ", pendiente_yyyy=" + pendiente_yyyy + ", cancelada_active=" + cancelada_active + ", cancelada_alias=" + cancelada_alias + ", cancelada_comentario=" + cancelada_comentario + ", cancelada_dd=" + cancelada_dd + ", cancelada_mm=" + cancelada_mm + ", cancelada_yyyy=" + cancelada_yyyy + ", flag=" + flag + '}';
+        return "BiOrden{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", cliente=" + cliente + ", cedula=" + cedula + ", provincia=" + provincia + ", canton=" + canton + ", parroquia=" + parroquia + ", direccion=" + direccion + ", referencia=" + referencia + ", telefono=" + telefono + ", movil=" + movil + ", fechaVisitaCliente=" + fechaVisitaCliente + ", fechaEntregaProducto=" + fechaEntregaProducto + ", fechaLlegadaCliente=" + fechaLlegadaCliente + ", fechaSalidaCliente=" + fechaSalidaCliente + ", lugarAtencion=" + lugarAtencion + ", posibleFalla=" + posibleFalla + ", observacionCliente=" + observacionCliente + ", artefacto=" + artefacto + ", marca=" + marca + ", modelo=" + modelo + ", serie=" + serie + ", pnc=" + pnc + ", placa=" + placa + ", warranty=" + warranty + ", stock=" + stock + ", almacen=" + almacen + ", telefonoAlmacen=" + telefonoAlmacen + ", numeroFactura=" + numeroFactura + ", fechaFactura=" + fechaFactura + ", tecnico_codigo=" + tecnico_codigo + ", tecnico_cargo=" + tecnico_cargo + ", tecnico=" + tecnico + ", usuario_codigo=" + usuario_codigo + ", usuario=" + usuario + ", kmRecorridos=" + kmRecorridos + ", valorPorKmRecorrido=" + valorPorKmRecorrido + ", observacionRuta=" + observacionRuta + ", desperfecto=" + desperfecto + ", trabajoRealizado=" + trabajoRealizado + ", observaciones=" + observaciones + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subTotalKilometraje=" + subTotalKilometraje + ", abierta_active=" + abierta_active + ", abierta_alias=" + abierta_alias + ", abierta_comentario=" + abierta_comentario + ", abierta_dd=" + abierta_dd + ", abierta_mm=" + abierta_mm + ", abierta_yyyy=" + abierta_yyyy + ", cerrada_active=" + cerrada_active + ", cerrada_alias=" + cerrada_alias + ", cerrada_comentario=" + cerrada_comentario + ", cerrada_dd=" + cerrada_dd + ", cerrada_mm=" + cerrada_mm + ", cerrada_yyyy=" + cerrada_yyyy + ", pendiente_active=" + pendiente_active + ", pendiente_alias=" + pendiente_alias + ", pendiente_comentario=" + pendiente_comentario + ", pendiente_dd=" + pendiente_dd + ", pendiente_mm=" + pendiente_mm + ", pendiente_yyyy=" + pendiente_yyyy + ", cancelada_active=" + cancelada_active + ", cancelada_alias=" + cancelada_alias + ", cancelada_comentario=" + cancelada_comentario + ", cancelada_dd=" + cancelada_dd + ", cancelada_mm=" + cancelada_mm + ", cancelada_yyyy=" + cancelada_yyyy + ", flag=" + flag + '}';
     }
 
 }

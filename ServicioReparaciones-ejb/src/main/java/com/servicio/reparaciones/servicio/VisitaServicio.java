@@ -6,7 +6,6 @@
 package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
-import com.servicio.reparaciones.modelo.nosql.Producto;
 import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.I.Ivisita;
 import com.servicio.reparaciones.servicio.util.Calendario;
@@ -63,25 +62,25 @@ public class VisitaServicio implements Ivisita, Serializable {
     }
 
     @Override
-    public Boolean update(Visita Visita) {
+    public Boolean update(Visita visita) {
         Query<Visita> query = this.ds.createQuery(Visita.class);
         query.and(
-                query.criteria("codigo").equal(Visita.getCodigo())
+                query.criteria("codigo").equal(visita.getCodigo())
         );
         UpdateOperations<Visita> update = this.ds.createUpdateOperations(Visita.class);
-        update.set("unique", Visita.getUnique()).
-                set("cliente", Visita.getCliente()).
-                set("producto", Visita.getProducto()).
-                set("fechaVisitaCliente", Visita.getFechaVisitaCliente()).
-                set("fechaEntregaProducto", Visita.getFechaEntregaProducto()).
-                set("fechaLlegadaCliente", Visita.getFechaLlegadaCliente()).
-                set("fechaSalidaCliente", Visita.getFechaSalidaCliente()).
-                set("lugarAtencion", Visita.getLugarAtencion()).
-                set("observacionCliente", Visita.getObservacionCliente()).
-                set("posibleFalla", Visita.getPosibleFalla()).
-                set("username", Visita.getUsername()).
+        update.set("unique", visita.getUnique()).
+                set("cliente", visita.getCliente()).
+                set("producto", visita.getProducto()).
+                set("fechaVisitaCliente", visita.getFechaVisitaCliente()).
+                set("fechaEntregaProducto", visita.getFechaEntregaProducto()).
+                set("fechaLlegadaCliente", visita.getFechaLlegadaCliente()).
+                set("fechaSalidaCliente", visita.getFechaSalidaCliente()).
+                set("lugarAtencion", visita.getLugarAtencion()).
+                set("observacionCliente", visita.getObservacionCliente()).
+                set("posibleFalla", visita.getPosibleFalla()).
+                set("username", visita.getUsername()).
                 set("lastChange", this.calendario.getCalendario().getTime()).
-                set("flag", Visita.getFlag());
+                set("flag", visita.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
