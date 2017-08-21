@@ -17,7 +17,7 @@ import org.mongodb.morphia.annotations.Indexes;
  *
  * @author luis
  */
-@Entity(value = "BiServireparaciones", noClassnameStored = true)
+@Entity(value = "BiOrden", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
 public class BiOrden extends BaseEntity {
@@ -27,9 +27,6 @@ public class BiOrden extends BaseEntity {
     private String barcode;
     private String numeroOrden;
     private String numeroTicket;
-    private Double subTotalRepuestos;
-    private Double subTotalServicios;
-    private Double subTotalKilometraje;
 
     private String cliente;
     private String cedula;
@@ -46,8 +43,8 @@ public class BiOrden extends BaseEntity {
     private Date fechaLlegadaCliente;
     private Date fechaSalidaCliente;
     private String lugarAtencion;
-    private String observacionCliente;
     private String posibleFalla;
+    private String observacionCliente;
 
     private String artefacto;
     private String marca;
@@ -79,25 +76,37 @@ public class BiOrden extends BaseEntity {
     private String trabajoRealizado;
     private String observaciones;
 
+    private Double subTotalRepuestos;
+    private Double subTotalServicios;
+    private Double subTotalKilometraje;
+
     private Boolean abierta_active;
     private String abierta_alias;
     private String abierta_comentario;
-    private Date abierta_creationDate;
+    private String abierta_dd;
+    private String abierta_mm;
+    private String abierta_yyyy;
 
     private Boolean cerrada_active;
     private String cerrada_alias;
     private String cerrada_comentario;
-    private Date cerrada_creationDate;
+    private String cerrada_dd;
+    private String cerrada_mm;
+    private String cerrada_yyyy;
 
     private Boolean pendiente_active;
     private String pendiente_alias;
     private String pendiente_comentario;
-    private Date pendiente_creationDate;
+    private String pendiente_dd;
+    private String pendiente_mm;
+    private String pendiente_yyyy;
 
     private Boolean cancelada_active;
     private String cancelada_alias;
     private String cancelada_comentario;
-    private Date cancelada_creationDate;
+    private String cancelada_dd;
+    private String cancelada_mm;
+    private String cancelada_yyyy;
 
     private Integer flag;
 
@@ -134,30 +143,6 @@ public class BiOrden extends BaseEntity {
 
     public void setNumeroTicket(String numeroTicket) {
         this.numeroTicket = numeroTicket;
-    }
-
-    public Double getSubTotalRepuestos() {
-        return subTotalRepuestos;
-    }
-
-    public void setSubTotalRepuestos(Double subTotalRepuestos) {
-        this.subTotalRepuestos = subTotalRepuestos;
-    }
-
-    public Double getSubTotalServicios() {
-        return subTotalServicios;
-    }
-
-    public void setSubTotalServicios(Double subTotalServicios) {
-        this.subTotalServicios = subTotalServicios;
-    }
-
-    public Double getSubTotalKilometraje() {
-        return subTotalKilometraje;
-    }
-
-    public void setSubTotalKilometraje(Double subTotalKilometraje) {
-        this.subTotalKilometraje = subTotalKilometraje;
     }
 
     public String getCliente() {
@@ -480,6 +465,30 @@ public class BiOrden extends BaseEntity {
         this.observaciones = observaciones;
     }
 
+    public Double getSubTotalRepuestos() {
+        return subTotalRepuestos;
+    }
+
+    public void setSubTotalRepuestos(Double subTotalRepuestos) {
+        this.subTotalRepuestos = subTotalRepuestos;
+    }
+
+    public Double getSubTotalServicios() {
+        return subTotalServicios;
+    }
+
+    public void setSubTotalServicios(Double subTotalServicios) {
+        this.subTotalServicios = subTotalServicios;
+    }
+
+    public Double getSubTotalKilometraje() {
+        return subTotalKilometraje;
+    }
+
+    public void setSubTotalKilometraje(Double subTotalKilometraje) {
+        this.subTotalKilometraje = subTotalKilometraje;
+    }
+
     public Boolean getAbierta_active() {
         return abierta_active;
     }
@@ -504,12 +513,28 @@ public class BiOrden extends BaseEntity {
         this.abierta_comentario = abierta_comentario;
     }
 
-    public Date getAbierta_creationDate() {
-        return abierta_creationDate;
+    public String getAbierta_dd() {
+        return abierta_dd;
     }
 
-    public void setAbierta_creationDate(Date abierta_creationDate) {
-        this.abierta_creationDate = abierta_creationDate;
+    public void setAbierta_dd(String abierta_dd) {
+        this.abierta_dd = abierta_dd;
+    }
+
+    public String getAbierta_mm() {
+        return abierta_mm;
+    }
+
+    public void setAbierta_mm(String abierta_mm) {
+        this.abierta_mm = abierta_mm;
+    }
+
+    public String getAbierta_yyyy() {
+        return abierta_yyyy;
+    }
+
+    public void setAbierta_yyyy(String abierta_yyyy) {
+        this.abierta_yyyy = abierta_yyyy;
     }
 
     public Boolean getCerrada_active() {
@@ -536,12 +561,28 @@ public class BiOrden extends BaseEntity {
         this.cerrada_comentario = cerrada_comentario;
     }
 
-    public Date getCerrada_creationDate() {
-        return cerrada_creationDate;
+    public String getCerrada_dd() {
+        return cerrada_dd;
     }
 
-    public void setCerrada_creationDate(Date cerrada_creationDate) {
-        this.cerrada_creationDate = cerrada_creationDate;
+    public void setCerrada_dd(String cerrada_dd) {
+        this.cerrada_dd = cerrada_dd;
+    }
+
+    public String getCerrada_mm() {
+        return cerrada_mm;
+    }
+
+    public void setCerrada_mm(String cerrada_mm) {
+        this.cerrada_mm = cerrada_mm;
+    }
+
+    public String getCerrada_yyyy() {
+        return cerrada_yyyy;
+    }
+
+    public void setCerrada_yyyy(String cerrada_yyyy) {
+        this.cerrada_yyyy = cerrada_yyyy;
     }
 
     public Boolean getPendiente_active() {
@@ -568,12 +609,28 @@ public class BiOrden extends BaseEntity {
         this.pendiente_comentario = pendiente_comentario;
     }
 
-    public Date getPendiente_creationDate() {
-        return pendiente_creationDate;
+    public String getPendiente_dd() {
+        return pendiente_dd;
     }
 
-    public void setPendiente_creationDate(Date pendiente_creationDate) {
-        this.pendiente_creationDate = pendiente_creationDate;
+    public void setPendiente_dd(String pendiente_dd) {
+        this.pendiente_dd = pendiente_dd;
+    }
+
+    public String getPendiente_mm() {
+        return pendiente_mm;
+    }
+
+    public void setPendiente_mm(String pendiente_mm) {
+        this.pendiente_mm = pendiente_mm;
+    }
+
+    public String getPendiente_yyyy() {
+        return pendiente_yyyy;
+    }
+
+    public void setPendiente_yyyy(String pendiente_yyyy) {
+        this.pendiente_yyyy = pendiente_yyyy;
     }
 
     public Boolean getCancelada_active() {
@@ -600,12 +657,28 @@ public class BiOrden extends BaseEntity {
         this.cancelada_comentario = cancelada_comentario;
     }
 
-    public Date getCancelada_creationDate() {
-        return cancelada_creationDate;
+    public String getCancelada_dd() {
+        return cancelada_dd;
     }
 
-    public void setCancelada_creationDate(Date cancelada_creationDate) {
-        this.cancelada_creationDate = cancelada_creationDate;
+    public void setCancelada_dd(String cancelada_dd) {
+        this.cancelada_dd = cancelada_dd;
+    }
+
+    public String getCancelada_mm() {
+        return cancelada_mm;
+    }
+
+    public void setCancelada_mm(String cancelada_mm) {
+        this.cancelada_mm = cancelada_mm;
+    }
+
+    public String getCancelada_yyyy() {
+        return cancelada_yyyy;
+    }
+
+    public void setCancelada_yyyy(String cancelada_yyyy) {
+        this.cancelada_yyyy = cancelada_yyyy;
     }
 
     public Integer getFlag() {
@@ -618,8 +691,9 @@ public class BiOrden extends BaseEntity {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.codigo);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.codigo);
+        hash = 79 * hash + Objects.hashCode(this.barcode);
         return hash;
     }
 
@@ -635,6 +709,9 @@ public class BiOrden extends BaseEntity {
             return false;
         }
         final BiOrden other = (BiOrden) obj;
+        if (!Objects.equals(this.barcode, other.barcode)) {
+            return false;
+        }
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -643,7 +720,7 @@ public class BiOrden extends BaseEntity {
 
     @Override
     public String toString() {
-        return "BiServireparaciones{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subTotalKilometraje=" + subTotalKilometraje + ", cliente=" + cliente + ", cedula=" + cedula + ", provincia=" + provincia + ", canton=" + canton + ", parroquia=" + parroquia + ", direccion=" + direccion + ", referencia=" + referencia + ", telefono=" + telefono + ", movil=" + movil + ", fechaVisitaCliente=" + fechaVisitaCliente + ", fechaEntregaProducto=" + fechaEntregaProducto + ", fechaLlegadaCliente=" + fechaLlegadaCliente + ", fechaSalidaCliente=" + fechaSalidaCliente + ", lugarAtencion=" + lugarAtencion + ", observacionCliente=" + observacionCliente + ", posibleFalla=" + posibleFalla + ", artefacto=" + artefacto + ", marca=" + marca + ", modelo=" + modelo + ", serie=" + serie + ", pnc=" + pnc + ", placa=" + placa + ", warranty=" + warranty + ", stock=" + stock + ", almacen=" + almacen + ", telefonoAlmacen=" + telefonoAlmacen + ", numeroFactura=" + numeroFactura + ", fechaFactura=" + fechaFactura + ", tecnico_codigo=" + tecnico_codigo + ", cargo=" + cargo + ", tecnico=" + tecnico + ", usuario_codigo=" + usuario_codigo + ", usuario=" + usuario + ", kmRecorridos=" + kmRecorridos + ", valorPorKmRecorrido=" + valorPorKmRecorrido + ", subTotal=" + subTotal + ", observacionRuta=" + observacionRuta + ", abierta_active=" + abierta_active + ", abierta_alias=" + abierta_alias + ", abierta_comentario=" + abierta_comentario + ", abierta_creationDate=" + abierta_creationDate + ", cerrada_active=" + cerrada_active + ", cerrada_alias=" + cerrada_alias + ", cerrada_comentario=" + cerrada_comentario + ", cerrada_creationDate=" + cerrada_creationDate + ", pendiente_active=" + pendiente_active + ", pendiente_alias=" + pendiente_alias + ", pendiente_comentario=" + pendiente_comentario + ", pendiente_creationDate=" + pendiente_creationDate + ", cancelada_active=" + cancelada_active + ", cancelada_alias=" + cancelada_alias + ", cancelada_comentario=" + cancelada_comentario + ", cancelada_creationDate=" + cancelada_creationDate + '}';
+        return "BiOrden{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", cliente=" + cliente + ", cedula=" + cedula + ", provincia=" + provincia + ", canton=" + canton + ", parroquia=" + parroquia + ", direccion=" + direccion + ", referencia=" + referencia + ", telefono=" + telefono + ", movil=" + movil + ", fechaVisitaCliente=" + fechaVisitaCliente + ", fechaEntregaProducto=" + fechaEntregaProducto + ", fechaLlegadaCliente=" + fechaLlegadaCliente + ", fechaSalidaCliente=" + fechaSalidaCliente + ", lugarAtencion=" + lugarAtencion + ", observacionCliente=" + observacionCliente + ", posibleFalla=" + posibleFalla + ", artefacto=" + artefacto + ", marca=" + marca + ", modelo=" + modelo + ", serie=" + serie + ", pnc=" + pnc + ", placa=" + placa + ", warranty=" + warranty + ", stock=" + stock + ", almacen=" + almacen + ", telefonoAlmacen=" + telefonoAlmacen + ", numeroFactura=" + numeroFactura + ", fechaFactura=" + fechaFactura + ", tecnico_codigo=" + tecnico_codigo + ", cargo=" + cargo + ", tecnico=" + tecnico + ", usuario_codigo=" + usuario_codigo + ", usuario=" + usuario + ", kmRecorridos=" + kmRecorridos + ", valorPorKmRecorrido=" + valorPorKmRecorrido + ", subTotal=" + subTotal + ", observacionRuta=" + observacionRuta + ", desperfecto=" + desperfecto + ", trabajoRealizado=" + trabajoRealizado + ", observaciones=" + observaciones + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subTotalKilometraje=" + subTotalKilometraje + ", abierta_active=" + abierta_active + ", abierta_alias=" + abierta_alias + ", abierta_comentario=" + abierta_comentario + ", abierta_dd=" + abierta_dd + ", abierta_mm=" + abierta_mm + ", abierta_yyyy=" + abierta_yyyy + ", cerrada_active=" + cerrada_active + ", cerrada_alias=" + cerrada_alias + ", cerrada_comentario=" + cerrada_comentario + ", cerrada_dd=" + cerrada_dd + ", cerrada_mm=" + cerrada_mm + ", cerrada_yyyy=" + cerrada_yyyy + ", pendiente_active=" + pendiente_active + ", pendiente_alias=" + pendiente_alias + ", pendiente_comentario=" + pendiente_comentario + ", pendiente_dd=" + pendiente_dd + ", pendiente_mm=" + pendiente_mm + ", pendiente_yyyy=" + pendiente_yyyy + ", cancelada_active=" + cancelada_active + ", cancelada_alias=" + cancelada_alias + ", cancelada_comentario=" + cancelada_comentario + ", cancelada_dd=" + cancelada_dd + ", cancelada_mm=" + cancelada_mm + ", cancelada_yyyy=" + cancelada_yyyy + ", flag=" + flag + '}';
     }
 
 }
