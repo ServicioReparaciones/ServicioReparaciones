@@ -79,6 +79,7 @@ public class BiOrden extends BaseEntity {
     private Double subTotalServicios;
     private Double subTotalKilometraje;
 
+    private String abierta_usuario;
     private Boolean abierta_active;
     private String abierta_alias;
     private String abierta_comentario;
@@ -86,6 +87,7 @@ public class BiOrden extends BaseEntity {
     private String abierta_mm;
     private String abierta_yyyy;
 
+    private String cerrada_usuario;
     private Boolean cerrada_active;
     private String cerrada_alias;
     private String cerrada_comentario;
@@ -93,6 +95,7 @@ public class BiOrden extends BaseEntity {
     private String cerrada_mm;
     private String cerrada_yyyy;
 
+    private String pendiente_usuario;
     private Boolean pendiente_active;
     private String pendiente_alias;
     private String pendiente_comentario;
@@ -100,6 +103,7 @@ public class BiOrden extends BaseEntity {
     private String pendiente_mm;
     private String pendiente_yyyy;
 
+    private String cancelada_usuario;
     private Boolean cancelada_active;
     private String cancelada_alias;
     private String cancelada_comentario;
@@ -256,20 +260,20 @@ public class BiOrden extends BaseEntity {
         this.lugarAtencion = lugarAtencion;
     }
 
-    public String getObservacionCliente() {
-        return observacionCliente;
-    }
-
-    public void setObservacionCliente(String observacionCliente) {
-        this.observacionCliente = observacionCliente;
-    }
-
     public String getPosibleFalla() {
         return posibleFalla;
     }
 
     public void setPosibleFalla(String posibleFalla) {
         this.posibleFalla = posibleFalla;
+    }
+
+    public String getObservacionCliente() {
+        return observacionCliente;
+    }
+
+    public void setObservacionCliente(String observacionCliente) {
+        this.observacionCliente = observacionCliente;
     }
 
     public String getArtefacto() {
@@ -480,6 +484,14 @@ public class BiOrden extends BaseEntity {
         this.subTotalKilometraje = subTotalKilometraje;
     }
 
+    public String getAbierta_usuario() {
+        return abierta_usuario;
+    }
+
+    public void setAbierta_usuario(String abierta_usuario) {
+        this.abierta_usuario = abierta_usuario;
+    }
+
     public Boolean getAbierta_active() {
         return abierta_active;
     }
@@ -526,6 +538,14 @@ public class BiOrden extends BaseEntity {
 
     public void setAbierta_yyyy(String abierta_yyyy) {
         this.abierta_yyyy = abierta_yyyy;
+    }
+
+    public String getCerrada_usuario() {
+        return cerrada_usuario;
+    }
+
+    public void setCerrada_usuario(String cerrada_usuario) {
+        this.cerrada_usuario = cerrada_usuario;
     }
 
     public Boolean getCerrada_active() {
@@ -576,6 +596,14 @@ public class BiOrden extends BaseEntity {
         this.cerrada_yyyy = cerrada_yyyy;
     }
 
+    public String getPendiente_usuario() {
+        return pendiente_usuario;
+    }
+
+    public void setPendiente_usuario(String pendiente_usuario) {
+        this.pendiente_usuario = pendiente_usuario;
+    }
+
     public Boolean getPendiente_active() {
         return pendiente_active;
     }
@@ -622,6 +650,14 @@ public class BiOrden extends BaseEntity {
 
     public void setPendiente_yyyy(String pendiente_yyyy) {
         this.pendiente_yyyy = pendiente_yyyy;
+    }
+
+    public String getCancelada_usuario() {
+        return cancelada_usuario;
+    }
+
+    public void setCancelada_usuario(String cancelada_usuario) {
+        this.cancelada_usuario = cancelada_usuario;
     }
 
     public Boolean getCancelada_active() {
@@ -683,8 +719,8 @@ public class BiOrden extends BaseEntity {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.codigo);
-        hash = 79 * hash + Objects.hashCode(this.barcode);
+        hash = 53 * hash + Objects.hashCode(this.codigo);
+        hash = 53 * hash + Objects.hashCode(this.barcode);
         return hash;
     }
 
@@ -711,7 +747,7 @@ public class BiOrden extends BaseEntity {
 
     @Override
     public String toString() {
-        return "BiOrden{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", cliente=" + cliente + ", cedula=" + cedula + ", provincia=" + provincia + ", canton=" + canton + ", parroquia=" + parroquia + ", direccion=" + direccion + ", referencia=" + referencia + ", telefono=" + telefono + ", movil=" + movil + ", fechaVisitaCliente=" + fechaVisitaCliente + ", fechaEntregaProducto=" + fechaEntregaProducto + ", fechaLlegadaCliente=" + fechaLlegadaCliente + ", fechaSalidaCliente=" + fechaSalidaCliente + ", lugarAtencion=" + lugarAtencion + ", posibleFalla=" + posibleFalla + ", observacionCliente=" + observacionCliente + ", artefacto=" + artefacto + ", marca=" + marca + ", modelo=" + modelo + ", serie=" + serie + ", pnc=" + pnc + ", placa=" + placa + ", warranty=" + warranty + ", stock=" + stock + ", almacen=" + almacen + ", telefonoAlmacen=" + telefonoAlmacen + ", numeroFactura=" + numeroFactura + ", fechaFactura=" + fechaFactura + ", tecnico_codigo=" + tecnico_codigo + ", tecnico_cargo=" + tecnico_cargo + ", tecnico=" + tecnico + ", usuario_codigo=" + usuario_codigo + ", usuario=" + usuario + ", kmRecorridos=" + kmRecorridos + ", valorPorKmRecorrido=" + valorPorKmRecorrido + ", observacionRuta=" + observacionRuta + ", desperfecto=" + desperfecto + ", trabajoRealizado=" + trabajoRealizado + ", observaciones=" + observaciones + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subTotalKilometraje=" + subTotalKilometraje + ", abierta_active=" + abierta_active + ", abierta_alias=" + abierta_alias + ", abierta_comentario=" + abierta_comentario + ", abierta_dd=" + abierta_dd + ", abierta_mm=" + abierta_mm + ", abierta_yyyy=" + abierta_yyyy + ", cerrada_active=" + cerrada_active + ", cerrada_alias=" + cerrada_alias + ", cerrada_comentario=" + cerrada_comentario + ", cerrada_dd=" + cerrada_dd + ", cerrada_mm=" + cerrada_mm + ", cerrada_yyyy=" + cerrada_yyyy + ", pendiente_active=" + pendiente_active + ", pendiente_alias=" + pendiente_alias + ", pendiente_comentario=" + pendiente_comentario + ", pendiente_dd=" + pendiente_dd + ", pendiente_mm=" + pendiente_mm + ", pendiente_yyyy=" + pendiente_yyyy + ", cancelada_active=" + cancelada_active + ", cancelada_alias=" + cancelada_alias + ", cancelada_comentario=" + cancelada_comentario + ", cancelada_dd=" + cancelada_dd + ", cancelada_mm=" + cancelada_mm + ", cancelada_yyyy=" + cancelada_yyyy + ", flag=" + flag + '}';
+        return "BiOrden{" + "codigo=" + codigo + ", barcode=" + barcode + ", numeroOrden=" + numeroOrden + ", numeroTicket=" + numeroTicket + ", cliente=" + cliente + ", cedula=" + cedula + ", provincia=" + provincia + ", canton=" + canton + ", parroquia=" + parroquia + ", direccion=" + direccion + ", referencia=" + referencia + ", telefono=" + telefono + ", movil=" + movil + ", fechaVisitaCliente=" + fechaVisitaCliente + ", fechaEntregaProducto=" + fechaEntregaProducto + ", fechaLlegadaCliente=" + fechaLlegadaCliente + ", fechaSalidaCliente=" + fechaSalidaCliente + ", lugarAtencion=" + lugarAtencion + ", posibleFalla=" + posibleFalla + ", observacionCliente=" + observacionCliente + ", artefacto=" + artefacto + ", marca=" + marca + ", modelo=" + modelo + ", serie=" + serie + ", pnc=" + pnc + ", placa=" + placa + ", warranty=" + warranty + ", stock=" + stock + ", almacen=" + almacen + ", telefonoAlmacen=" + telefonoAlmacen + ", numeroFactura=" + numeroFactura + ", fechaFactura=" + fechaFactura + ", tecnico_codigo=" + tecnico_codigo + ", tecnico_cargo=" + tecnico_cargo + ", tecnico=" + tecnico + ", usuario_codigo=" + usuario_codigo + ", usuario=" + usuario + ", kmRecorridos=" + kmRecorridos + ", valorPorKmRecorrido=" + valorPorKmRecorrido + ", observacionRuta=" + observacionRuta + ", desperfecto=" + desperfecto + ", trabajoRealizado=" + trabajoRealizado + ", observaciones=" + observaciones + ", subTotalRepuestos=" + subTotalRepuestos + ", subTotalServicios=" + subTotalServicios + ", subTotalKilometraje=" + subTotalKilometraje + ", abierta_usuario=" + abierta_usuario + ", abierta_active=" + abierta_active + ", abierta_alias=" + abierta_alias + ", abierta_comentario=" + abierta_comentario + ", abierta_dd=" + abierta_dd + ", abierta_mm=" + abierta_mm + ", abierta_yyyy=" + abierta_yyyy + ", cerrada_usuario=" + cerrada_usuario + ", cerrada_active=" + cerrada_active + ", cerrada_alias=" + cerrada_alias + ", cerrada_comentario=" + cerrada_comentario + ", cerrada_dd=" + cerrada_dd + ", cerrada_mm=" + cerrada_mm + ", cerrada_yyyy=" + cerrada_yyyy + ", pendiente_usuario=" + pendiente_usuario + ", pendiente_active=" + pendiente_active + ", pendiente_alias=" + pendiente_alias + ", pendiente_comentario=" + pendiente_comentario + ", pendiente_dd=" + pendiente_dd + ", pendiente_mm=" + pendiente_mm + ", pendiente_yyyy=" + pendiente_yyyy + ", cancelada_usuario=" + cancelada_usuario + ", cancelada_active=" + cancelada_active + ", cancelada_alias=" + cancelada_alias + ", cancelada_comentario=" + cancelada_comentario + ", cancelada_dd=" + cancelada_dd + ", cancelada_mm=" + cancelada_mm + ", cancelada_yyyy=" + cancelada_yyyy + ", flag=" + flag + '}';
     }
 
 }

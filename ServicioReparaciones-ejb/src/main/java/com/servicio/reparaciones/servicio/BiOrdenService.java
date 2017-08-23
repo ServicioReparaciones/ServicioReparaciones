@@ -8,7 +8,6 @@ package com.servicio.reparaciones.servicio;
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.BiOrden;
 import com.servicio.reparaciones.modelo.nosql.Orden;
-import com.servicio.reparaciones.modelo.nosql.Producto;
 import com.servicio.reparaciones.servicio.I.Ibi;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -59,8 +58,17 @@ public class BiOrdenService implements Ibi, Serializable {
         BiOrden biOrden = new BiOrden();
 
         biOrden.setBarcode(orden.getCodigo() + "");
-        biOrden.setNumeroOrden(orden.getNumeroOrden());
-        biOrden.setNumeroTicket(orden.getNumeroTicket());
+        if (orden.getNumeroOrden() != null) {
+            biOrden.setNumeroOrden(orden.getNumeroOrden());
+        } else {
+            biOrden.setNumeroOrden("");
+        }
+
+        if (orden.getNumeroTicket() != null) {
+            biOrden.setNumeroTicket(orden.getNumeroTicket());
+        } else {
+            biOrden.setNumeroTicket("");
+        }
 
         biOrden.setCliente(orden.getCliente().getNombres() + " " + orden.getCliente().getApellidos());
         if (orden.getCliente().getCedula() != null && !orden.getCliente().getCedula().equals("")) {
@@ -96,7 +104,7 @@ public class BiOrdenService implements Ibi, Serializable {
         biOrden.setFechaEntregaProducto(orden.getVisita().getFechaEntregaProducto());
         biOrden.setFechaLlegadaCliente(orden.getVisita().getFechaLlegadaCliente());
         biOrden.setFechaSalidaCliente(orden.getVisita().getFechaSalidaCliente());
-        biOrden.setLugarAtencion(orden.getVisita().getLugarAtencion());
+        biOrden.setLugarAtencion(orden.getVisita().getLugarAtencion().toUpperCase());
         biOrden.setPosibleFalla(orden.getVisita().getPosibleFalla());
         biOrden.setObservacionCliente(orden.getVisita().getObservacionCliente());
 
@@ -171,6 +179,7 @@ public class BiOrdenService implements Ibi, Serializable {
         biOrden.setUsuario_codigo(orden.getUsername().getCodigo());
         biOrden.setUsuario(orden.getUsername().getDatosPersonales().getNombres() + " " + orden.getUsername().getDatosPersonales().getApellidos());
 
+        biOrden.setAbierta_usuario(orden.getCiclo().getAbierta().getUsername().getDatosPersonales().getNombres() + " " + orden.getCiclo().getAbierta().getUsername().getDatosPersonales().getApellidos());
         biOrden.setAbierta_active(orden.getCiclo().getAbierta().getActive());
         biOrden.setAbierta_alias(orden.getCiclo().getAbierta().getAlias());
         biOrden.setAbierta_comentario(orden.getCiclo().getAbierta().getComentario());
@@ -180,6 +189,7 @@ public class BiOrdenService implements Ibi, Serializable {
             biOrden.setAbierta_yyyy(convertDate(orden.getCiclo().getAbierta().getCreationDate()).get(2));
         }
 
+        biOrden.setCerrada_usuario(orden.getCiclo().getCerrada().getUsername().getDatosPersonales().getNombres() + " " + orden.getCiclo().getCerrada().getUsername().getDatosPersonales().getApellidos());
         biOrden.setCerrada_active(orden.getCiclo().getCerrada().getActive());
         biOrden.setCerrada_alias(orden.getCiclo().getCerrada().getAlias());
         biOrden.setCerrada_comentario(orden.getCiclo().getCerrada().getComentario());
@@ -189,6 +199,7 @@ public class BiOrdenService implements Ibi, Serializable {
             biOrden.setCerrada_yyyy(convertDate(orden.getCiclo().getCerrada().getCreationDate()).get(2));
         }
 
+        biOrden.setPendiente_usuario(orden.getCiclo().getPendiente().getUsername().getDatosPersonales().getNombres() + " " + orden.getCiclo().getPendiente().getUsername().getDatosPersonales().getApellidos());
         biOrden.setPendiente_active(orden.getCiclo().getPendiente().getActive());
         biOrden.setPendiente_alias(orden.getCiclo().getPendiente().getAlias());
         biOrden.setPendiente_comentario(orden.getCiclo().getPendiente().getComentario());
@@ -198,14 +209,23 @@ public class BiOrdenService implements Ibi, Serializable {
             biOrden.setPendiente_yyyy(convertDate(orden.getCiclo().getPendiente().getCreationDate()).get(2));
         }
 
-        biOrden.setCancelada_active(orden.getCiclo().getCancelada().getActive());
-        biOrden.setCancelada_alias(orden.getCiclo().getCancelada().getAlias());
-        biOrden.setCancelada_comentario(orden.getCiclo().getCancelada().getComentario());
-        if (orden.getCiclo().getCancelada().getCreationDate() != null) {
-            biOrden.setCancelada_dd(convertDate(orden.getCiclo().getCancelada().getCreationDate()).get(0));
-            biOrden.setCancelada_mm(convertDate(orden.getCiclo().getCancelada().getCreationDate()).get(1));
-            biOrden.setCancelada_yyyy(convertDate(orden.getCiclo().getCancelada().getCreationDate()).get(2));
+        if (orden.getCiclo().getCancelada() != null) {
+            if (orden.getCiclo().getCancelada().getUsername() != null) {
+                biOrden.setCancelada_usuario(orden.getCiclo().getCancelada().getUsername().getDatosPersonales().getNombres() + " " + orden.getCiclo().getCancelada().getUsername().getDatosPersonales().getApellidos());
+            } else {
+                biOrden.setCancelada_usuario(" - ");
+            }
+            biOrden.setCancelada_active(orden.getCiclo().getCancelada().getActive());
+            biOrden.setCancelada_alias(orden.getCiclo().getCancelada().getAlias());
+            biOrden.setCancelada_comentario(orden.getCiclo().getCancelada().getComentario());
+            if (orden.getCiclo().getCancelada().getCreationDate() != null) {
+                biOrden.setCancelada_dd(convertDate(orden.getCiclo().getCancelada().getCreationDate()).get(0));
+                biOrden.setCancelada_mm(convertDate(orden.getCiclo().getCancelada().getCreationDate()).get(1));
+                biOrden.setCancelada_yyyy(convertDate(orden.getCiclo().getCancelada().getCreationDate()).get(2));
+            }
         }
+
+        biOrden.setFlag(1);
 
         if (type == 0) {
             insert(biOrden);
