@@ -227,7 +227,7 @@ public class MovimientoInternoBean implements ImethodsFindBeans, Serializable {
             if (this.selected.getCiclo().getCerrada().getActive()) {
                 this.selected = null;
                 this.active = Boolean.FALSE;
-            } else {
+            } else if (this.selected.getCiclo().getPendiente().getActive()) {
                 this.active = Boolean.TRUE;
                 if (this.selected.getMovimientosInternos() == null) {
                     this.selected.setMovimientosInternos(new ArrayList<Comentario>());

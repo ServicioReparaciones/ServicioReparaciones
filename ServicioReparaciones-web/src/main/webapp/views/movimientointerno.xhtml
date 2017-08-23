@@ -103,6 +103,178 @@
         <h:outputText value="&lt;br/&gt;" escape="false"/>
         <h:form id="ford">
             <p:outputPanel id="outWizard">
+                <p:panel rendered="#{movimientoInternoBean.active}">
+                    <h:outputText style="font-size: 40px" value="N. ORD: #{movimientoInternoBean.selected.codigo}"/>
+                    <h:panelGrid cellpadding="5">
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.abierta.alias} " rendered="#{movimientoInternoBean.selected.ciclo.abierta.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.abierta.username.datosPersonales.nombres}" rendered="#{movimientoInternoBean.selected.ciclo.abierta.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.abierta.comentario}" rendered="#{movimientoInternoBean.selected.ciclo.abierta.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.cerrada.alias} " rendered="#{movimientoInternoBean.selected.ciclo.cerrada.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.cerrada.username.datosPersonales.nombres}" rendered="#{movimientoInternoBean.selected.ciclo.cerrada.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.cerrada.comentario}" rendered="#{movimientoInternoBean.selected.ciclo.cerrada.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.pendiente.alias} " rendered="#{movimientoInternoBean.selected.ciclo.pendiente.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.pendiente.username.datosPersonales.nombres}" rendered="#{movimientoInternoBean.selected.ciclo.pendiente.active}"/>
+                        <h:outputText style="font-size: 20px" value="#{movimientoInternoBean.selected.ciclo.pendiente.comentario}" rendered="#{movimientoInternoBean.selected.ciclo.pendiente.active}"/>    
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="2" cellpadding="5" 
+                                 rendered="#{movimientoInternoBean.selected.producto.warranty}">
+                        <p:outputLabel value="Numéro Orden Garantía:" 
+                                       rendered="#{movimientoInternoBean.selected.producto.warranty}"/>
+                        <p:outputLabel id="fnumOrden" 
+                                       value="#{movimientoInternoBean.selected.numeroOrden}"
+                                       rendered="#{movimientoInternoBean.selected.producto.warranty}"/>
+
+                        <p:outputLabel value="Numéro Ticket:"
+                                       rendered="#{movimientoInternoBean.selected.producto.warranty}"/>
+                        <p:outputLabel id="fnumTicket" 
+                                       value="#{movimientoInternoBean.selected.numeroTicket}"
+                                       rendered="#{movimientoInternoBean.selected.producto.warranty}"/>
+                    </h:panelGrid>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-user" value="Cliente"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.nombres}"/>
+
+                        <p:outputLabel value="Apellidos:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.apellidos}"/>
+
+                        <p:outputLabel value="Cédula:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.cedula}"/>
+
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.movil}"/>
+
+                        <p:outputLabel value="Teléfono:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.telefono}"/>
+
+                        <p:outputLabel value="Provincia:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.provincia}"/>
+
+                        <p:outputLabel value="Catón:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.canton}"/>
+
+                        <p:outputLabel value="Parroquia:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.parroquia}"/>
+
+                        <p:outputLabel value="Dirección:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.direccion}"/>
+
+                        <p:outputLabel value="Referencia:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.cliente.referencia}"/>
+                    </h:panelGrid>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-edit" value="Visita"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Fecha Vista:"/>
+                        <h:outputText value="#{movimientoInternoBean.selected.visita.fechaVisitaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Fecha llegada al cliente:"/>
+                        <h:outputText value="#{movimientoInternoBean.selected.visita.fechaLlegadaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Fecha salida del cliente:"/>
+                        <h:outputText value="#{movimientoInternoBean.selected.visita.fechaSalidaCliente}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Fecha entrega del producto:"/>
+                        <h:outputText value="#{movimientoInternoBean.selected.visita.fechaEntregaProducto}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+
+                        <p:outputLabel value="Lugar de Atencón::"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.visita.lugarAtencion}"/>
+
+                        <p:outputLabel value="Posible Falla:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.visita.posibleFalla}"/>
+
+                        <p:outputLabel value="Observación cliente:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.visita.observacionCliente}"/>
+
+                        <p:outputLabel value="Km. Recorrido:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.kilometrosRuta.kmRecorridos}"/>
+
+                        <p:outputLabel value="Observacion Km. Recorrido:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.kilometrosRuta.observacionRuta}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Valor subTotal Km. Recorrido: $"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.kilometrosRuta.subTotal}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-cube" value="Producto"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Artefacto:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.producto.artefacto}"/>
+
+                        <p:outputLabel value="Marca:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.producto.marca}"/>
+
+                        <p:outputLabel value="Modelo:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.producto.modelo}"/>
+
+                        <p:outputLabel value="Serie:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.producto.serie}"/>
+
+                        <p:outputLabel value="PNC:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.producto.pnc}"/>
+
+                        <p:outputLabel value="Placa:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.producto.placa}"/>    
+                    </h:panelGrid>
+                    <p:panel rendered="#{movimientoInternoBean.selected.producto.warranty}">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Almacén:"/>
+                            <p:outputLabel value="#{movimientoInternoBean.selected.producto.garantia.almacen}"/>
+
+                            <p:outputLabel value="Telefono Almacén"/>
+                            <p:outputLabel value="#{movimientoInternoBean.selected.producto.garantia.telefonoAlmacen}"/>
+
+                            <p:outputLabel value="Numéro Factura:"/>
+                            <p:outputLabel value="#{movimientoInternoBean.selected.producto.garantia.numeroFactura}"/>
+
+                            <p:outputLabel value="Fecha Factura:"/>
+                            <h:outputText value="#{movimientoInternoBean.selected.producto.garantia.fechaFactura}">
+                                <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-male" value="Técnico"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="#{movimientoInternoBean.selected.tecnico.datosPersonales.nombres}"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.tecnico.datosPersonales.apellidos}"/>
+                        <p:outputLabel value="Cargo:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.tecnico.cargo}"/>
+                        <p:outputLabel value="Móvil:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.tecnico.datosPersonales.movil}"/>
+                    </h:panelGrid>
+                    <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:commandButton icon="fa fa-fw fa-tasks" value="Trabajo"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:outputText value="&lt;br/&gt;" escape="false"/>
+                    <h:panelGrid cellpadding="5">
+                        <p:outputLabel value="Desperfecto del producto reparado:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.trabajoFinalEjecutado.desperfecto}"/>
+
+                        <p:outputLabel value="Descripción de Trabajo Final Ejecutado por el Tećnico:"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.trabajoFinalEjecutado.trabajoRealizado}"/>
+
+                        <p:outputLabel value="Observaciónes :"/>
+                        <p:outputLabel value="#{movimientoInternoBean.selected.trabajoFinalEjecutado.observaciones}"/>
+                    </h:panelGrid>
+                </p:panel>
+                <h:outputText value="&lt;br/&gt;" escape="false" />
                 <p:panel header="Registro de Moviemintos Internos" rendered="#{movimientoInternoBean.active}">
                     <p:dataTable var="cmt" value="#{movimientoInternoBean.find.movimientosInternos}"
                                  tableStyle="width: auto">
