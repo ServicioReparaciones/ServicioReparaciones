@@ -54,7 +54,7 @@ public class BiOrdenService implements Ibi, Serializable {
         return exito;
     }
 
-    public void insertBiOrden(Orden orden, int type) {
+    public void transactionalBiOrden(Orden orden, int type) {
 
         BiOrden biOrden = new BiOrden();
 
@@ -63,12 +63,34 @@ public class BiOrdenService implements Ibi, Serializable {
         biOrden.setNumeroTicket(orden.getNumeroTicket());
 
         biOrden.setCliente(orden.getCliente().getNombres() + " " + orden.getCliente().getApellidos());
-        biOrden.setTelefono(orden.getCliente().getTelefono());
-        biOrden.setMovil(orden.getCliente().getMovil());
+        if (orden.getCliente().getCedula() != null && !orden.getCliente().getCedula().equals("")) {
+            biOrden.setCedula(orden.getCliente().getCedula());
+        } else {
+            biOrden.setCedula("9999999999999");
+        }
+        if (orden.getCliente().getTelefono() != null && !orden.getCliente().getTelefono().equals("")) {
+            biOrden.setTelefono(orden.getCliente().getTelefono());
+        } else {
+            biOrden.setTelefono("999-999-999");
+        }
+        if (orden.getCliente().getMovil() != null && !orden.getCliente().getMovil().equals("")) {
+            biOrden.setMovil(orden.getCliente().getMovil());
+        } else {
+            biOrden.setMovil("999-99-99-9999");
+        }
         biOrden.setProvincia(orden.getCliente().getProvincia());
         biOrden.setCanton(orden.getCliente().getCanton());
         biOrden.setParroquia(orden.getCliente().getParroquia());
-        biOrden.setDireccion(orden.getCliente().getDireccion());
+        if (orden.getCliente().getDireccion() != null && !orden.getCliente().getDireccion().equals("")) {
+            biOrden.setDireccion(orden.getCliente().getDireccion());
+        } else {
+            biOrden.setDireccion("S/N");
+        }
+        if (orden.getCliente().getReferencia() != null && !orden.getCliente().getReferencia().equals("")) {
+            biOrden.setReferencia(orden.getCliente().getReferencia());
+        } else {
+            biOrden.setReferencia("S/N");
+        }
 
         biOrden.setFechaVisitaCliente(orden.getVisita().getFechaVisitaCliente());
         biOrden.setFechaEntregaProducto(orden.getVisita().getFechaEntregaProducto());
@@ -126,10 +148,12 @@ public class BiOrdenService implements Ibi, Serializable {
 
         if (orden.getTecnico().getCargo() != null && !orden.getTecnico().getCargo().equals("blank")) {
             biOrden.setTecnico_codigo(orden.getTecnico().getCodigo());
+            biOrden.setTecnico_cargo(orden.getTecnico().getCargo());
             biOrden.setTecnico(orden.getTecnico().getDatosPersonales().getNombres() + " " + orden.getTecnico().getDatosPersonales().getApellidos());
         } else {
             biOrden.setTecnico_codigo(0);
-            biOrden.setTecnico("");
+            biOrden.setTecnico_cargo(" - ");
+            biOrden.setTecnico(" - ");
         }
 
         biOrden.setKmRecorridos(orden.getKilometrosRuta().getKmRecorridos());
@@ -203,11 +227,11 @@ public class BiOrdenService implements Ibi, Serializable {
 
     @Override
     public Boolean update(BiOrden biOrden) {
-        Query<Orden> query = this.ds.createQuery(Orden.class);
+        Query<BiOrden> query = this.ds.createQuery(BiOrden.class);
         query.and(
                 query.criteria("barcode").equal(biOrden.getBarcode())
         );
-        UpdateOperations<Orden> update = this.ds.createUpdateOperations(Orden.class);
+        UpdateOperations<BiOrden> update = this.ds.createUpdateOperations(BiOrden.class);
         update.set("numeroOrden", biOrden.getNumeroOrden()).
                 set("numeroTicket", biOrden.getNumeroTicket()).
                 set("cliente", biOrden.getCliente()).
@@ -353,7 +377,7 @@ public class BiOrdenService implements Ibi, Serializable {
     @Override
     public Integer count() {
         Integer count = 0;
-        Long result = this.ds.find(Producto.class).count();
+        Long result = this.ds.find(BiOrden.class).count();
         count = new Integer(result.intValue());
         return count;
     }

@@ -43,6 +43,8 @@ public class OrdenServicio implements Iorden, Serializable {
     private ClienteServicio clienteService;
     @Inject
     private ProductoServicio productoService;
+    @Inject
+    private BiOrdenService biOrdenService;
 
     @Override
     public Integer generatedCodigo() {
@@ -64,6 +66,9 @@ public class OrdenServicio implements Iorden, Serializable {
             orden.setFlag(1);
             this.ds.save(orden);
             exito = Boolean.TRUE;
+        }
+        if (exito) {
+            this.biOrdenService.transactionalBiOrden(orden, 0);
         }
         return exito;
     }
@@ -96,7 +101,11 @@ public class OrdenServicio implements Iorden, Serializable {
                 set("lastChange", this.calendario.getCalendario().getTime()).
                 set("flag", orden.getFlag());
         UpdateResults results = this.ds.update(query, update);
-        return results.getUpdatedExisting();
+        Boolean exito = results.getUpdatedExisting();
+        if (exito) {
+            this.biOrdenService.transactionalBiOrden(orden, 1);
+        }
+        return exito;
     }
 
     @Override
