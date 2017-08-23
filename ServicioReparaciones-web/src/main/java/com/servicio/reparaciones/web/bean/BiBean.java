@@ -5,9 +5,18 @@
  */
 package com.servicio.reparaciones.web.bean;
 
+import com.servicio.reparaciones.modelo.nosql.Orden;
+import com.servicio.reparaciones.servicio.BiOrdenService;
+import com.servicio.reparaciones.servicio.OrdenServicio;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 
 /**
  *
@@ -17,24 +26,24 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class BiBean implements Serializable {
 
-    /*
-   if (this.nuevo.getModelo() != null && !this.nuevo.getModelo().equals("")) {
-                this.nuevo.setModelo(this.nuevo.getModelo().trim());
-                this.nuevo.setModelo(this.nuevo.getModelo().toUpperCase());
-            }
-            if (this.nuevo.getSerie() != null && !this.nuevo.getSerie().equals("")) {
-                this.nuevo.setSerie(this.nuevo.getSerie().trim());
-                this.nuevo.setSerie(this.nuevo.getSerie().toUpperCase());
-            }
-            if (this.nuevo.getPlaca() != null && !this.nuevo.getPlaca().equals("")) {
-                this.nuevo.setPlaca(this.nuevo.getPlaca().trim());
-                this.nuevo.setPlaca(this.nuevo.getPlaca().toUpperCase());
-            }
-            if (this.nuevo.getPnc() != null && !this.nuevo.getPnc().equals("")) {
-                this.nuevo.setPnc(this.nuevo.getPnc().trim());
-                this.nuevo.setPnc(this.nuevo.getPnc().toUpperCase());
-            }
-     */
     private static final long serialVersionUID = -2821429635055287173L;
+    private static final Logger LOG = Logger.getLogger(BiBean.class.getName());
+
+    @Inject
+    private BiOrdenService biOrdenService;
+    @Inject
+    private OrdenServicio ordenService;
+
+    public void loadData(ActionEvent evt) {
+        List<Orden> odenes = new ArrayList<>();
+        odenes = this.ordenService.ObtenerListaOrdens();
+        LOG.log(Level.INFO, "ordenes :" + odenes.size());
+        for (Orden ord : odenes) {
+            LOG.log(Level.INFO, "ordenes :" + ord.getCodigo());
+            this.biOrdenService.transactionalBiOrden(ord, 0);
+        }
+        LOG.log(Level.INFO, "ordenes finazilo con exito");
+
+    }
 
 }
