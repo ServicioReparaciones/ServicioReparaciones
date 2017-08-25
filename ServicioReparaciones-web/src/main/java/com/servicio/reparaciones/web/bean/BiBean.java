@@ -30,19 +30,18 @@ public class BiBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(BiBean.class.getName());
 
     @Inject
-    private BiOrdenService biOrdenService;
-    @Inject
     private OrdenServicio ordenService;
 
     public void loadData(ActionEvent evt) {
-        List<Orden> odenes = new ArrayList<>();
-        odenes = this.ordenService.ObtenerListaOrdens();
-        LOG.log(Level.INFO, "ordenes :" + odenes.size());
-        for (Orden ord : odenes) {
-            LOG.log(Level.INFO, "ordenes :" + ord.getCodigo());
-            this.biOrdenService.transactionalBiOrden(ord, 0);
-        }
-        LOG.log(Level.INFO, "ordenes finazilo con exito");
+//        List<Orden> odenes = new ArrayList<>();
+//        odenes = this.ordenService.ObtenerListaOrdens();
+//        LOG.log(Level.INFO, "ordenes :" + odenes.size());
+//        for (Orden ord : odenes) {
+//            if (ord.getMovimientosInternos() != null && !ord.getMovimientosInternos().isEmpty()) {
+//                LOG.log(Level.INFO, "ordenes >>>>>>  :" + ord.getCodigo());
+//            }
+//        }
+//        LOG.log(Level.INFO, "ordenes finazilo con exito");
 
     }
 

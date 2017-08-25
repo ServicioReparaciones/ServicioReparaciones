@@ -8,6 +8,7 @@ package com.servicio.reparaciones.web.bean;
 import com.servicio.reparaciones.modelo.nosql.Comentario;
 import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
+import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.OrdenServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.servicio.VisitaServicio;
@@ -215,9 +216,15 @@ public class OrdenCanceladaBean implements ImethodsFindBeans, Serializable {
             this.find.setUsername(this.usuario);
             Boolean exito = this.ordenService.update(this.find);
             if (exito) {
-                exito = this.visitaService.deleteFlag(this.find.getVisita());
-                FacesUtil.addMessageInfo("Se ha cancelado");
-                this.init();
+                Visita visita = this.visitaService.findByUnique(this.find.getVisita());
+                if (visita.getId() != null) {
+                    visita.setFlag(0);
+                    exito = this.visitaService.update(visita);
+                }
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha cancelado");
+                    this.init();
+                }
             } else {
                 FacesUtil.addMessageError(null, "No se ha cancelado.");
             }
