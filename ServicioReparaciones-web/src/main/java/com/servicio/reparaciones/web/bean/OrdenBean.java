@@ -5,6 +5,7 @@
  */
 package com.servicio.reparaciones.web.bean;
 
+import com.servicio.reparaciones.modelo.nosql.Cliente;
 import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.modelo.nosql.Servicio;
 import com.servicio.reparaciones.modelo.nosql.Tecnico;
@@ -17,6 +18,7 @@ import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.servicio.VisitaServicio;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
+import com.servicio.reparaciones.web.bean.lazy.LazyClienteDataModel;
 import com.servicio.reparaciones.web.bean.util.GeneratedHtml;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import com.servicio.reparaciones.web.util.SessionUtil;
@@ -33,6 +35,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.LazyDataModel;
 
 /**
  *
@@ -52,14 +56,18 @@ public class OrdenBean implements ImethodsBean, Serializable {
     private List<Servicio> servicios;
     private Usuario usuario;
 
-    @Inject
-    private OrdenServicio ordenService;
-    @Inject
-    private ClienteBean clienteBean;
+    private LazyDataModel<Cliente> lazyModelCliente;
+    private Cliente selectedCliente;
+
     @Inject
     private ProductoBean productoBean;
     @Inject
     private VisitaBean vistaBean;
+    @Inject
+    private OrdenGeneratedBean ordenGenerate;
+
+    @Inject
+    private OrdenServicio ordenService;
     @Inject
     private VisitaServicio visitaService;
     @Inject
@@ -68,8 +76,6 @@ public class OrdenBean implements ImethodsBean, Serializable {
     private TecnicoServicio tecnicoService;
     @Inject
     private OrdenServidorXml ordenServerXml;
-    @Inject
-    private OrdenGeneratedBean ordenGenerate;
     @Inject
     private UsuarioServicio usarioService;
 
@@ -80,15 +86,17 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.selected = null;
         this.ordenes = this.ordenService.ObtenerListaOrdens(1);
         this.filterOrdenes = null;
+        this.lazyModelCliente = new LazyClienteDataModel(1);
+        this.selectedCliente = null;
         this.servicios = new ArrayList<>();
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
 
     private void beanInit() {
-        this.clienteBean.init();
         this.productoBean.init();
         this.vistaBean.init();
+        this.ordenGenerate.init();
     }
 
     private void cicloInit() {
@@ -97,12 +105,21 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.nuevo.getCiclo().getPendiente().setUsername(this.usuario);
         this.nuevo.getCiclo().getCancelada().setUsername(this.usuario);
     }
+    
+     public void onRowSelectCliente(SelectEvent event) {
+        this.selectedCliente = (Cliente) event.getObject();
+        if (this.selectedCliente != null) {
+            this.getNuevo().setCliente(this.selectedCliente);
+        } else {
+            this.selectedCliente = null;
+        }
+    }
 
     @Override
     public void add(ActionEvent evt) {
         this.usuario = this.usarioService.findByCodigo(this.usuario);
         this.nuevo.setUsername(this.usuario);
-        this.nuevo.setCliente(this.clienteBean.getNuevo());
+        //this.nuevo.setCliente(this.clienteBean.getNuevo());
         this.nuevo.setProducto(this.productoBean.getNuevo());
         String unique = this.vistaBean.getNuevo().getUnique();
         this.vistaBean.add(evt);
@@ -175,15 +192,14 @@ public class OrdenBean implements ImethodsBean, Serializable {
     }
 
     public String onFlowProcess(FlowEvent event) {
-        if (this.clienteBean.getNuevo() != null) {
-            this.nuevo.setCliente(this.clienteBean.getNuevo());
+        if (this.nuevo.getCliente() != null) {
             this.productoBean.loadListByCliente(this.nuevo.getCliente());
-            this.productoBean.setCliente(this.clienteBean.getNuevo());
+            this.productoBean.setCliente(this.nuevo.getCliente());
         }
         if (this.productoBean.getNuevo() != null) {
             this.nuevo.setProducto(this.productoBean.getNuevo());
             this.servicios = this.servicioService.ObtenerListaServiciosMarcaArtefacto(this.nuevo.getProducto().getMarca(), this.nuevo.getProducto().getArtefacto());
-            this.vistaBean.getNuevo().setCliente(this.clienteBean.getNuevo());
+            this.vistaBean.getNuevo().setCliente(this.nuevo.getCliente());
             this.vistaBean.getNuevo().setProducto(this.productoBean.getNuevo());
         }
         if (this.vistaBean.getNuevo() != null) {
@@ -225,14 +241,6 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.filterOrdenes = filterOrdenes;
     }
 
-    public ClienteBean getClienteBean() {
-        return clienteBean;
-    }
-
-    public void setClienteBean(ClienteBean clienteBean) {
-        this.clienteBean = clienteBean;
-    }
-
     public VisitaBean getVistaBean() {
         return vistaBean;
     }
@@ -263,5 +271,21 @@ public class OrdenBean implements ImethodsBean, Serializable {
 
     public void setServicios(List<Servicio> servicios) {
         this.servicios = servicios;
+    }
+
+    public LazyDataModel<Cliente> getLazyModelCliente() {
+        return lazyModelCliente;
+    }
+
+    public void setLazyModelCliente(LazyDataModel<Cliente> lazyModelCliente) {
+        this.lazyModelCliente = lazyModelCliente;
+    }
+
+    public Cliente getSelectedCliente() {
+        return selectedCliente;
+    }
+
+    public void setSelectedCliente(Cliente selectedCliente) {
+        this.selectedCliente = selectedCliente;
     }
 }

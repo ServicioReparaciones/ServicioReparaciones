@@ -10,12 +10,12 @@
                       nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
                 <p:tab id="cliente" title="CLIENTE">
                     <p:panel header="1. Seleccione un cliente">
-                        <p:dataTable  id="dtcli" var="cli" value="#{ordenBean.clienteBean.lazyModel}"
-                                      selectionMode="single" selection="#{ordenBean.clienteBean.selected}"
+                        <p:dataTable  id="dtcli" var="cli" value="#{ordenBean.lazyModelCliente}"
+                                      selectionMode="single" selection="#{ordenBean.selectedCliente}"
                                       rows="5" paginator="true" tableStyle="width: auto"
                                       paginatorPosition="bottom" lazy="true" reflow="true">
 
-                            <p:ajax event="rowSelect" listener="#{ordenBean.clienteBean.onRowSelect}" 
+                            <p:ajax event="rowSelect" listener="#{ordenBean.onRowSelectCliente}" 
                                     update=":ford:outCli, :ford:codigo"/>
 
                             <f:facet name="header">
@@ -56,40 +56,40 @@
                         <p:outputPanel id="outCli">
                             <h:panelGrid columns="6" cellpadding="5">
                                 <p:outputLabel value="Nombres:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.nombres}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.nombres}"/>
 
                                 <p:outputLabel value="Apellidos:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.apellidos}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.apellidos}"/>
 
                                 <p:outputLabel value="Cédula:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.cedula}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.cedula}"/>
 
                                 <p:outputLabel value="Móvil:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.movil}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.movil}"/>
 
                                 <p:outputLabel value="Teléfono:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.telefono}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.telefono}"/>
 
                                 <p:outputLabel value="Provincia:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.provincia}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.provincia}"/>
 
                                 <p:outputLabel value="Catón:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.canton}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.canton}"/>
 
                                 <p:outputLabel value="Parroquia:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.parroquia}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.parroquia}"/>
 
                                 <p:outputLabel value="Dirección:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.direccion}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.direccion}"/>
 
                                 <p:outputLabel value="Referencia:"/>
-                                <p:outputLabel value="#{ordenBean.clienteBean.selected.referencia}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.cliente.referencia}"/>
                             </h:panelGrid>
                         </p:outputPanel>
                         <p:separator/>
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel for="codigo" value="Código del Cliente:"/>
-                            <p:inputText id="codigo" required="true" value="#{ordenBean.clienteBean.nuevo.codigo}"/>
+                            <p:inputText id="codigo" required="true" value="#{ordenBean.nuevo.codigo}"/>
                             <p:message for="codigo" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:panel>
@@ -100,8 +100,8 @@
                         <p:panel>
                             <h:panelGrid columns="4" cellpadding="5">
                                 <h:outputText value="El cliente"/>
-                                <h:outputText value="#{ordenBean.clienteBean.nuevo.nombres}"/>
-                                <h:outputText value="#{ordenBean.clienteBean.nuevo.apellidos}"/>
+                                <h:outputText value="#{ordenBean.nuevo.nombres}"/>
+                                <h:outputText value="#{ordenBean.nuevo.apellidos}"/>
                                 <h:outputText value="tiene los siguientes productos registrados."/>
                             </h:panelGrid>
                         </p:panel>
@@ -280,34 +280,34 @@
                         <p:commandButton icon="fa fa-fw fa-user" value="Cliente"/>
                         <h:panelGrid columns="6" cellpadding="5">
                             <p:outputLabel value="Nombres:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.nombres}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.nombres}"/>
 
                             <p:outputLabel value="Apellidos:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.apellidos}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.apellidos}"/>
 
                             <p:outputLabel value="Cédula:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.cedula}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.cedula}"/>
 
                             <p:outputLabel value="Móvil:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.movil}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.movil}"/>
 
                             <p:outputLabel value="Teléfono:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.telefono}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.telefono}"/>
 
                             <p:outputLabel value="Provincia:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.provincia}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.provincia}"/>
 
                             <p:outputLabel value="Catón:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.canton}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.canton}"/>
 
                             <p:outputLabel value="Parroquia:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.parroquia}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.parroquia}"/>
 
                             <p:outputLabel value="Dirección:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.direccion}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.direccion}"/>
 
                             <p:outputLabel value="Referencia:"/>
-                            <p:outputLabel value="#{ordenBean.clienteBean.nuevo.referencia}"/>
+                            <p:outputLabel value="#{ordenBean.selectedCliente.referencia}"/>
                         </h:panelGrid>
                         <h:outputText value="&lt;br/&gt;" escape="false" />
                         <p:commandButton icon="fa fa-fw fa-cube" value="Producto"/>
