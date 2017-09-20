@@ -58,6 +58,7 @@ public class OrdenBean implements ImethodsBean, Serializable {
 
     private LazyDataModel<Cliente> lazyModelCliente;
     private Cliente selectedCliente;
+    private String urlPathVaucher;
 
     @Inject
     private ProductoBean productoBean;
@@ -136,6 +137,7 @@ public class OrdenBean implements ImethodsBean, Serializable {
         String ipAdress = request.getLocalAddr();
         String filepath = "http://" + ipAdress + "/pdf/" + barcode + "/" + barcode + ".html";
         this.nuevo.setUrl(filepath);
+        this.setUrlPathVaucher(filepath);
         this.ordenGenerate.setAbierta(this.nuevo);
         Boolean exito = this.ordenService.insert(this.nuevo);
         if (exito) {
@@ -287,5 +289,13 @@ public class OrdenBean implements ImethodsBean, Serializable {
 
     public void setSelectedCliente(Cliente selectedCliente) {
         this.selectedCliente = selectedCliente;
+    }
+
+    public String getUrlPathVaucher() {
+        return urlPathVaucher;
+    }
+
+    public void setUrlPathVaucher(String urlPathVaucher) {
+        this.urlPathVaucher = urlPathVaucher;
     }
 }

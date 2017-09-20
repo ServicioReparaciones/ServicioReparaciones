@@ -89,7 +89,7 @@
                         <p:separator/>
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel for="codigo" value="Código del Cliente:"/>
-                            <p:inputText id="codigo" required="true" value="#{ordenBean.nuevo.codigo}"/>
+                            <p:inputText id="codigo" required="true" value="#{ordenBean.selectedCliente.codigo}"/>
                             <p:message for="codigo" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:panel>
@@ -100,8 +100,8 @@
                         <p:panel>
                             <h:panelGrid columns="4" cellpadding="5">
                                 <h:outputText value="El cliente"/>
-                                <h:outputText value="#{ordenBean.nuevo.nombres}"/>
-                                <h:outputText value="#{ordenBean.nuevo.apellidos}"/>
+                                <h:outputText value="#{ordenBean.selectedCliente.nombres}"/>
+                                <h:outputText value="#{ordenBean.selectedCliente.apellidos}"/>
                                 <h:outputText value="tiene los siguientes productos registrados."/>
                             </h:panelGrid>
                         </p:panel>
@@ -515,7 +515,7 @@
                         <p:outputLabel value="Se ha generado con exito la orden."/>
                         <p:outputLabel value="Para imprimir de click en el icono."/>
                         <h:panelGrid style="margin: 0 auto;">
-                            <p:link target="_blank" href="#{ordenBean.ordenGenerate.abierta.url}">
+                            <p:link target="_blank" href="#{ordenBean.urlPathVaucher}">
                                 <p:graphicImage name="images/pdf.png" library="icarus-layout"/>
                             </p:link>
                         </h:panelGrid>
