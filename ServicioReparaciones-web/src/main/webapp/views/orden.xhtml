@@ -106,13 +106,13 @@
                             </h:panelGrid>
                         </p:panel>
                         <h:outputText value="&lt;br/&gt;" escape="false"/>
-                        <p:dataTable  id="dtpro" var="pro" value="#{ordenBean.productoBean.productos}" 
-                                      filteredValue="#{ordenBean.productoBean.filterProductos}"
-                                      selectionMode="single" selection="#{ordenBean.productoBean.selected}"
+                        <p:dataTable  id="dtpro" var="pro" value="#{ordenBean.productos}" 
+                                      filteredValue="#{ordenBean.filterProductos}"
+                                      selectionMode="single" selection="#{ordenBean.selectedProducto}"
                                       rowKey="#{pro.codigo}" rows="5" paginator="true"
                                       paginatorPosition="bottom" reflow="true">
 
-                            <p:ajax event="rowSelect" listener="#{ordenBean.productoBean.onRowSelect}" 
+                            <p:ajax event="rowSelect" listener="#{ordenBean.onRowSelectProducto}" 
                                     update=":ford:outPro, :ford:barcode"/>
 
                             <f:facet name="header">
@@ -153,10 +153,10 @@
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton value="Nuevo Producto sin Garantá" update=":faddPro:outPro"
-                                                 actionListener="#{ordenBean.productoBean.initProducto(evt)}"
+                                                 actionListener="#{productoBean.initProducto(evt)}"
                                                  oncomplete="PF('dlgAddPro').show()"/>
                                 <p:commandButton value="Nuevo Producto con Garantá" update=":faddProWarranty:outProW"
-                                                 actionListener="#{ordenBean.productoBean.initProducto(evt)}"
+                                                 actionListener="#{productoBean.initProducto(evt)}"
                                                  oncomplete="PF('dlgAddProWarranty').show()"/>
                             </f:facet>
                         </p:dataTable>
@@ -164,36 +164,36 @@
                         <p:outputPanel id="outPro">
                             <h:panelGrid columns="6" cellpadding="5">
                                 <p:outputLabel value="Artefacto:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.selected.artefacto}"/>
+                                <p:outputLabel value="#{ordenBean.selectedProducto.artefacto}"/>
 
                                 <p:outputLabel value="Marca:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.selected.marca}"/>
+                                <p:outputLabel value="#{ordenBean.selectedProducto.marca}"/>
 
                                 <p:outputLabel value="Modelo:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.selected.modelo}"/>
+                                <p:outputLabel value="#{ordenBean.selectedProducto.modelo}"/>
 
                                 <p:outputLabel value="Serie:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.selected.serie}"/>
+                                <p:outputLabel value="#{ordenBean.selectedProducto.serie}"/>
 
                                 <p:outputLabel value="PNC:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.selected.pnc}"/>
+                                <p:outputLabel value="#{ordenBean.selectedProducto.pnc}"/>
 
                                 <p:outputLabel value="Placa:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.selected.placa}"/>    
+                                <p:outputLabel value="#{ordenBean.selectedProducto.placa}"/>    
                             </h:panelGrid>
-                            <p:panel rendered="#{ordenBean.productoBean.selected.warranty}">
+                            <p:panel rendered="#{ordenBean.selectedProducto.warranty}">
                                 <h:panelGrid columns="4" cellpadding="5">
                                     <p:outputLabel value="Almacén:"/>
-                                    <p:outputLabel value="#{ordenBean.productoBean.selected.garantia.almacen}"/>
+                                    <p:outputLabel value="#{ordenBean.selectedProducto.garantia.almacen}"/>
 
                                     <p:outputLabel value="Telefono Almacén"/>
-                                    <p:outputLabel value="#{ordenBean.productoBean.selected.garantia.telefonoAlmacen}"/>
+                                    <p:outputLabel value="#{ordenBean.selectedProducto.garantia.telefonoAlmacen}"/>
 
                                     <p:outputLabel value="Numéro Factura:"/>
-                                    <p:outputLabel value="#{ordenBean.productoBean.selected.garantia.numeroFactura}"/>
+                                    <p:outputLabel value="#{ordenBean.selectedProducto.garantia.numeroFactura}"/>
 
                                     <p:outputLabel value="Fecha Factura:"/>
-                                    <h:outputText value="#{ordenBean.productoBean.selected.garantia.fechaFactura}">
+                                    <h:outputText value="#{ordenBean.selectedProducto.garantia.fechaFactura}">
                                         <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                                     </h:outputText>
                                 </h:panelGrid>
@@ -202,7 +202,7 @@
                         <p:separator/>
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel for="barcode" value="Barcode del Producto:"/>
-                            <p:inputText id="barcode" required="true" value="#{ordenBean.productoBean.nuevo.codigo}"/>
+                            <p:inputText id="barcode" required="true" value="#{ordenBean.nuevo.producto.codigo}"/>
                             <p:message for="barcode" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:panel>
@@ -233,29 +233,29 @@
                             <p:inputText id="observacionCliente" value="#{ordenBean.vistaBean.nuevo.observacionCliente}"/>
                             <p:message for="observacionCliente" display="tooltip" severity="error"/>
                         </h:panelGrid>
-                        <p:separator rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
-                        <h:panelGrid cellpadding="5" rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                        <p:separator rendered="#{ordenBean.nuevo.producto.warranty}"/>
+                        <h:panelGrid cellpadding="5" rendered="#{ordenBean.nuevo.producto.warranty}">
                             <p:outputLabel value="Códigos Garantía"
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
                         </h:panelGrid>
-                        <p:separator rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                        <p:separator rendered="#{ordenBean.nuevo.producto.warranty}"/>
                         <h:panelGrid columns="6" cellpadding="5"
-                                     rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                                     rendered="#{ordenBean.nuevo.producto.warranty}">
                             <p:outputLabel for="numOrden" value="Numéro de Orden Garantía:"
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
                             <p:inputText id="numOrden" required="true"
-                                         rendered="#{ordenBean.productoBean.nuevo.warranty}"
-                                         value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroOrden}"/>
+                                         rendered="#{ordenBean.nuevo.producto.warranty}"
+                                         value="#{ordenBean.nuevo.producto.codesWarranty.numeroOrden}"/>
                             <p:message for="numOrden" display="tooltip" severity="error"
-                                       rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                       rendered="#{ordenBean.nuevo.producto.warranty}"/>
 
                             <p:outputLabel for="numTicket" value="Numéro de Ticket:"
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
                             <p:inputText id="numTicket" required="true"
-                                         rendered="#{ordenBean.productoBean.nuevo.warranty}"
-                                         value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroTicket}"/>
+                                         rendered="#{ordenBean.nuevo.producto.warranty}"
+                                         value="#{ordenBean.nuevo.producto.codesWarranty.numeroTicket}"/>
                             <p:message for="numTicket" display="tooltip" severity="error"
-                                       rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                       rendered="#{ordenBean.nuevo.producto.warranty}"/>
                         </h:panelGrid>
                     </p:panel>
                 </p:tab>
@@ -263,18 +263,18 @@
                 <p:tab id="orden" title="ORDEN">
                     <p:panel header="4. Revisión Datos Orden">
                         <h:panelGrid columns="2" cellpadding="5" 
-                                     rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                                     rendered="#{ordenBean.nuevo.producto.warranty}">
                             <p:outputLabel value="Numéro Orden Garantía:" 
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
                             <p:outputLabel id="fnumOrden" 
-                                           value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroOrden}"
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           value="#{ordenBean.nuevo.producto.codesWarranty.numeroOrden}"
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
 
                             <p:outputLabel value="Numéro Ticket:"
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
                             <p:outputLabel id="fnumTicket" 
-                                           value="#{ordenBean.productoBean.nuevo.codesWarranty.numeroTicket}"
-                                           rendered="#{ordenBean.productoBean.nuevo.warranty}"/>
+                                           value="#{ordenBean.nuevo.producto.codesWarranty.numeroTicket}"
+                                           rendered="#{ordenBean.nuevo.producto.warranty}"/>
                         </h:panelGrid>
                         <h:outputText value="&lt;br/&gt;" escape="false" />
                         <p:commandButton icon="fa fa-fw fa-user" value="Cliente"/>
@@ -313,40 +313,40 @@
                         <p:commandButton icon="fa fa-fw fa-cube" value="Producto"/>
                         <h:panelGrid columns="4" cellpadding="5">
                             <p:outputLabel value="Artefacto:"/>
-                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.artefacto}"/>
+                            <p:outputLabel value="#{ordenBean.nuevo.producto.artefacto}"/>
 
                             <p:outputLabel value="Marca:"/>
-                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.marca}"/>
+                            <p:outputLabel value="#{ordenBean.nuevo.producto.marca}"/>
 
                             <p:outputLabel value="Modelo:"/>
-                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.modelo}"/>
+                            <p:outputLabel value="#{ordenBean.nuevo.producto.modelo}"/>
 
                             <p:outputLabel value="Serie:"/>
-                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.serie}"/>
+                            <p:outputLabel value="#{ordenBean.nuevo.producto.serie}"/>
 
                             <p:outputLabel value="PNC:"/>
-                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.pnc}"/>
+                            <p:outputLabel value="#{ordenBean.nuevo.producto.pnc}"/>
 
                             <p:outputLabel value="Placa:"/>
-                            <p:outputLabel value="#{ordenBean.productoBean.nuevo.placa}"/>    
+                            <p:outputLabel value="#{ordenBean.nuevo.producto.placa}"/>    
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="5">
                             <p:outputLabel value="Servicio:"/>
                             <p:outputLabel value="#{ordenBean.vistaBean.nuevo.servicio}"/>
                         </h:panelGrid>
-                        <p:panel rendered="#{ordenBean.productoBean.nuevo.warranty}">
+                        <p:panel rendered="#{ordenBean.nuevo.producto.warranty}">
                             <h:panelGrid columns="2" cellpadding="5">
                                 <p:outputLabel value="Almacén:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.nuevo.garantia.almacen}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.producto.garantia.almacen}"/>
 
                                 <p:outputLabel value="Telefono Almacén"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.nuevo.garantia.telefonoAlmacen}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.producto.garantia.telefonoAlmacen}"/>
 
                                 <p:outputLabel value="Numéro Factura:"/>
-                                <p:outputLabel value="#{ordenBean.productoBean.nuevo.garantia.numeroFactura}"/>
+                                <p:outputLabel value="#{ordenBean.nuevo.producto.garantia.numeroFactura}"/>
 
                                 <p:outputLabel value="Fecha Factura:"/>
-                                <h:outputText value="#{ordenBean.productoBean.nuevo.garantia.fechaFactura}">
+                                <h:outputText value="#{ordenBean.nuevo.producto.garantia.fechaFactura}">
                                     <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                                 </h:outputText>
                             </h:panelGrid>
@@ -384,12 +384,12 @@
                 <p:outputPanel id="outPro">
                     <h:panelGrid columns="2" cellpadding="5">
                         <h:outputLabel value="BARCODE:"/>
-                        <h:outputLabel value="#{productoBean.nuevo.barcode}"/>
+                        <h:outputLabel value="#{ordenBean.nuevoProducto.barcode}"/>
                     </h:panelGrid>
                     <p:separator/>
                     <h:panelGrid columns="6" cellpadding="5">
                         <p:outputLabel for="eartefacto" value="Artefacto:"/>
-                        <p:selectOneMenu id="eartefacto" required="true" value="#{productoBean.nuevo.artefacto}">
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{ordenBean.nuevoProducto.artefacto}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{productoBean.artefactos}" var="art"
                                            itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}"/>
@@ -397,7 +397,7 @@
                         <p:message for="eartefacto" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="emarca" value="Marca:"/>
-                        <p:selectOneMenu id="emarca" required="true" value="#{productoBean.nuevo.marca}">
+                        <p:selectOneMenu id="emarca" required="true" value="#{ordenBean.nuevoProducto.marca}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{productoBean.marcas}" var="mar"
                                            itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
@@ -405,25 +405,25 @@
                         <p:message for="emarca" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="emodelo" value="Modelo:"/>
-                        <p:inputText id="emodelo" value="#{productoBean.nuevo.modelo}"/>
+                        <p:inputText id="emodelo" value="#{ordenBean.nuevoProducto.modelo}"/>
                         <p:message for="emodelo" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="eserie" value="Serie:"/>
-                        <p:inputText id="eserie" value="#{productoBean.nuevo.serie}"/>
+                        <p:inputText id="eserie" value="#{ordenBean.nuevoProducto.serie}"/>
                         <p:message for="eserie" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="epnc" value="PNC:"/>
-                        <p:inputText id="epnc" value="#{productoBean.nuevo.pnc}"/>
+                        <p:inputText id="epnc" value="#{ordenBean.nuevoProducto.pnc}"/>
                         <p:message for="epnc" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="eplaca" value="Placa:"/>
-                        <p:inputText id="eplaca" value="#{productoBean.nuevo.placa}"/>
+                        <p:inputText id="eplaca" value="#{ordenBean.nuevoProducto.placa}"/>
                         <p:message for="eplaca" display="tooltip" severity="error"/>    
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Guardar" update=":faddPro, :ford:dtpro" 
-                                     actionListener="#{productoBean.addProductoWarranty(evt, false)}"/>
+                                     actionListener="#{ordenBean.addProductoWarranty(evt, false)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>     
@@ -433,50 +433,50 @@
                 <p:outputPanel id="outProW">
                     <h:panelGrid columns="2" cellpadding="5">
                         <h:outputLabel value="BARCODE:"/>
-                        <h:outputLabel value="#{ordenBean.productoBean.nuevo.barcode}"/>
+                        <h:outputLabel value="#{ordenBean.nuevoProducto.barcode}"/>
                     </h:panelGrid>
                     <p:separator/>
                     <h:panelGrid columns="6" cellpadding="5">
                         <p:outputLabel for="eartefacto" value="Artefacto:"/>
-                        <p:selectOneMenu id="eartefacto" required="true" value="#{ordenBean.productoBean.nuevo.artefacto}">
+                        <p:selectOneMenu id="eartefacto" required="true" value="#{ordenBean.nuevoProducto.artefacto}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{ordenBean.productoBean.artefactos}" var="art"
+                            <f:selectItems value="#{productoBean.artefactos}" var="art"
                                            itemLabel="#{art.artefacto}" itemValue="#{art.artefacto}"/>
                         </p:selectOneMenu>
                         <p:message for="eartefacto" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="emarca" value="Marca:"/>
-                        <p:selectOneMenu id="emarca" required="true" value="#{ordenBean.productoBean.nuevo.marca}">
+                        <p:selectOneMenu id="emarca" required="true" value="#{ordenBean.nuevoProducto.marca}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{ordenBean.productoBean.marcas}" var="mar"
+                            <f:selectItems value="#{productoBean.marcas}" var="mar"
                                            itemLabel="#{mar.marca}" itemValue="#{mar.marca}"/>
                         </p:selectOneMenu>
                         <p:message for="emarca" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="emodelo" value="Modelo:"/>
-                        <p:inputText id="emodelo" value="#{ordenBean.productoBean.nuevo.modelo}"/>
+                        <p:inputText id="emodelo" value="#{ordenBean.nuevoProducto.modelo}"/>
                         <p:message for="emodelo" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="eserie" value="Serie:"/>
-                        <p:inputText id="eserie" value="#{ordenBean.productoBean.nuevo.serie}"/>
+                        <p:inputText id="eserie" value="#{ordenBean.nuevoProducto.serie}"/>
                         <p:message for="eserie" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="epnc" value="PNC:"/>
-                        <p:inputText id="epnc" value="#{ordenBean.productoBean.nuevo.pnc}"/>
+                        <p:inputText id="epnc" value="#{ordenBean.nuevoProducto.pnc}"/>
                         <p:message for="epnc" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="eplaca" value="Placa:"/>
-                        <p:inputText id="eplaca" value="#{ordenBean.productoBean.nuevo.placa}"/>
+                        <p:inputText id="eplaca" value="#{ordenBean.nuevoProducto.placa}"/>
                         <p:message for="eplaca" display="tooltip" severity="error"/>    
                     </h:panelGrid>
                     <p:panel>
                         <h:panelGrid columns="6" cellpadding="5">
                             <p:outputLabel for="ealmacen" value="Almacén:"/>
                             <p:selectOneMenu id="ealmacen" required="true" 
-                                             value="#{ordenBean.productoBean.nuevo.garantia.almacen}"
+                                             value="#{ordenBean.nuevoProducto.garantia.almacen}"
                                              effect="fade" var="t" filter="true" filterMatchMode="startsWith">
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                <f:selectItems value="#{ordenBean.productoBean.almacenes}" var="alm"
+                                <f:selectItems value="#{productoBean.almacenes}" var="alm"
                                                itemLabel="#{alm.almacen}" itemValue="#{alm.almacen}"/>
                                 <p:column>
                                     <h:outputText value="#{t}" />
@@ -486,24 +486,24 @@
 
                             <p:outputLabel for="etelefonoAlmacen" value="Telefono Almacén"/>
                             <p:inputText id="etelefonoAlmacen" maxlength="13" 
-                                         value="#{ordenBean.productoBean.nuevo.garantia.telefonoAlmacen}"/>
+                                         value="#{ordenBean.nuevoProducto.garantia.telefonoAlmacen}"/>
                             <p:message for="etelefonoAlmacen" display="tooltip" severity="error"/>
 
                             <p:outputLabel for="enumeroFactura" value="Numéro Factura:"/>
                             <p:inputText id="enumeroFactura" maxlength="12" 
-                                         value="#{ordenBean.productoBean.nuevo.garantia.numeroFactura}"/>
+                                         value="#{ordenBean.nuevoProducto.garantia.numeroFactura}"/>
                             <p:message for="enumeroFactura" display="tooltip" severity="error"/>
 
                             <p:outputLabel for="efechaFactura" value="Fecha Factura:"/>
                             <p:calendar  id="efechaFactura" pattern="dd/MM/yyyy" showOn="button" 
-                                         value="#{ordenBean.productoBean.nuevo.garantia.fechaFactura}"/>
+                                         value="#{ordenBean.nuevoProducto.garantia.fechaFactura}"/>
                             <p:message for="efechaFactura" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:panel>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Guardar" update=":faddProWarranty, :ford:dtpro" 
-                                     actionListener="#{ordenBean.productoBean.addProductoWarranty(evt, true)}"/>
+                                     actionListener="#{ordenBean.addProductoWarranty(evt, true)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>      

@@ -7,11 +7,13 @@ package com.servicio.reparaciones.web.bean;
 
 import com.servicio.reparaciones.modelo.nosql.Cliente;
 import com.servicio.reparaciones.modelo.nosql.Orden;
+import com.servicio.reparaciones.modelo.nosql.Producto;
 import com.servicio.reparaciones.modelo.nosql.Servicio;
 import com.servicio.reparaciones.modelo.nosql.Tecnico;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.modelo.nosql.Visita;
 import com.servicio.reparaciones.servicio.OrdenServicio;
+import com.servicio.reparaciones.servicio.ProductoServicio;
 import com.servicio.reparaciones.servicio.ServicioServicio;
 import com.servicio.reparaciones.servicio.TecnicoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
@@ -25,6 +27,7 @@ import com.servicio.reparaciones.web.util.SessionUtil;
 import com.servicio.reparaciones.xml.servidor.OrdenServidorXml;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -60,13 +63,18 @@ public class OrdenBean implements ImethodsBean, Serializable {
     private Cliente selectedCliente;
     private String urlPathVaucher;
 
-    @Inject
-    private ProductoBean productoBean;
+    private Producto nuevoProducto;
+    private Producto selectedProducto;
+    private List<Producto> productos;
+    private List<Producto> filterProductos;
+
     @Inject
     private VisitaBean vistaBean;
     @Inject
     private OrdenGeneratedBean ordenGenerate;
 
+    @Inject
+    private ProductoServicio productoService;
     @Inject
     private OrdenServicio ordenService;
     @Inject
@@ -84,6 +92,8 @@ public class OrdenBean implements ImethodsBean, Serializable {
     public void init() {
         this.nuevo = new Orden();
         this.nuevo.setBarcode(this.ordenService.generatedBarcode());
+        this.nuevoProducto = new Producto();
+        this.nuevoProducto.setBarcode(this.productoService.generatedBarcode());
         this.selected = null;
         this.ordenes = this.ordenService.ObtenerListaOrdens(1);
         this.filterOrdenes = null;
@@ -95,7 +105,6 @@ public class OrdenBean implements ImethodsBean, Serializable {
     }
 
     private void beanInit() {
-        this.productoBean.init();
         this.vistaBean.init();
         this.ordenGenerate.init();
     }
@@ -106,8 +115,42 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.nuevo.getCiclo().getPendiente().setUsername(this.usuario);
         this.nuevo.getCiclo().getCancelada().setUsername(this.usuario);
     }
-    
-     public void onRowSelectCliente(SelectEvent event) {
+
+    public void addProductoWarranty(ActionEvent evt, Boolean warranty) {
+        if (warranty != null) {
+            this.usuario = this.usarioService.findByCodigo(this.usuario);
+            this.nuevoProducto.setUsername(this.usuario);
+            this.nuevoProducto.setCliente(this.nuevo.getCliente());
+            this.nuevoProducto.setWarranty(warranty);
+            if (this.nuevoProducto.getModelo() != null && !this.nuevoProducto.getModelo().equals("")) {
+                this.nuevoProducto.setModelo(this.nuevoProducto.getModelo().trim());
+                this.nuevoProducto.setModelo(this.nuevoProducto.getModelo().toUpperCase());
+            }
+            if (this.nuevoProducto.getSerie() != null && !this.nuevoProducto.getSerie().equals("")) {
+                this.nuevoProducto.setSerie(this.nuevoProducto.getSerie().trim());
+                this.nuevoProducto.setSerie(this.nuevoProducto.getSerie().toUpperCase());
+            }
+            if (this.nuevoProducto.getPlaca() != null && !this.nuevoProducto.getPlaca().equals("")) {
+                this.nuevoProducto.setPlaca(this.nuevoProducto.getPlaca().trim());
+                this.nuevoProducto.setPlaca(this.nuevoProducto.getPlaca().toUpperCase());
+            }
+            if (this.nuevoProducto.getPnc() != null && !this.nuevoProducto.getPnc().equals("")) {
+                this.nuevoProducto.setPnc(this.nuevoProducto.getPnc().trim());
+                this.nuevoProducto.setPnc(this.nuevoProducto.getPnc().toUpperCase());
+            }
+            Boolean exito = this.productoService.insert(this.nuevoProducto);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.updateListByCliente();
+                this.nuevoProducto = new Producto();
+                this.nuevoProducto.setBarcode(this.productoService.generatedBarcode());
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+            }
+        }
+    }
+
+    public void onRowSelectCliente(SelectEvent event) {
         this.selectedCliente = (Cliente) event.getObject();
         if (this.selectedCliente != null) {
             this.getNuevo().setCliente(this.selectedCliente);
@@ -116,18 +159,25 @@ public class OrdenBean implements ImethodsBean, Serializable {
         }
     }
 
+    public void onRowSelectProducto(SelectEvent event) {
+        this.selectedProducto = (Producto) event.getObject();
+        if (this.selectedProducto != null) {
+            this.getNuevo().setProducto(this.selectedProducto);
+        } else {
+            this.selectedProducto = null;
+        }
+    }
+
     @Override
     public void add(ActionEvent evt) {
         this.usuario = this.usarioService.findByCodigo(this.usuario);
         this.nuevo.setUsername(this.usuario);
-        //this.nuevo.setCliente(this.clienteBean.getNuevo());
-        this.nuevo.setProducto(this.productoBean.getNuevo());
         String unique = this.vistaBean.getNuevo().getUnique();
         this.vistaBean.add(evt);
         this.nuevo.setVisita(this.visitaService.findByUnique(new Visita(unique)));
         this.nuevo.setTecnico(this.tecnicoService.findByCargo(new Tecnico("blank")));
-        this.nuevo.setNumeroOrden(this.productoBean.getNuevo().getCodesWarranty().getNumeroOrden());
-        this.nuevo.setNumeroTicket(this.productoBean.getNuevo().getCodesWarranty().getNumeroTicket());
+        this.nuevo.setNumeroOrden(this.nuevo.getProducto().getCodesWarranty().getNumeroOrden());
+        this.nuevo.setNumeroTicket(this.nuevo.getProducto().getCodesWarranty().getNumeroTicket());
         this.nuevo.getCiclo().getAbierta().setActive(Boolean.TRUE);
         this.nuevo.getCiclo().getAbierta().setCreationDate(this.calendario.getCalendario().getTime());
         this.cicloInit();
@@ -193,16 +243,30 @@ public class OrdenBean implements ImethodsBean, Serializable {
         }
     }
 
+    private void loadListByCliente(Cliente cliente) {
+        Producto producto = new Producto();
+        producto.setCliente(cliente);
+        this.productos = this.productoService.findByCliente(producto);
+        Collections.reverse(this.productos);
+    }
+
+    private void updateListByCliente() {
+        Producto producto = new Producto();
+        if (this.nuevo.getCliente().getCodigo() != null) {
+            producto.setCliente(this.nuevo.getCliente());
+            this.productos = this.productoService.findByCliente(producto);
+            Collections.reverse(this.productos);
+        }
+    }
+
     public String onFlowProcess(FlowEvent event) {
         if (this.nuevo.getCliente() != null) {
-            this.productoBean.loadListByCliente(this.nuevo.getCliente());
-            this.productoBean.setCliente(this.nuevo.getCliente());
+            loadListByCliente(this.nuevo.getCliente());
         }
-        if (this.productoBean.getNuevo() != null) {
-            this.nuevo.setProducto(this.productoBean.getNuevo());
+        if (this.nuevo.getProducto() != null) {
             this.servicios = this.servicioService.ObtenerListaServiciosMarcaArtefacto(this.nuevo.getProducto().getMarca(), this.nuevo.getProducto().getArtefacto());
             this.vistaBean.getNuevo().setCliente(this.nuevo.getCliente());
-            this.vistaBean.getNuevo().setProducto(this.productoBean.getNuevo());
+            this.vistaBean.getNuevo().setProducto(this.nuevo.getProducto());
         }
         if (this.vistaBean.getNuevo() != null) {
             this.vistaBean.getNuevo().setServicio(this.servicioService.findByCodigo(this.vistaBean.getNuevo().getServicio()));
@@ -251,14 +315,6 @@ public class OrdenBean implements ImethodsBean, Serializable {
         this.vistaBean = vistaBean;
     }
 
-    public ProductoBean getProductoBean() {
-        return productoBean;
-    }
-
-    public void setProductoBean(ProductoBean productoBean) {
-        this.productoBean = productoBean;
-    }
-
     public OrdenGeneratedBean getOrdenGenerate() {
         return ordenGenerate;
     }
@@ -298,4 +354,37 @@ public class OrdenBean implements ImethodsBean, Serializable {
     public void setUrlPathVaucher(String urlPathVaucher) {
         this.urlPathVaucher = urlPathVaucher;
     }
+
+    public Producto getSelectedProducto() {
+        return selectedProducto;
+    }
+
+    public void setSelectedProducto(Producto selectedProducto) {
+        this.selectedProducto = selectedProducto;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
+    public List<Producto> getFilterProductos() {
+        return filterProductos;
+    }
+
+    public void setFilterProductos(List<Producto> filterProductos) {
+        this.filterProductos = filterProductos;
+    }
+
+    public Producto getNuevoProducto() {
+        return nuevoProducto;
+    }
+
+    public void setNuevoProducto(Producto nuevoProducto) {
+        this.nuevoProducto = nuevoProducto;
+    }
+
 }
