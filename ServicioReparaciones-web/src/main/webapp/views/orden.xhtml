@@ -220,6 +220,7 @@
                             <p:selectOneMenu id="servicio" required="true" 
                                              value="#{ordenBean.servicioOrden}" converter="servicioConverter"
                                              effect="fade" var="scs" filter="true" filterMatchMode="startsWith">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                 <f:selectItems value="#{ordenBean.servicios}" var="servis"
                                                itemLabel="#{servis.descripcion}" itemValue="#{servis}"/>
                                 <p:column>

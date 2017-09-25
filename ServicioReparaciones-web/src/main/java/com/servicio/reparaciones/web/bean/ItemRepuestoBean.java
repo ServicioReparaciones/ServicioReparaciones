@@ -48,8 +48,11 @@ public class ItemRepuestoBean implements ImethodsBean, Serializable {
         if (this.nuevo != null && this.nuevo.getCantidad() != 0
                 && this.nuevo.getRepuesto().getCodigo() != null) {
             Integer index = this.items.size();
-            this.nuevo.setIndex(index);
-            Boolean exito = this.items.add(this.nuevo);
+            ItemRepuesto item = new ItemRepuesto();
+            item.setIndex(index);
+            item.setCantidad(this.nuevo.getCantidad());
+            item.setRepuesto(this.nuevo.getRepuesto());
+            Boolean exito = this.items.add(item);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
             }

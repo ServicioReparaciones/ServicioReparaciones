@@ -5,11 +5,11 @@
  */
 package com.servicio.reparaciones.web.bean;
 
-import com.servicio.reparaciones.modelo.nosql.Repuesto;
+import com.servicio.reparaciones.modelo.nosql.Falla;
 import com.servicio.reparaciones.modelo.nosql.Usuario;
 import com.servicio.reparaciones.modelo.sql.Marca;
+import com.servicio.reparaciones.servicio.FallaServicio;
 import com.servicio.reparaciones.servicio.MarcaServicio;
-import com.servicio.reparaciones.servicio.RepuestoServicio;
 import com.servicio.reparaciones.servicio.UsuarioServicio;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
 import com.servicio.reparaciones.web.util.FacesUtil;
@@ -18,31 +18,31 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
-import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author luis
  */
-@Named(value = "repuestoBean")
+@Named(value = "fallaBean")
 @ViewScoped
-public class RepuestoBean implements ImethodsBean, Serializable {
+public class FallaBean implements ImethodsBean, Serializable {
 
-    private static final long serialVersionUID = -3314963063281209488L;
+    private static final long serialVersionUID = 7742862935038028200L;
 
-    private Repuesto nuevo;
-    private Repuesto selected;
-    private List<Repuesto> repuestos;
-    private List<Repuesto> filterRepuestos;
+    private Falla nuevo;
+    private Falla selected;
+    private List<Falla> fallas;
+    private List<Falla> filterFallas;
 
     private List<Marca> marcas;
 
     private Usuario usuario;
 
     @Inject
-    private RepuestoServicio repuestoService;
+    private FallaServicio fallaService;
     @Inject
     private MarcaServicio marcaService;
     @Inject
@@ -50,12 +50,11 @@ public class RepuestoBean implements ImethodsBean, Serializable {
 
     @PostConstruct
     public void init() {
-        this.nuevo = new Repuesto();
-        this.nuevo.setBarcode(this.repuestoService.generatedBarcode());
+        this.nuevo = new Falla();
         this.selected = null;
-        this.repuestos = this.repuestoService.ObtenerListaRepuestos(1);
+        this.fallas = this.fallaService.ObtenerListaFallas(1);
         this.marcas = this.marcaService.ObtenerListaMarcas();
-        this.filterRepuestos = null;
+        this.filterFallas = null;
         this.usuario = new Usuario();
         this.usuario.setCodigo(SessionUtil.sessionVarNumeric("codigo"));
     }
@@ -64,7 +63,7 @@ public class RepuestoBean implements ImethodsBean, Serializable {
     public void add(ActionEvent evt) {
         this.usuario = this.usarioService.findByCodigo(this.usuario);
         this.nuevo.setUsername(this.usuario);
-        Boolean exito = this.repuestoService.insert(this.nuevo);
+        Boolean exito = this.fallaService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();
@@ -79,7 +78,7 @@ public class RepuestoBean implements ImethodsBean, Serializable {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
-            Boolean exito = this.repuestoService.update(this.selected);
+            Boolean exito = this.fallaService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
@@ -97,7 +96,7 @@ public class RepuestoBean implements ImethodsBean, Serializable {
         if (this.selected != null) {
             this.usuario = this.usarioService.findByCodigo(this.usuario);
             this.selected.setUsername(this.usuario);
-            Boolean exito = this.repuestoService.deleteFlag(this.selected);
+            Boolean exito = this.fallaService.deleteFlag(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
@@ -110,36 +109,36 @@ public class RepuestoBean implements ImethodsBean, Serializable {
         }
     }
 
-    public Repuesto getNuevo() {
+    public Falla getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Repuesto nuevo) {
+    public void setNuevo(Falla nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Repuesto getSelected() {
+    public Falla getSelected() {
         return selected;
     }
 
-    public void setSelected(Repuesto selected) {
+    public void setSelected(Falla selected) {
         this.selected = selected;
     }
 
-    public List<Repuesto> getRepuestos() {
-        return repuestos;
+    public List<Falla> getFallas() {
+        return fallas;
     }
 
-    public void setRepuestos(List<Repuesto> repuestos) {
-        this.repuestos = repuestos;
+    public void setFallas(List<Falla> fallas) {
+        this.fallas = fallas;
     }
 
-    public List<Repuesto> getFilterRepuestos() {
-        return filterRepuestos;
+    public List<Falla> getFilterFallas() {
+        return filterFallas;
     }
 
-    public void setFilterRepuestos(List<Repuesto> filterRepuestos) {
-        this.filterRepuestos = filterRepuestos;
+    public void setFilterFallas(List<Falla> filterFallas) {
+        this.filterFallas = filterFallas;
     }
 
     public List<Marca> getMarcas() {

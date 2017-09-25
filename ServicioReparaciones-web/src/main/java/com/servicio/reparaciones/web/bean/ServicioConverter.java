@@ -21,10 +21,10 @@ import javax.inject.Inject;
  */
 @FacesConverter("servicioConverter")
 public class ServicioConverter implements Converter {
-
+    
     @Inject
     private ServicioServicio servicioService;
-
+    
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && value.trim().length() > 0) {
@@ -37,14 +37,14 @@ public class ServicioConverter implements Converter {
             return null;
         }
     }
-
+    
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value != null) {
+        if (value != null && !value.toString().equals("")) {
             return String.valueOf(((Servicio) value).getCodigo());
         } else {
             return null;
         }
     }
-
+    
 }
