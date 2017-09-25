@@ -94,6 +94,7 @@ public class OrdenServicio implements Iorden, Serializable {
                 set("kilometrosRuta", orden.getKilometrosRuta()).
                 set("detalleRepuestos", orden.getDetalleRepuestos()).
                 set("detalleServicios", orden.getDetalleServicios()).
+                set("listaFallas", orden.getListaFallas()).
                 set("trabajoFinalEjecutado", orden.getTrabajoFinalEjecutado()).
                 set("movimientosInternos", orden.getMovimientosInternos()).
                 set("url", orden.getUrl()).
