@@ -83,6 +83,17 @@ public class ServicioServicio implements Iservicio, Serializable {
         return find;
     }
 
+    public Servicio findByCodigo(Integer codigo) {
+        Servicio find = new Servicio();
+        Query<Servicio> result = this.ds.find(Servicio.class).
+                field("codigo").equal(codigo).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+
     public Servicio findByDescripcion(Servicio servicio) {
         Servicio find = new Servicio();
         Query<Servicio> result = this.ds.find(Servicio.class).

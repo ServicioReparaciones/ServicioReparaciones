@@ -91,6 +91,17 @@ public class RepuestoServicio implements Irepuesto, Serializable {
         return find;
     }
 
+    public Repuesto findByCodigo(Integer codigo) {
+        Repuesto find = new Repuesto();
+        Query<Repuesto> result = this.ds.find(Repuesto.class).
+                field("codigo").equal(codigo).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+
     public Repuesto findByBarcode(Repuesto repuesto) {
         Repuesto find = new Repuesto();
         Query<Repuesto> result = this.ds.find(Repuesto.class).
