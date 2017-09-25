@@ -5,7 +5,7 @@
  */
 package com.servicio.reparaciones.web.bean;
 
-import com.servicio.reparaciones.modelo.nosql.ItemRepuesto;
+import com.servicio.reparaciones.modelo.nosql.ItemFalla;
 import com.servicio.reparaciones.web.bean.interfaz.ImethodsBean;
 import com.servicio.reparaciones.web.util.FacesUtil;
 import java.io.Serializable;
@@ -20,32 +20,30 @@ import javax.faces.view.ViewScoped;
  *
  * @author luis
  */
-@Named(value = "itemRepuestoBean")
+@Named(value = "itemFallaBean")
 @ViewScoped
-public class ItemRepuestoBean implements ImethodsBean, Serializable {
+public class ItemFallaBean implements ImethodsBean, Serializable {
 
     private static final long serialVersionUID = 2716532692607176408L;
 
-    private ItemRepuesto nuevo;
-    private ItemRepuesto selected;
-    private List<ItemRepuesto> items;
+    private ItemFalla nuevo;
+    private ItemFalla selected;
+    private List<ItemFalla> items;
 
     @PostConstruct
     public void init() {
-        this.nuevo = new ItemRepuesto();
+        this.nuevo = new ItemFalla();
         this.selected = null;
         this.items = new ArrayList<>();
     }
 
     @Override
     public void add(ActionEvent evt) {
-        if (this.nuevo != null && this.nuevo.getCantidad() != 0
-                && this.nuevo.getRepuesto().getCodigo() != null) {
+        if (this.nuevo != null && this.nuevo.getFalla().getCodigo() != null) {
             Integer index = this.items.size();
-            ItemRepuesto item = new ItemRepuesto();
+            ItemFalla item = new ItemFalla();
             item.setIndex(index);
-            item.setCantidad(this.nuevo.getCantidad());
-            item.setRepuesto(this.nuevo.getRepuesto());
+            item.setFalla(this.nuevo.getFalla());
             Boolean exito = this.items.add(item);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
@@ -56,7 +54,7 @@ public class ItemRepuestoBean implements ImethodsBean, Serializable {
     @Override
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
-            ItemRepuesto temp = this.selected;
+            ItemFalla temp = this.selected;
             Boolean exito = this.items.remove(temp);
             if (exito) {
                 exito = this.items.add(this.selected);
@@ -70,7 +68,7 @@ public class ItemRepuestoBean implements ImethodsBean, Serializable {
     @Override
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
-            ItemRepuesto temp = this.selected;
+            ItemFalla temp = this.selected;
             Boolean exito = this.items.remove(temp);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado.");
@@ -78,37 +76,27 @@ public class ItemRepuestoBean implements ImethodsBean, Serializable {
         }
     }
 
-    public Double calcularSubTotal() {
-        Double subTotal = 0d;
-        if (this.items != null && !this.items.isEmpty()) {
-            for (ItemRepuesto e : this.items) {
-                subTotal = subTotal + e.getSubTotal();
-            }
-        }
-        return subTotal;
-    }
-
-    public ItemRepuesto getNuevo() {
+    public ItemFalla getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(ItemRepuesto nuevo) {
+    public void setNuevo(ItemFalla nuevo) {
         this.nuevo = nuevo;
     }
 
-    public ItemRepuesto getSelected() {
+    public ItemFalla getSelected() {
         return selected;
     }
 
-    public void setSelected(ItemRepuesto selected) {
+    public void setSelected(ItemFalla selected) {
         this.selected = selected;
     }
 
-    public List<ItemRepuesto> getItems() {
+    public List<ItemFalla> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemRepuesto> items) {
+    public void setItems(List<ItemFalla> items) {
         this.items = items;
     }
 

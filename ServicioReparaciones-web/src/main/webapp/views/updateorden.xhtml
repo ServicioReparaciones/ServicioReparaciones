@@ -288,7 +288,8 @@
 
                                         <p:inputText value="#{findOrden.itemsRepuesto.nuevo.cantidad}"/>
 
-                                        <p:selectOneMenu value="#{findOrden.itemsRepuesto.nuevo.repuesto}" converter="repuestoConverter"
+                                        <p:selectOneMenu value="#{findOrden.itemsRepuesto.nuevo.repuesto}" 
+                                                         converter="repuestoConverter" required="false"
                                                          effect="fade" var="rpto" filter="true" filterMatchMode="startsWith">
                                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                             <f:selectItems value="#{repuestoBean.repuestos}" var="reptos"
@@ -401,9 +402,55 @@
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
-                    <p:tab id="evidencia" title="EVIDENCIAS">
-                        <p:panel header="5. Fotografías o documentos relacionados con el cliente o el producto.">
-
+                    <p:tab id="code" title="CODIGOS DE FALLA">
+                        <p:panel header="5. Agregue los codigos de falla segun lo especificado en la orden de trabajo.">
+                            <p:outputPanel id="outItemFall">
+                                <h:panelGrid columns="4" cellpadding="5">
+                                    <p:selectOneMenu value="#{findOrden.itemsFalla.nuevo.falla}" 
+                                                     converter="fallaConverter" required="false"
+                                                     effect="fade" var="flls" filter="true" filterMatchMode="startsWith">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{fallaBean.fallas}" var="falls"
+                                                       itemLabel="#{falls.descripcion}" itemValue="#{falls}"/>
+                                        <p:column>
+                                            <h:outputText value="#{flls.code}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{flls.marca}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{flls.descripcion}"/>
+                                        </p:column>
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Agregar" update=":ford:outItemFall, :ford:dtfall"
+                                                     actionListener="#{findOrden.itemsFalla.add(evt)}"/>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:dataTable id="dtfall" var="fll" rowIndexVar="ifall"
+                                         value="#{findOrden.itemsFalla.items}">
+                                <f:facet name="header">
+                                    <h:outputText value="LISTA DE FALLAS"/>
+                                </f:facet>
+                                <p:column style="width:16px;text-align: center">
+                                    <h:outputText value="#{ifall +1}"/>
+                                </p:column>
+                                <p:column headerText="Código" style="text-align: center;width: auto">
+                                    <h:outputText value="#{fll.falla.code}" />
+                                </p:column>
+                                <p:column headerText="Marca" style="text-align: center;width: auto">
+                                    <h:outputText value="#{fll.falla.marca}" />
+                                </p:column>
+                                <p:column headerText="Falla" style="text-align: center;width: auto">
+                                    <h:outputText value="#{fll.falla.descripcion}" />
+                                </p:column>
+                                <p:column style="width:32px;text-align: center">
+                                    <p:commandButton icon="fa fa-fw fa-remove" update=":ford:dtfall"
+                                                     actionListener="#{findOrden.itemsFalla.remove(evt)}">
+                                        <f:setPropertyActionListener value="#{fll}" target="#{findOrden.itemsFalla.selected}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
                         </p:panel>
                     </p:tab>
                     <p:tab id="orden" title="ORDEN">

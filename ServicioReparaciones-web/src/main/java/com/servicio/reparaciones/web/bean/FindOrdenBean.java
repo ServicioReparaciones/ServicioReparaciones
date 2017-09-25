@@ -77,6 +77,8 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     @Inject
     private ItemRepuestoBean itemsRepuesto;
     @Inject
+    private ItemFallaBean itemsFalla;
+    @Inject
     private ServicioServicio servicioService;
     @Inject
     private RepuestoServicio repuestoService;
@@ -101,6 +103,7 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
     private void beanInit() {
         this.itemsRepuesto.init();
         this.itemsServicio.init();
+        this.itemsFalla.init();
     }
 
     public void modifyCloseOrden(ActionEvent evt) {
@@ -450,6 +453,14 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
 
     public void setLazyModel(LazyDataModel<Orden> lazyModel) {
         this.lazyModel = lazyModel;
+    }
+
+    public ItemFallaBean getItemsFalla() {
+        return itemsFalla;
+    }
+
+    public void setItemsFalla(ItemFallaBean itemsFalla) {
+        this.itemsFalla = itemsFalla;
     }
 
 }
