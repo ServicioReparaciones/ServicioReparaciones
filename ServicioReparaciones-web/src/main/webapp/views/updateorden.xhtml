@@ -293,12 +293,12 @@
                                                          effect="fade" var="rpto" filter="true" filterMatchMode="startsWith">
                                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                             <f:selectItems value="#{repuestoBean.repuestos}" var="reptos"
-                                                           itemLabel="#{reptos.descripcion}" itemValue="#{reptos}"/>
+                                                           itemLabel="#{reptos.nombre}" itemValue="#{reptos}"/>
                                             <p:column>
                                                 <h:outputText value="#{rpto.code}"/>
                                             </p:column>
                                             <p:column>
-                                                <h:outputText value="#{rpto.descripcion}"/>
+                                                <h:outputText value="#{rpto.nombre}"/>
                                             </p:column>
                                             <p:column>
                                                 <h:outputText value="#{rpto.artefacto}"/>
