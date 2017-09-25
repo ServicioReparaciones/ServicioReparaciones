@@ -278,65 +278,39 @@
                                 </h:panelGrid>
                             </p:panel>
                         </p:panel>
-                    </p:tab>
-                    <p:tab id="servicio" title="SERVICIOS">
-                        <p:panel header="3. Agregue los servicios realizados">
-                            <p:panel>
-                                <p:outputPanel id="outItemSrv">
-                                    <h:panelGrid columns="4" cellpadding="5">
-                                        <p:outputLabel value="Cantidad:"/>
-                                        <p:inputText value="#{findOrden.itemsServicio.nuevo.cantidad}"/>
-                                        <p:selectOneMenu value="#{findOrden.itemsServicio.nuevo.servicio.codigo}">
-                                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                            <f:selectItems value="#{findOrden.servicios}" var="servs"
-                                                           itemLabel="#{servs}" itemValue="#{servs.codigo}"/>
-                                        </p:selectOneMenu>
-                                        <p:commandButton value="Agregar" update=":ford:outItemSrv, :ford:dtsrv"
-                                                         actionListener="#{findOrden.itemsServicio.add(evt)}"/>
-                                    </h:panelGrid>
-                                </p:outputPanel>
-                            </p:panel>
-                            <h:outputText value="&lt;br/&gt;" escape="false"/>
-                            <p:dataTable id="dtsrv" var="srv" rowIndexVar="isvr"
-                                         value="#{findOrden.itemsServicio.items}">
-                                <f:facet name="header">
-                                    <h:outputText value="DETALLE SERVICIOS"/>
-                                </f:facet>
-                                <p:column style="width:16px;text-align: center">
-                                    <h:outputText value="#{isvr +1}"/>
-                                </p:column>
-                                <p:column headerText="Cantidad" style="text-align: center;width: auto">
-                                    <h:outputText value="#{srv.cantidad}" />
-                                </p:column>
-                                <p:column headerText="Servicio" style="text-align: center;width: auto">
-                                    <h:outputText value="#{srv.servicio.descripcion} #{srv.servicio.artefacto} #{srv.servicio.marca}" />
-                                </p:column>
-                                <p:column headerText="Precio Unit." style="text-align: center;width: auto">
-                                    <h:outputText value="#{srv.servicio.precio}" />
-                                </p:column>
-                                <p:column headerText="SubTotal" style="text-align: center;width: auto">
-                                    <h:outputText value="#{srv.subTotal}" />
-                                </p:column>
-                                <p:column style="width:32px;text-align: center">
-                                    <p:commandButton icon="fa fa-fw fa-remove" update=":ford:dtsrv"
-                                                     actionListener="#{findOrden.itemsServicio.remove(evt)}">
-                                        <f:setPropertyActionListener value="#{srv}" target="#{findOrden.itemsServicio.selected}" />
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:panel>
-                    </p:tab>
+                    </p:tab>                                        
                     <p:tab id="repuesto" title="REPUESTOS">
-                        <p:panel header="4. Agregue los repuestos ulitizados">
+                        <p:panel header="3. Agregue los repuestos ulitizados">
                             <p:panel>
                                 <p:outputPanel id="outItemRep">
                                     <h:panelGrid columns="4" cellpadding="5">
                                         <p:outputLabel value="Cantidad:"/>
+
                                         <p:inputText value="#{findOrden.itemsRepuesto.nuevo.cantidad}"/>
-                                        <p:selectOneMenu value="#{findOrden.itemsRepuesto.nuevo.repuesto.codigo}">
+
+                                        <p:selectOneMenu value="#{findOrden.itemsRepuesto.nuevo.repuesto}" converter="repuestoConverter"
+                                                         effect="fade" var="rpto" filter="true" filterMatchMode="startsWith">
                                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                            <f:selectItems value="#{findOrden.repuestos}" var="reptos"
-                                                           itemLabel="#{reptos}" itemValue="#{reptos.codigo}"/>
+                                            <f:selectItems value="#{repuestoBean.repuestos}" var="reptos"
+                                                           itemLabel="#{reptos.descripcion}" itemValue="#{reptos}"/>
+                                            <p:column>
+                                                <h:outputText value="#{rpto.code}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{rpto.descripcion}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{rpto.artefacto}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{rpto.marca}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{rpto.modelo}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{rpto.numeroParte}"/>
+                                            </p:column>
                                         </p:selectOneMenu>
                                         <p:commandButton value="Agregar" update=":ford:outItemRep, :ford:dtrep"
                                                          actionListener="#{findOrden.itemsRepuesto.add(evt)}"/>
@@ -386,7 +360,7 @@
                         </p:panel>
                     </p:tab>
                     <p:tab id="trabajo" title="TRABAJO">
-                        <p:panel header="5. Complete los datos del trabajo final ejecutado">
+                        <p:panel header="4. Complete los datos del trabajo final ejecutado">
                             <h:panelGrid columns="2" cellpadding="5">
                                 <h:panelGrid cellpadding="5">
                                     <p:outputLabel for="desperfecto" value="Desperfecto del producto reparado:"/>
@@ -425,6 +399,11 @@
                                     </p:column>
                                 </p:dataTable>
                             </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="evidencia" title="EVIDENCIAS">
+                        <p:panel header="5. Fotografías o documentos relacionados con el cliente o el producto.">
+
                         </p:panel>
                     </p:tab>
                     <p:tab id="orden" title="ORDEN">

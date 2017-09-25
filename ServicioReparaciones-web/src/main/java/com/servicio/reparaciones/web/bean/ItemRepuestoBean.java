@@ -47,9 +47,7 @@ public class ItemRepuestoBean implements ImethodsBean, Serializable {
     public void add(ActionEvent evt) {
         if (this.nuevo != null && this.nuevo.getCantidad() != 0
                 && this.nuevo.getRepuesto().getCodigo() != null) {
-            Integer index = this.items.size() + 1;
-            Repuesto repuesto = this.respuestoService.findByCodigo(this.nuevo.getRepuesto());
-            this.nuevo.setRepuesto(repuesto);
+            Integer index = this.items.size();
             this.nuevo.setIndex(index);
             Boolean exito = this.items.add(this.nuevo);
             if (exito) {
