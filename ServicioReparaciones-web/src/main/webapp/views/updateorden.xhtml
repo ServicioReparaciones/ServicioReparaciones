@@ -526,7 +526,10 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                                 </h:outputText>
 
-                                <p:outputLabel value="Lugar de Atencón::"/>
+                                <p:outputLabel value="Servicio:"/>
+                                <p:outputLabel value="#{findOrden.find.visita.servicio.descripcion} - #{findOrden.find.visita.servicio.precio}"/>
+
+                                <p:outputLabel value="Lugar de Atencón:"/>
                                 <p:outputLabel value="#{findOrden.find.visita.lugarAtencion}"/>
 
                                 <p:outputLabel value="Posible Falla:"/>
@@ -586,38 +589,6 @@
                                 </h:panelGrid>
                             </p:panel>
                             <h:outputText value="&lt;br/&gt;" escape="false" />
-                            <p:commandButton icon="fa fa-fw fa-wrench" value="Servicios"/>
-                            <h:outputText value="&lt;br/&gt;" escape="false"/>
-                            <h:outputText value="&lt;br/&gt;" escape="false"/>
-                            <p:dataTable var="srvOrd" rowIndexVar="isvrOrd"
-                                         value="#{findOrden.itemsServicio.items}">
-                                <f:facet name="header">
-                                    <h:outputText value="SERVICIOS"/>
-                                </f:facet>
-                                <p:column style="width:16px;text-align: center">
-                                    <h:outputText value="#{isvrOrd +1}"/>
-                                </p:column>
-                                <p:column headerText="Cantidad" style="text-align: center;width: auto">
-                                    <h:outputText value="#{srvOrd.cantidad}" />
-                                </p:column>
-                                <p:column headerText="Servicio" style="text-align: center;width: auto">
-                                    <h:outputText value="#{srvOrd.servicio.descripcion} #{srvOrd.servicio.artefacto} #{srvOrd.servicio.marca}" />
-                                </p:column>
-                                <p:column headerText="Precio Unit." style="text-align: center;width: auto">
-                                    <h:outputText value="#{srvOrd.servicio.precio}" />
-                                </p:column>
-                                <p:column headerText="SubTotal" style="text-align: center;width: auto">
-                                    <h:outputText value="#{srvOrd.subTotal}" />
-                                </p:column>
-                            </p:dataTable>
-                            <h:outputText value="&lt;br/&gt;" escape="false" />
-                            <p:panel>
-                                <h:panelGrid columns="2" cellpadding="5" style="float: right">
-                                    <p:outputLabel value="Valor subTotal Servicios Prestados: $"/>
-                                    <p:outputLabel value="#{findOrden.itemsServicio.calcularSubTotal()}"/>
-                                </h:panelGrid>
-                            </p:panel>
-                            <h:outputText value="&lt;br/&gt;" escape="false" />
                             <p:commandButton icon="fa fa-fw fa-steam-square" value="Repuestos"/>
                             <h:outputText value="&lt;br/&gt;" escape="false"/>
                             <h:outputText value="&lt;br/&gt;" escape="false"/>
@@ -661,6 +632,28 @@
                                     <p:outputLabel value="#{findOrden.itemsRepuesto.calcularSubTotal()}"/>
                                 </h:panelGrid>
                             </p:panel>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-wrench" value="Codigos de Falla"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false"/>
+                            <p:dataTable var="srvOrd" rowIndexVar="isvrOrd"
+                                         value="#{findOrden.itemsFalla.items}">
+                                <f:facet name="header">
+                                    <h:outputText value="FALLAS"/>
+                                </f:facet>
+                                <p:column style="width:16px;text-align: center">
+                                    <h:outputText value="#{isvrOrd +1}"/>
+                                </p:column>
+                                <p:column headerText="Codigo" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.falla.code}" />
+                                </p:column>
+                                <p:column headerText="Marca" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.falla.marca}" />
+                                </p:column>
+                                <p:column headerText="Descripcion" style="text-align: center;width: auto">
+                                    <h:outputText value="#{srvOrd.falla.descripcion}" />
+                                </p:column>
+                            </p:dataTable>
                             <h:outputText value="&lt;br/&gt;" escape="false" />
                             <p:commandButton icon="fa fa-fw fa-male" value="Técnico"/>
                             <h:outputText value="&lt;br/&gt;" escape="false"/>

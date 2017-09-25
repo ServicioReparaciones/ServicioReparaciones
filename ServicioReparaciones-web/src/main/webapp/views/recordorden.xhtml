@@ -194,7 +194,11 @@
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
 
-                        <p:outputLabel value="Lugar de Atencón::"/>
+                        <p:outputLabel value="Servicio:"/>
+                        <p:outputLabel value="#{recordOrdenBean.find.visita.servicio.descripcion} - #{recordOrdenBean.find.visita.servicio.precio}"/>
+
+
+                        <p:outputLabel value="Lugar de Atencón:"/>
                         <p:outputLabel value="#{recordOrdenBean.find.visita.lugarAtencion}"/>
 
                         <p:outputLabel value="Posible Falla:"/>
@@ -252,32 +256,6 @@
                                 <f:convertDateTime pattern="dd/MM/yyy" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                             </h:outputText>
                         </h:panelGrid>
-                    </p:panel>
-                    <h:outputText value="&lt;br/&gt;" escape="false" />
-                    <p:panel header="Servicios" toggleable="true" collapsed="true" 
-                             toggleSpeed="500" closeSpeed="500">
-                        <p:dataTable var="srvOrd" rowIndexVar="isvrOrd"
-                                     value="#{recordOrdenBean.find.detalleServicios}">
-                            <p:column style="width:16px;text-align: center">
-                                <h:outputText value="#{isvrOrd +1}"/>
-                            </p:column>
-                            <p:column headerText="Cantidad" style="text-align: center;width: auto">
-                                <h:outputText value="#{srvOrd.cantidad}" />
-                            </p:column>
-                            <p:column headerText="Servicio" style="text-align: center;width: auto">
-                                <h:outputText value="#{srvOrd.servicio.descripcion} #{srvOrd.servicio.artefacto} #{srvOrd.servicio.marca}" />
-                            </p:column>
-                            <p:column headerText="Precio Unit." style="text-align: center;width: auto">
-                                <h:outputText value="#{srvOrd.servicio.precio}" />
-                            </p:column>
-                            <p:column headerText="SubTotal" style="text-align: center;width: auto">
-                                <h:outputText value="#{srvOrd.subTotal}" />
-                            </p:column>
-                        </p:dataTable>
-                        <f:facet name="footer">
-                            <p:outputLabel value="Valor subTotal Servicios Prestados: $"/>
-                            <p:outputLabel value="#{recordOrdenBean.find.subTotalServicios}"/>
-                        </f:facet>
                     </p:panel>
                     <h:outputText value="&lt;br/&gt;" escape="false" />
                     <p:panel header="Repuestos" toggleable="true" collapsed="true" 

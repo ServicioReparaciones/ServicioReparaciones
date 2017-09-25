@@ -122,6 +122,9 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.setSubTotalServicios(this.itemsServicio.calcularSubTotal());
             this.find.setSubTotalRepuestos(this.itemsRepuesto.calcularSubTotal());
             this.find.setSubTotalKilometraje(this.find.getKilometrosRuta().getSubTotal());
+            if (this.itemsFalla.getItems() != null && !this.itemsFalla.getItems().isEmpty()) {
+                this.find.setListaFallas(this.itemsFalla.getItems());
+            }
             this.find.getCiclo().getAbierta().setActive(Boolean.FALSE);
             this.find.getCiclo().getPendiente().setActive(Boolean.FALSE);
             this.find.getCiclo().getCerrada().setActive(Boolean.TRUE);
@@ -158,6 +161,9 @@ public class FindOrdenBean implements ImethodsFindBeans, Serializable {
             this.find.setSubTotalServicios(this.itemsServicio.calcularSubTotal());
             this.find.setSubTotalRepuestos(this.itemsRepuesto.calcularSubTotal());
             this.find.setSubTotalKilometraje(this.find.getKilometrosRuta().getSubTotal());
+            if (this.itemsFalla.getItems() != null && !this.itemsFalla.getItems().isEmpty()) {
+                this.find.setListaFallas(this.itemsFalla.getItems());
+            }
             this.find.getCiclo().getAbierta().setActive(Boolean.FALSE);
             this.find.getCiclo().getPendiente().setActive(Boolean.TRUE);
             this.find.getCiclo().getPendiente().setCreationDate(this.calendario.getCalendario().getTime());
