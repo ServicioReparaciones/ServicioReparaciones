@@ -7,7 +7,7 @@ package com.servicio.reparaciones.servicio;
 
 import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Falla;
-import com.servicio.reparaciones.modelo.nosql.Repuesto;
+import com.servicio.reparaciones.modelo.nosql.Falla;
 import com.servicio.reparaciones.servicio.I.Ifalla;
 import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
@@ -54,11 +54,11 @@ public class FallaServicio implements Ifalla, Serializable {
 
     @Override
     public Boolean update(Falla falla) {
-        Query<Repuesto> query = this.ds.createQuery(Repuesto.class);
+        Query<Falla> query = this.ds.createQuery(Falla.class);
         query.and(
                 query.criteria("codigo").equal(falla.getCodigo())
         );
-        UpdateOperations<Repuesto> update = this.ds.createUpdateOperations(Repuesto.class);
+        UpdateOperations<Falla> update = this.ds.createUpdateOperations(Falla.class);
         update.set("code", falla.getCode()).
                 set("marca", falla.getMarca()).
                 set("descripcion", falla.getDescripcion()).

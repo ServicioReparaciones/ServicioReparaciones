@@ -52,6 +52,8 @@ public class Orden extends BaseEntity {
     @Embedded
     private List<ItemServicio> detalleServicios;
     @Embedded
+    private List<ItemFalla> listaFallas;
+    @Embedded
     private TrabajoFinalEjecutado trabajoFinalEjecutado;
     @Embedded
     private List<Comentario> movimientosInternos;
@@ -73,6 +75,7 @@ public class Orden extends BaseEntity {
         this.kilometrosRuta = new Kilometraje();
         this.detalleRepuestos = new ArrayList<>();
         this.detalleServicios = new ArrayList<>();
+        this.listaFallas = new ArrayList<>();
         this.trabajoFinalEjecutado = new TrabajoFinalEjecutado();
         this.movimientosInternos = new ArrayList<>();
         this.username = new Usuario();
@@ -243,6 +246,14 @@ public class Orden extends BaseEntity {
 
     public void setUsername(Usuario username) {
         this.username = username;
+    }
+    
+        public List<ItemFalla> getListaFallas() {
+        return listaFallas;
+    }
+
+    public void setListaFallas(List<ItemFalla> listaFallas) {
+        this.listaFallas = listaFallas;
     }
 
     @Override

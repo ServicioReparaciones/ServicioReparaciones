@@ -25,7 +25,6 @@ public class ItemRepuesto {
     public ItemRepuesto() {
         this.cantidad = 0;
         this.subTotal = 0d;
-        this.repuesto = new Repuesto();
     }
 
     public Integer getCantidad() {
