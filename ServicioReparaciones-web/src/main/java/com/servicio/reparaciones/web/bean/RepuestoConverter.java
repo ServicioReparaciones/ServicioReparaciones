@@ -31,6 +31,7 @@ public class RepuestoConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        this.repuestoService = new RepuestoServicio();
         if (value != null && value.trim().length() > 0 && !value.equals("Seleccionar")) {
             LOG.log(Level.INFO, "RepuestoConverter >>" + value, value);
             try {

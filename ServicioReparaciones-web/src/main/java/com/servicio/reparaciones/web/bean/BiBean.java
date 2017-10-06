@@ -5,13 +5,9 @@
  */
 package com.servicio.reparaciones.web.bean;
 
-import com.servicio.reparaciones.modelo.nosql.Orden;
-import com.servicio.reparaciones.servicio.BiOrdenService;
+import com.servicio.reparaciones.servicio.BiMabeService;
 import com.servicio.reparaciones.servicio.OrdenServicio;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -31,6 +27,8 @@ public class BiBean implements Serializable {
 
     @Inject
     private OrdenServicio ordenService;
+    @Inject
+    private BiMabeService mabeService;
 
     public void loadData(ActionEvent evt) {
 //        List<Orden> odenes = new ArrayList<>();
@@ -42,6 +40,7 @@ public class BiBean implements Serializable {
 //            }
 //        }
 //        LOG.log(Level.INFO, "ordenes finazilo con exito");
+        mabeService.transactionalBiMabe();
 
     }
 

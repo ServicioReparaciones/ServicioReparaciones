@@ -31,6 +31,7 @@ public class FallaConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        this.fallaService = new FallaServicio();
         LOG.log(Level.INFO, "FallaConverter >>" + value, value);
         if (value != null && value.trim().length() > 0 && !value.equals("Seleccionar")) {
             try {
