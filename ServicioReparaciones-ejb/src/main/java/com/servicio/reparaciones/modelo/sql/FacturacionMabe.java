@@ -22,20 +22,19 @@ public class FacturacionMabe implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @Column(name = "NOTIFICACION")
+    @Column(name = "NOTIFICACION", nullable = false)
     private String notificacion;
-    @Column(name = "TALLER_AUTORIZADO")
+    @Column(name = "TALLER_AUTORIZADO", nullable = false, length = 1)
     private String tallerAutorizado;
-    @Column(name = "FECHA_DE_CIERRE_SISTEMA")
+    @Column(name = "FECHA_DE_CIERRE_SISTEMA", nullable = false, length = 100)
     private String fechaDeCierreSistema;
-    @Column(name = "CODIGO_DE_TALLER")
+    @Column(name = "CODIGO_DE_TALLER", nullable = false, length = 100)
     private String codigoDeTaller;
-    @Column(name = "VALOR_FIJO")
+    @Column(name = "VALOR_FIJO", nullable = false, length = 100)
     private String valorFijo;
-    @Column(name = "INDEX")
+    @Column(name = "INDEX", nullable = false)
     private Integer index;
-    @Column(name = "FLAG")
+    @Column(name = "FLAG", nullable = false)
     private Integer flag;
 
     public FacturacionMabe() {
@@ -125,5 +124,5 @@ public class FacturacionMabe implements Serializable {
     public String toString() {
         return "map.xlsx.mysql.map.FacturacionMabe[ notificacion=" + notificacion + " ]";
     }
-    
+
 }

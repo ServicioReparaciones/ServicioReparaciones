@@ -19,20 +19,20 @@ import javax.persistence.Query;
  */
 @Stateless
 @LocalBean
-public class FacturacionMabeDAO extends DefaultGenericDAOImple<FacturacionMabe, String>{
+public class FacturacionMabeDAO extends DefaultGenericDAOImple<FacturacionMabe, String> {
 
     public FacturacionMabeDAO() {
         super(FacturacionMabe.class);
     }
-    
+
     public List<FacturacionMabe> ListaFacturacionMabees() {
-        Query qry = super.getEntityManager().createQuery("SELECT obj FROM FacturacionMabe obj WHERE obj.flag = 1");
-        List<FacturacionMabe> almacenes = qry.getResultList();
-        if (almacenes.isEmpty()) {
+        Query qry = super.getEntityManager().createNativeQuery("SELECT * FROM FacturacionMabe WHERE FLAG = 1", FacturacionMabe.class);
+        List<FacturacionMabe> facturacionMabe = qry.getResultList();
+        if (facturacionMabe.isEmpty()) {
             return new ArrayList<FacturacionMabe>();
         } else {
-            return almacenes;
+            return facturacionMabe;
         }
     }
-    
+
 }

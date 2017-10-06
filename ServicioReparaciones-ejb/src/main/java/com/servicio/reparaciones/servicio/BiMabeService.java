@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -57,17 +58,21 @@ public class BiMabeService implements IbiMabe, Serializable {
         return exito;
     }
 
+    private static final Logger LOG = Logger.getLogger(BiMabeService.class.getName());
+
     public void transactionalBiMabe() {
 
         List<FacturacionMabe> listfact = this.facturacionMabeService.ObtenerListaFacturacionMabees();
         List<BiMabe> mabeList = new ArrayList<>();
         if (listfact != null && !listfact.isEmpty()) {
+            LOG.log(Level.INFO, ">> " + listfact.size());
             for (int i = 0; i < listfact.size(); i++) {
                 mabeList.add(new BiMabe());
             }
             for (FacturacionMabe fact : listfact) {
                 Orden orden = this.ordenService.findByNumeroTicket(fact.getNotificacion());
-                if (orden.getNumeroTicket() != null) {
+                if (orden.getBarcode() != null && orden.getId() != null) {
+                    LOG.log(Level.INFO, ">> " + orden.getNumeroOrden());
                     mabeList.get(fact.getIndex()).setCIUDAD(orden.getCliente().getProvincia());
                     mabeList.get(fact.getIndex()).setORDEN_DE_SERVICIO_PADRE(orden.getNumeroOrden());
                     mabeList.get(fact.getIndex()).setNOTIFICACION(orden.getNumeroTicket());
@@ -83,19 +88,30 @@ public class BiMabeService implements IbiMabe, Serializable {
                     } else {
                         mabeList.get(fact.getIndex()).setSIN_RESPUESTO("X");
                     }
+                }else{
+                    LOG.log(Level.INFO, ">> no find "+fact.getNotificacion() );
                 }
             }
 
             for (BiMabe mabe : mabeList) {
                 insert(mabe);
+                LOG.log(Level.INFO, ">> " + mabe.getNOTIFICACION());
             }
 
         }
     }
 
     private String convertDate(Date fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String date = format.format(fecha);
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        String date = "";
+        if (fecha != null) {
+            date = format.format(fecha);
+            LOG.log(Level.INFO, ">> " + date);
+        } else {
+            date = format.format(new Date());
+            LOG.log(Level.INFO, ">>  null" + date);
+        }
         return date;
     }
 
