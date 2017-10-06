@@ -143,10 +143,32 @@ public class OrdenServicio implements Iorden, Serializable {
         return find;
     }
 
+    public Orden findByNumeroOrden(String numeroOrden) {
+        Orden find = new Orden();
+        Query<Orden> result = this.ds.find(Orden.class).
+                field("numeroOrden").equal(numeroOrden).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+
     public Orden findByNumeroTicket(Orden orden) {
         Orden find = new Orden();
         Query<Orden> result = this.ds.find(Orden.class).
                 field("numeroTicket").equal(orden.getNumeroTicket()).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+
+    public Orden findByNumeroTicket(String numeroTicket) {
+        Orden find = new Orden();
+        Query<Orden> result = this.ds.find(Orden.class).
+                field("numeroTicket").equal(numeroTicket).
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
@@ -306,18 +328,17 @@ public class OrdenServicio implements Iorden, Serializable {
         return list;
     }
 
-    public List<Orden> ObtenerListaOrdens() {
-        List<Orden> list = new ArrayList<>();
-        Query<Orden> result = this.ds.find(Orden.class);
-        if (result.asList() != null && !result.asList().isEmpty()) {
-            list = result.asList();
-        }
-        if (list == null) {
-            list = new ArrayList<>();
-        }
-        return list;
-    }
-
+//    public List<Orden> ObtenerListaOrdens() {
+//        List<Orden> list = new ArrayList<>();
+//        Query<Orden> result = this.ds.find(Orden.class);
+//        if (result.asList() != null && !result.asList().isEmpty()) {
+//            list = result.asList();
+//        }
+//        if (list == null) {
+//            list = new ArrayList<>();
+//        }
+//        return list;
+//    }
     @Override
     public Integer count() {
         Integer count = 0;

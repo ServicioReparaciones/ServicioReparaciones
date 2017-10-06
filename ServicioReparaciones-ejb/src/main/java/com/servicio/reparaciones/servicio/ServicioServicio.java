@@ -12,6 +12,8 @@ import com.servicio.reparaciones.servicio.util.Calendario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.mongodb.morphia.Datastore;
@@ -28,6 +30,7 @@ import org.mongodb.morphia.query.UpdateResults;
 public class ServicioServicio implements Iservicio, Serializable {
 
     private static final long serialVersionUID = 9135048042951372429L;
+    private static final Logger LOG = Logger.getLogger(ServicioServicio.class.getName());
 
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
@@ -90,6 +93,7 @@ public class ServicioServicio implements Iservicio, Serializable {
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
+            LOG.log(Level.INFO, "findByCodigo(Integer codigo) >>" + find.getCodigo()+" "+find.getDescripcion(), codigo);
         }
         return find;
     }
