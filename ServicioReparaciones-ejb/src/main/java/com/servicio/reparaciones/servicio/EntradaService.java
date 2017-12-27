@@ -5,13 +5,13 @@
  */
 package com.servicio.reparaciones.servicio;
 
-import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Articulo;
 import com.servicio.reparaciones.modelo.nosql.Bodega;
 import com.servicio.reparaciones.modelo.nosql.Entrada;
 import com.servicio.reparaciones.modelo.nosql.Inventario;
 import com.servicio.reparaciones.servicio.I.Ientrada;
 import com.servicio.reparaciones.servicio.util.Calendario;
+import com.servicio.reparaciones.util.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

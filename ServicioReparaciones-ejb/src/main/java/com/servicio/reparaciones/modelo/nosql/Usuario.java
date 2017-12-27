@@ -5,7 +5,7 @@
  */
 package com.servicio.reparaciones.modelo.nosql;
 
-import com.mongo.persistance.BaseEntity;
+import com.servicio.reparaciones.util.entity.BaseEntity;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;

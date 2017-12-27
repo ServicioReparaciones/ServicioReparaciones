@@ -26,11 +26,6 @@
             <version>3.4.0</version>
         </dependency>
         <dependency>
-            <groupId>com.mongo.persistance</groupId>
-            <artifactId>mongoPersistance</artifactId>
-            <version>1.6</version>
-        </dependency>
-        <dependency>
             <groupId>org.mongodb.morphia</groupId>
             <artifactId>morphia</artifactId>
             <version>1.3.2</version>

@@ -5,10 +5,10 @@
  */
 package com.servicio.reparaciones.servicio;
 
-import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Bodega;
 import com.servicio.reparaciones.servicio.I.Ibodega;
 import com.servicio.reparaciones.servicio.util.Calendario;
+import com.servicio.reparaciones.util.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

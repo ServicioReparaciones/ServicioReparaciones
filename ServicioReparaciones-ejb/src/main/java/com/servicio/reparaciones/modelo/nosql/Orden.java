@@ -5,7 +5,7 @@
  */
 package com.servicio.reparaciones.modelo.nosql;
 
-import com.mongo.persistance.BaseEntity;
+import com.servicio.reparaciones.util.entity.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

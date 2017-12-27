@@ -5,7 +5,6 @@
  */
 package com.servicio.reparaciones.servicio;
 
-import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.Cliente;
 import com.servicio.reparaciones.modelo.nosql.ItemRepuesto;
 import com.servicio.reparaciones.modelo.nosql.ItemServicio;
@@ -13,6 +12,7 @@ import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.modelo.nosql.Producto;
 import com.servicio.reparaciones.servicio.I.Iorden;
 import com.servicio.reparaciones.servicio.util.Calendario;
+import com.servicio.reparaciones.util.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

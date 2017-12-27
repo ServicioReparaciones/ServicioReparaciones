@@ -5,10 +5,10 @@
  */
 package com.servicio.reparaciones.servicio;
 
-import com.mongo.persistance.MongoPersistence;
 import com.servicio.reparaciones.modelo.nosql.BiMabeRepuesto;
 import com.servicio.reparaciones.modelo.nosql.Orden;
 import com.servicio.reparaciones.servicio.I.IbiMabeRepuesto;
+import com.servicio.reparaciones.util.MongoPersistence;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
